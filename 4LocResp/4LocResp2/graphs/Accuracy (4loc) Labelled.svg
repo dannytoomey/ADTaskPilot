@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   version="1.1"
+   id="svg3788"
+   width="746.88"
+   height="560"
+   viewBox="0 0 746.88 560"
+   sodipodi:docname="Accuracy (4loc) Labelled.svg"
+   inkscape:version="0.92.2 5c3e80d, 2017-08-06">
+  <metadata
+     id="metadata3794">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <defs
+     id="defs3792" />
+  <sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="1255"
+     inkscape:window-height="755"
+     id="namedview3790"
+     showgrid="false"
+     inkscape:zoom="0.68437835"
+     inkscape:cx="312.07044"
+     inkscape:cy="321.32841"
+     inkscape:window-x="0"
+     inkscape:window-y="1"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="layer4" />
+  <image
+     sodipodi:absref="/Users/dannytoomey/Documents/Research/ADTask/ADTaskPilot/4LocResp/4LocResp/graphs/Accuracy (4loc).png"
+     xlink:href="Accuracy (4loc).png"
+     width="746.88"
+     height="560"
+     preserveAspectRatio="none"
+     id="image3796"
+     x="0"
+     y="0" />
+  <g
+     inkscape:groupmode="layer"
+     id="layer4"
+     inkscape:label="Layer 1">
+    <image
+       sodipodi:absref="/Users/dannytoomey/Documents/Research/ADTask/ADTaskPilot/4LocResp/4LocResp/graphs/xLabel1167.png"
+       xlink:href="xLabel1167.png"
+       y="507.36078"
+       x="-1.6440001"
+       id="image4807"
+       preserveAspectRatio="none"
+       height="54.666668"
+       width="746.30005" />
+  </g>
+</svg>

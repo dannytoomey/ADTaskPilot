@@ -79,9 +79,10 @@ numTrials = 6;
 valCueThres=2/3;
 invalCueThres=1/3;
 
+audRespDur=2.5;
+
 for cond=1:numCond
     
-    cond=3;
     
     if cond==1
         
@@ -363,7 +364,6 @@ for cond=1:numCond
 
                         %record auditory resp if dual-task, show fixation if single
 
-                        audRespDur=1;
                         audResp=0;
                         
                         Screen('FillRect',window,grey);
@@ -843,7 +843,6 @@ for cond=1:numCond
 
                         %record auditory resp if dual-task, show fixation if single
 
-                        audRespDur=1;
                         audResp=0;
                         
                         Screen('FillRect',window,grey);
@@ -1150,7 +1149,7 @@ for cond=1:numCond
                                     elseif 66<stimLoc
                                         RGB4=[255 0 0];
                                         Screen('FillRect', window, RGB4, centeredRect4);
-                                        Screen('FillOval', window, RGB2, centeredRect2, maxDiameter);
+                                        Screen('FillOval', window, RGB1, centeredRect1, maxDiameter);
                                         Screen('FillOval', window, RGB3, centeredRect3, maxDiameter);
                                     end
                                 end
@@ -1339,7 +1338,6 @@ for cond=1:numCond
 
                         %record auditory resp if dual-task, show fixation if single
 
-                        audRespDur=1;
                         audResp=0;
                         
                         Screen('FillRect',window,grey);

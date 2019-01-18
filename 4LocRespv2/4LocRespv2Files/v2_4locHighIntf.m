@@ -308,7 +308,7 @@ for task=1:numTask
                             elseif 66<stimLoc
                                 RGB4=[255 0 0];
                                 Screen('FillRect', window, RGB4, centeredRect4);
-                                Screen('FillOval', window, RGB2, centeredRect2, maxDiameter);
+                                Screen('FillOval', window, RGB1, centeredRect1, maxDiameter);
                                 Screen('FillOval', window, RGB3, centeredRect3, maxDiameter);
                             end
                         end
@@ -496,7 +496,7 @@ for task=1:numTask
                 
                 %record auditory resp if dual-task, show fixation if single
                 
-                audRespDur=1;
+                audRespDur=2.5;
                 audResp=0;
                 audRT=0;
                 

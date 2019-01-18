@@ -267,8 +267,7 @@ for task=1:numTask
                 if boxLctn<=50
                     if cueOrder(1,trial)<=thres
                         if targetLoc<=50
-                            RGB1(1,1)=255;
-                            RGB1(1,3)=0;
+                            RGB1=[255 0 0];
                             target=1;
                             Screen('FillRect', window, RGB1, centeredRect1);
                             if stimLoc<=33
@@ -285,8 +284,7 @@ for task=1:numTask
                                 Screen('FillOval', window, RGB4, centeredRect4, maxDiameter);
                             end
                         elseif 50<targetLoc
-                            RGB2(1,1)=255;
-                            RGB2(1,3)=0;
+                            RGB2=[255 0 0];
                             target=2;
                             Screen('FillRect', window, RGB2, centeredRect2);
                             if stimLoc<=33
@@ -305,8 +303,7 @@ for task=1:numTask
                         end
                     elseif thres<cueOrder(1,trial)
                         if targetLoc<=50
-                            RGB3(1,1)=255;
-                            RGB3(1,3)=0;
+                            RGB3=[255 0 0];
                             target=3;
                             Screen('FillRect', window, RGB3, centeredRect3);
                             if stimLoc<=33
@@ -323,8 +320,7 @@ for task=1:numTask
                                 Screen('FillOval', window, RGB4, centeredRect4, maxDiameter);
                             end
                         elseif 50<targetLoc
-                            RGB4(1,1)=255;
-                            RGB4(1,3)=0;
+                            RGB4=[255 0 0];
                             target=4;
                             Screen('FillRect', window, RGB4, centeredRect4);
                             if stimLoc<=33
@@ -345,8 +341,7 @@ for task=1:numTask
                 elseif 50<boxLctn
                     if cueOrder(1,trial)<=thres
                         if targetLoc<=50
-                            RGB3(1,1)=255;
-                            RGB3(1,3)=0;
+                            RGB3=[255 0 0];
                             target=3;
                             Screen('FillRect', window, RGB3, centeredRect3);
                             if stimLoc<=33
@@ -363,8 +358,7 @@ for task=1:numTask
                                 Screen('FillOval', window, RGB4, centeredRect4, maxDiameter);
                             end
                         elseif 50<targetLoc
-                            RGB4(1,1)=255;
-                            RGB4(1,3)=0;
+                            RGB4=[255 0 0];
                             target=4;
                             Screen('FillRect', window, RGB4, centeredRect4);
                             if stimLoc<=33
@@ -383,8 +377,7 @@ for task=1:numTask
                         end
                     elseif thres<cueOrder(1,trial)
                         if targetLoc<=50
-                            RGB1(1,1)=255;
-                            RGB1(1,3)=0;
+                            RGB1=[255 0 0];
                             target=1;
                             Screen('FillRect', window, RGB1, centeredRect1);
                             if stimLoc<=33
@@ -401,8 +394,7 @@ for task=1:numTask
                                 Screen('FillOval', window, RGB4, centeredRect4, maxDiameter);
                             end
                         elseif 50<targetLoc
-                            RGB2(1,1)=255;
-                            RGB2(1,3)=0;
+                            RGB2=[255 0 0];
                             target=2;
                             Screen('FillRect', window, RGB2, centeredRect2);
                             if stimLoc<=33
@@ -475,7 +467,7 @@ for task=1:numTask
                 
                 %record auditory resp if dual-task, show fixation if single
                 
-                audRespDur=1;
+                audRespDur=2.5;
                 audResp=0;
                 audRT=0;
                 

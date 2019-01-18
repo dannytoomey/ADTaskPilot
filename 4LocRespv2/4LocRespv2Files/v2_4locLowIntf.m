@@ -373,7 +373,7 @@ for task=1:numTask
                 
                 %record auditory resp if dual-task, show fixation if single
                 
-                audRespDur=1;
+                audRespDur=2.5;
                 audResp=0;
                 audRT=0;
                 

@@ -27,7 +27,7 @@ else
     end
 end
 
-filePath = '/Users/labadmin/Documents/Experiments/ADTask/4LocResp/4LocResp/4LocRespData';
+filePath = '/Users/labadmin/Documents/Experiments/ADTask/ADTaskPilot/4LocRespv2/4LocRespv2Data';
 save([filePath '/' sprintf('sj%02d_SubjectInfo.mat',sjNum)],'age','gender','handedness','condCBOrder','taskCBOrder');
 
 if taskCBOrder==1

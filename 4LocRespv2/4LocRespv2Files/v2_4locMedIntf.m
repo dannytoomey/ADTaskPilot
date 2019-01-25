@@ -73,6 +73,10 @@ numTrials = 6;
 valCueThres=2/3;
 invalCueThres=1/3;
 
+wmLoadDur=3;
+visRespDur=1;
+audRespDur=2.5;
+
 load('taskCBOrder.mat');
 
 for task=1:numTask
@@ -80,17 +84,18 @@ for task=1:numTask
     Screen('TextSize',window,40);
     Screen('TextFont',window,'Courier');
     ignoreTones=['Respond to the location of the \n'...
-        'red square with the E, C, I, and N keys \n'...
+        'RED SQUARE with the E, C, I, and N keys \n'...
         '(E = upper left, I = upper right \n'...
         'C = lower left, and N = lower right) \n'...
-        'and ignore the tones.'];
+        'and IGNORE the TONES.'];
     respTones=['Respond to the location of the \n'...
-        'red square with the E, C, I, and N keys. \n'...
+        'RED SQUARE with the E, C, I, and N keys. \n'...
         '(E = upper left, I = upper right \n'...
         'C = lower left, and N = lower right) \n'...
-        'Respond to the pitch of the tone \n'...
+        'RESPOND to the PITCH of the TONES \n'...
         'with the F and J keys. \n' ...
         '(F = low and J = high)'];
+
         
     if medTaskOrder==1
         if task==1
@@ -120,33 +125,33 @@ for task=1:numTask
         end
         
         if cueCond==1
-            cueInst=['\n The box is more likely to give \n the location of the target. \n' ...
+            cueInst=['\n The box is MORE likely to give \n the location of the target. \n' ...
                 'Use this information.'];
         elseif cueCond==2
-            cueInst=['\n The box is less likely to give \n the location of the target. \n' ...
+            cueInst=['\n The box is LESS likely to give \n the location of the target. \n' ...
                 'Use this information.'];
         end
-        
+
         WMData=nan(10,numBlocks);
         
         for block=1:numBlocks
             
             singleTaskInst = ['You are about to see a sequence of letters. \n' ...
                 'Remember these letters in order. \n \n' ... 
-                'Remember to respond to the location \n' ... 
-                'of the red square and ignore the tones. \n \n'...
+                'Remember to RESPOND to the location \n' ... 
+                'of the RED SQUARE and IGNORE the TONES. \n \n'...
                 sprintf('%s',cueInst) '\n \n' ... 
                 'Press space when you are ready \n' ... 
                 'to see the letters.'];
             dualTaskInst = ['You are about to see a sequence of letters. \n'... 
                 'Remember these letters in order. \n \n'...
-                'Remember to respond to the \n' ... 
-                'location of the red square \n' ... 
-                'and the pitch of the tone.\n'...
+                'Remember to RESPOND to the \n' ... 
+                'location of the RED SQUARE \n' ... 
+                'AND the PITCH of the TONES.\n'...
                 sprintf('%s',cueInst) '\n \n' ... 
                 'Press space when you are ready \n' ... 
                 'to see the letters.'];
-            
+
             Screen('TextSize', window, 30);
             
             if medTaskOrder==1
@@ -189,7 +194,7 @@ for task=1:numTask
             Screen('DrawText',window,letter4,xCenter + .75*xScale,yCenter,white);
             Screen('DrawText',window,letter5,xCenter + 1.5*xScale,yCenter,white);
             Screen('Flip',window);
-            WaitSecs(2);
+            WaitSecs(wmLoadDur);
             
             Screen('FillRect',window,grey,[]);
             Screen('Flip',window);
@@ -428,9 +433,7 @@ for task=1:numTask
                 PsychPortAudio('FillBuffer', pahandle, beep);
 
                 %present stimuli
-                
-                numSecs = 1;
-                
+               
                 visResp=0;
 
                 visTStart = Screen('Flip', window);
@@ -438,7 +441,7 @@ for task=1:numTask
                 
                 %record visual response
                 
-                while GetSecs<=visTStart+numSecs
+                while GetSecs<=visTStart+visRespDur
                     if visResp==0
                     [keyIsDown, visTEnd, keyCode, ~] = KbCheck(keyboardIndices);
                         if keyIsDown == 1
@@ -467,7 +470,6 @@ for task=1:numTask
                 
                 %record auditory resp if dual-task, show fixation if single
                 
-                audRespDur=2.5;
                 audResp=0;
                 audRT=0;
                 
@@ -538,7 +540,7 @@ for task=1:numTask
             Screen('DrawText',window,'_',xCenter + .75*xScale,yCenter,white);
             Screen('DrawText',window,'_',xCenter + 1.5*xScale,yCenter,white);
             Screen('Flip',window,[],1);
-            WaitSecs(0.25);
+            WaitSecs(0.5);
             wmResp = zeros(1,5);
             numResp = 1;
             loc=[xCenter - 1.5*xScale,xCenter - .75*xScale,xCenter,xCenter + .75*xScale,xCenter + 1.5*xScale];

@@ -19,7 +19,7 @@ function runANT(subjectNumber)
 %Experiment Parameters
 %lags are 300 and 700 ms
 
-laptopDebug=1;
+laptopDebug=0;
 if laptopDebug==1
     Screen('Preference','SkipSyncTests',1);
     subjectNumber=99;

@@ -13,10 +13,10 @@ function [nt1Acc,nt2Acc,nt2AccGivenT1Acc,trialMatrix,targets] = ANT(subjectNumbe
 nSOA = size(mySOA,2);
 nConCon = 2; %easy and hard
 nCueCon = 7; % cue conditions no-cue,fix,4 valid, 1 invalid
-if laptopDebug==0
-    nBlocks = 7;
+if subjectNumber==199
+    nBlocks = 1;
 else
-    nBlocks=1;
+    nBlocks=7;
 end
 nRepsPerBlock = 2;
 nTotalTrials = nConCon*nCueCon*nSOA*nRepsPerBlock*nBlocks; %nTotal trials
@@ -35,7 +35,7 @@ ctr = 0;
 error_ctr = 0;
 while error_ctr == ctr
     try
-        [window,rect] = Screen('OpenWindow',screen,[127.5000  127.5000  127.5000]);
+        [window,rect] = Screen('OpenWindow',screen,[255 255 255]);
     catch
         error_ctr = error_ctr+1;
     end

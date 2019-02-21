@@ -218,7 +218,7 @@ for cond=1:numCond
                         Screen('DrawLines',window,allCoords,lineWidthPix,white,[xCenter yCenter], 2);
                         Screen('Flip', window,[],1);
                         Screen('BlendFunction', window, 'GL_SRC_ALPHA', 'GL_ONE_MINUS_SRC_ALPHA');
-                        Screen('FrameRect',window,rectColor,centeredRect,1);
+                        Screen('FrameRect',window,rectColor,centeredRect,6);
                         Screen('Flip', window);
                         WaitSecs(0.5);
                         Screen('BlendFunction', window, 'GL_SRC_ALPHA', 'GL_ONE_MINUS_SRC_ALPHA');
@@ -591,7 +591,7 @@ for cond=1:numCond
                         Screen('DrawLines',window,allCoords,lineWidthPix,white,[xCenter yCenter], 2);
                         Screen('Flip', window,[],1);
                         Screen('BlendFunction', window, 'GL_SRC_ALPHA', 'GL_ONE_MINUS_SRC_ALPHA');
-                        Screen('FrameRect',window,rectColor,centeredRect,1);
+                        Screen('FrameRect',window,rectColor,centeredRect,6);
                         Screen('Flip', window);
                         WaitSecs(0.5);
                         Screen('BlendFunction', window, 'GL_SRC_ALPHA', 'GL_ONE_MINUS_SRC_ALPHA');
@@ -1068,7 +1068,7 @@ for cond=1:numCond
                         Screen('DrawLines',window,allCoords,lineWidthPix,white,[xCenter yCenter], 2);
                         Screen('Flip', window,[],1);
                         Screen('BlendFunction', window, 'GL_SRC_ALPHA', 'GL_ONE_MINUS_SRC_ALPHA');
-                        Screen('FrameRect',window,rectColor,centeredRect,1);
+                        Screen('FrameRect',window,rectColor,centeredRect,6);
                         Screen('Flip', window);
                         WaitSecs(0.5);
                         Screen('BlendFunction', window, 'GL_SRC_ALPHA', 'GL_ONE_MINUS_SRC_ALPHA');

@@ -216,7 +216,7 @@ for task=1:numTask
                     CenX = max(xLctn);
                 end
                 
-                %draw fixation cross
+                %draw fixation cross and cue
                 
                 stimRect = [0 0 50 50];
                 maxDiameter = max(stimRect);
@@ -227,13 +227,25 @@ for task=1:numTask
                 allCoords = [xCoords; yCoords];
                 lineWidthPix = 2;
                 crossSize=18;
+                baseRect = [0 0 1.5*stimRect(1,3) -stimY(1,1)+stimY(2,1)+1.5*stimRect(1,4)];
                 boxCenX = xCenter + CenX;
+                centeredRect = CenterRectOnPointd(baseRect, boxCenX, yCenter);
+                rectColor = [0 0 0]; 
                 Screen('BlendFunction', window, 'GL_SRC_ALPHA', 'GL_ONE_MINUS_SRC_ALPHA');
                 Screen('TextSize', window, crossSize);
                 Screen('DrawLines',window,allCoords,lineWidthPix,white,[xCenter yCenter], 2);
                 Screen('Flip', window,[],1);
-                WaitSecs(0.5);
-                
+                %draw cue
+                Screen('BlendFunction', window, 'GL_SRC_ALPHA', 'GL_ONE_MINUS_SRC_ALPHA');
+                Screen('FrameRect',window,rectColor,centeredRect,6);
+                Screen('Flip', window);
+                WaitSecs(0.5);      %show cue and fix for 0.5sec
+                Screen('BlendFunction', window, 'GL_SRC_ALPHA', 'GL_ONE_MINUS_SRC_ALPHA');
+                Screen('TextSize', window, crossSize);
+                Screen('DrawLines',window,allCoords,lineWidthPix,white,[xCenter yCenter], 2);
+                Screen('Flip', window,[],1);
+                WaitSecs(0.25);     %show just fix for 0.25sec
+
                 centeredRect1 = CenterRectOnPointd(stimRect, xCenter+stimX(1,1), yCenter+stimY(1,1));
                 centeredRect2 = CenterRectOnPointd(stimRect, xCenter+stimX(2,1), yCenter+stimY(2,1));
                 centeredRect3 = CenterRectOnPointd(stimRect, xCenter+stimX(1,2), yCenter+stimY(1,2));

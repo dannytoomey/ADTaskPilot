@@ -7,11 +7,18 @@ counterBal=[1	2	3	4	5	6	1	2	3	4	5	6	1	2	3	4	5	6	1	2	3	4	5	6	1	2	3	4	5	6	1	2	3	4	
             1	2	3	4	5	6	2	3	4	5	6	1	3	4	5	6	1	2	4	5	6	1	2	3	5	6	1	2	3	4	6	1	2	3	4	5];
 
 if sjNum==199
-    numBlocks=2;
+    
+    numBlocks=1;
+    
+    age=22;
+    gender=0;
+    handedness=1;
     lowTaskOrder=1;
     medTaskOrder=1;
     highTaskOrder=1;
     condCBOrder=0;
+    taskCBOrder=0;
+    
 else
     
     numBlocks=8;
@@ -61,7 +68,7 @@ elseif taskCBOrder==6
     highTaskOrder = 2;
 end
 
-laptopDebug=1;
+laptopDebug=0;
 
 if laptopDebug==1
     Screen('Preference','SkipSyncTests',1)
@@ -89,9 +96,9 @@ waitForDeviceStart = 0;
 
 if condCBOrder==0
     v2_4locPrac(numTask,numCue,numBlocks,numTrials,valCueThres,invalCueThres,wmLoadDur,visRespDur,audRespDur,numChannels,soundRep,soundDur,waitForDeviceStart)
-    %v2_4locLowIntf(filePath,sjNum,lowTaskOrder,numTask,numCue,numBlocks,numTrials,valCueThres,invalCueThres,wmLoadDur,visRespDur,audRespDur,numChannels,soundRep,soundDur,waitForDeviceStart)
-    %v2_4locMedIntf(filePath,sjNum,medTaskOrder,numTask,numCue,numBlocks,numTrials,valCueThres,invalCueThres,wmLoadDur,visRespDur,audRespDur,numChannels,soundRep,soundDur,waitForDeviceStart)
-    %v2_4locHighIntf(filePath,sjNum,highTaskOrder,numTask,numCue,numBlocks,numTrials,valCueThres,invalCueThres,wmLoadDur,visRespDur,audRespDur,numChannels,soundRep,soundDur,waitForDeviceStart)
+    v2_4locLowIntf(filePath,sjNum,lowTaskOrder,numTask,numCue,numBlocks,numTrials,valCueThres,invalCueThres,wmLoadDur,visRespDur,audRespDur,numChannels,soundRep,soundDur,waitForDeviceStart)
+    v2_4locMedIntf(filePath,sjNum,medTaskOrder,numTask,numCue,numBlocks,numTrials,valCueThres,invalCueThres,wmLoadDur,visRespDur,audRespDur,numChannels,soundRep,soundDur,waitForDeviceStart)
+    v2_4locHighIntf(filePath,sjNum,highTaskOrder,numTask,numCue,numBlocks,numTrials,valCueThres,invalCueThres,wmLoadDur,visRespDur,audRespDur,numChannels,soundRep,soundDur,waitForDeviceStart)
 end
 if condCBOrder==1
     v2_4locPrac(numTask,numCue,numBlocks,valCueThres,invalCueThres,wmLoadDur,visRespDur,audRespDur,numChannels,soundRep,soundDur,waitForDeviceStart)

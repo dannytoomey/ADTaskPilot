@@ -31,7 +31,16 @@ PsychDefaultSetup(2);
 PsychImaging('PrepareConfiguration');
 
 screen=max(Screen('Screens'));
-[window,rect] = Screen('OpenWindow',screen,[255 255 255]);
+ctr = 0;
+error_ctr = 0;
+while error_ctr == ctr
+    try
+        [window,rect] = Screen('OpenWindow',screen,[127.5000  127.5000  127.5000]);
+    catch
+        error_ctr = error_ctr+1;
+    end
+    ctr = ctr+1;
+end
 HideCursor;
 
 [centerX, centerY] = RectCenter(rect);

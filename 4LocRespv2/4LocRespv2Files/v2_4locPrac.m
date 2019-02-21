@@ -24,8 +24,8 @@
 
 %uses hIntf v2
 
-function v2_4locPrac(sjNum)
-
+function v2_4locPrac(numTask,numCue,numBlocks,numTrials,valCueThres,invalCueThres,wmLoadDur,visRespDur,audRespDur,numChannels,soundRep,soundDur,waitForDeviceStart)
+    
 sca;
 PsychDefaultSetup(2);
 InitializePsychSound(1);
@@ -69,23 +69,8 @@ stimX = x - x1/2;
 stimY = y - y1/2;
 yScale = stimY(1,2);
 xScale = stimX(1,2);
-numChannels = 1;
-soundRep = 1;
-soundDur = 0.25;
-waitForDeviceStart = 0;
 
 numCond=3;
-numTask = 2;
-numCue = 2;
-
-numBlocks = 1;
-numTrials = 6;
-valCueThres=2/3;
-invalCueThres=1/3;
-
-wmLoadDur=3;
-visRespDur=1;
-audRespDur=2.5;
 
 for cond=1:numCond
     

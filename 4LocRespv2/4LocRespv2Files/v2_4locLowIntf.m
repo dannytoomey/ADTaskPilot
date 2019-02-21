@@ -18,7 +18,9 @@
 
 %% Low Interference Condition
 
-function v2_4locLowIntf(sjNum)
+function v2_4locLowIntf(filePath,sjNum,lowTaskOrder,numTask,numCue,numBlocks,numTrials,valCueThres,invalCueThres,wmLoadDur,visRespDur,audRespDur,numChannels,soundRep,soundDur,waitForDeviceStart)
+
+%set up the screen
 
 sca;
 PsychDefaultSetup(2);
@@ -40,6 +42,9 @@ while error_ctr == ctr
     end
     ctr = ctr+1;
 end
+
+%set up the keys that will be used to respond
+
 [keyboardIndices, ~, ~] = GetKeyboardIndices('Apple Internal Keyboard / Trackpad');
 KbName('UnifyKeyNames');
 upLeftResp = KbName('e');
@@ -48,6 +53,9 @@ upRightResp = KbName('i');
 downRightResp = KbName('n');
 lowResp=KbName('f');
 highResp=KbName('j');
+
+%set up the stimulus locations
+
 PsychImaging('PrepareConfiguration');
 [xCenter, yCenter] = RectCenter(rect);
 [~, screenYpixels] = Screen('WindowSize', window);
@@ -62,27 +70,11 @@ stimX = x - x1/2;
 stimY = y - y1/2;
 yScale = stimY(1,2);
 xScale = stimX(1,2);
-numChannels = 1;
-soundRep = 1;
-soundDur = 0.25;
-waitForDeviceStart = 0;
-
-numTask = 2;
-numCue = 2;
-
-numBlocks = 8;
-numTrials = 6;
-valCueThres=2/3;
-invalCueThres=1/3;
-
-wmLoadDur=3;
-visRespDur=1;
-audRespDur=2.5;
-
-load('taskCBOrder.mat');
 
 for task=1:numTask
         
+    %give task instructions
+    
     Screen('TextSize',window,40);
     Screen('TextFont',window,'Courier');
     ignoreTones=['Respond to the location of the \n'...
@@ -137,6 +129,8 @@ for task=1:numTask
         
         for block=1:numBlocks
             
+            %give instructions for this block
+            
             singleTaskInst = ['You are about to see a sequence of letters. \n' ...
                 'Remember these letters in order. \n \n' ... 
                 'Remember to respond to the location \n' ... 
@@ -178,7 +172,7 @@ for task=1:numTask
             KbStrokeWait
             WaitSecs(.2)
             
-            %load WM
+            %give WM load
             
             letters = ['A' 'B' 'C' 'D' 'E' 'F' 'G' 'H' 'I' 'J' 'K' 'L' 'M' 'N' 'O' 'P' 'Q' 'R' 'S' 'T' 'U' 'V' 'W' 'X' 'Y' 'Z'];
             rng('shuffle');
@@ -220,6 +214,8 @@ for task=1:numTask
                 end
                 
                 %draw fixation cross
+                %(let it be for now but next time, a '+' will do just fine,
+                %this is a little excessive)
                 
                 stimRect = [0 0 50 50];
                 maxDiameter = max(stimRect);
@@ -230,23 +226,14 @@ for task=1:numTask
                 allCoords = [xCoords; yCoords];
                 lineWidthPix = 2;
                 crossSize=18;
-                baseRect = [0 0 1.5*stimRect(1,3) -stimY(1,1)+stimY(2,1)+1.5*stimRect(1,4)];
                 boxCenX = xCenter + CenX;
-                centeredRect = CenterRectOnPointd(baseRect, boxCenX, yCenter);
-                rectColor = [0 0 0]; 
                 Screen('BlendFunction', window, 'GL_SRC_ALPHA', 'GL_ONE_MINUS_SRC_ALPHA');
                 Screen('TextSize', window, crossSize);
                 Screen('DrawLines',window,allCoords,lineWidthPix,white,[xCenter yCenter], 2);
                 Screen('Flip', window,[],1);
-                Screen('BlendFunction', window, 'GL_SRC_ALPHA', 'GL_ONE_MINUS_SRC_ALPHA');
-                Screen('FrameRect',window,rectColor,centeredRect,1);
-                Screen('Flip', window);
                 WaitSecs(0.5);
-                Screen('BlendFunction', window, 'GL_SRC_ALPHA', 'GL_ONE_MINUS_SRC_ALPHA');
-                Screen('TextSize', window, crossSize);
-                Screen('DrawLines',window,allCoords,lineWidthPix,white,[xCenter yCenter], 2);
-                Screen('Flip', window,[],1);
-                WaitSecs(0.25);
+                
+                %set the location of each stimulus
                 
                 centeredRect1 = CenterRectOnPointd(stimRect, xCenter+stimX(1,1), yCenter+stimY(1,1));
                 centeredRect2 = CenterRectOnPointd(stimRect, xCenter+stimX(2,1), yCenter+stimY(2,1));
@@ -261,6 +248,10 @@ for task=1:numTask
                 
                 rng('shuffle');
                 targetLoc=randi(100);
+                
+                %determine stimulus location and target
+                %(make subfunctions for this kind of thing next time, this
+                %is messy to read)
                 
                 if boxLctn<=50
                     if cueOrder(1,trial)<=thres
@@ -350,7 +341,7 @@ for task=1:numTask
                     if visResp==0
                     [keyIsDown, visTEnd, keyCode, ~] = KbCheck(keyboardIndices);
                         if keyIsDown == 1
-                            ind = find(keyCode ~=0);
+                            ind = find(keyCode~=0);
                             if size(ind,2)==1
                                 if ind == upLeftResp
                                     visResp = 1;
@@ -368,7 +359,7 @@ for task=1:numTask
                 if visTEnd==0
                     visTEnd=GetSecs;
                 end
-                visRT = visTEnd - visTStart;
+                visRT=visTEnd-visTStart;
                 
                 PsychPortAudio('Stop',pahandle,1,1);
                 PsychPortAudio('Close', pahandle);
@@ -413,16 +404,16 @@ for task=1:numTask
                     audRT=audTEnd-audTStart;
                 end
                 
-                trialData(1,trial) = cueCond;
-                trialData(2,trial) = cueOrder(1,trial);
-                trialData(3,trial) = boxCenX;
-                trialData(4,trial) = targetLoc;
-                trialData(5,trial) = tone;
-                trialData(6,trial) = audResp;
-                trialData(7,trial) = audRT;
-                trialData(8,trial) = target;
-                trialData(9,trial) = visResp;
-                trialData(10,trial) = visRT;
+                trialData(1,trial) = cueCond;               %weather cues are more or less valid on this block
+                trialData(2,trial) = cueOrder(1,trial);     %cue val or inval on this trial    
+                trialData(3,trial) = boxCenX;               %location of the cue
+                trialData(4,trial) = targetLoc;             %recording so in case i need to double check that the target is being display in the correct location
+                trialData(5,trial) = tone;                  %pitch of the tone
+                trialData(6,trial) = audResp;               %low or high resp
+                trialData(7,trial) = audRT;                 %rt for auditory response
+                trialData(8,trial) = target;                %location of visual target
+                trialData(9,trial) = visResp;               %upper/lower left/right location resp
+                trialData(10,trial) = visRT;                %rt for visual response
                 
                 allLowTrials(trial).thisTrialData=trialData;
                 
@@ -431,6 +422,9 @@ for task=1:numTask
             save('allLowTrialsFile.mat','allLowTrials');
             
             %probe wm
+            
+            Screen('FillRect',window,grey)
+            WaitSecs(0.5)
             
             Screen('TextSize', window, 30);
             Screen('TextFont', window, 'Courier');
@@ -444,6 +438,8 @@ for task=1:numTask
             Screen('DrawText',window,'_',xCenter + .75*xScale,yCenter,white);
             Screen('DrawText',window,'_',xCenter + 1.5*xScale,yCenter,white);
             Screen('Flip',window,[],1);
+            %put this waitsecs here so if they're pressing a key from
+            %visual resp it doesn't show up as a wm resp
             WaitSecs(0.5);
             wmResp = zeros(1,5);
             numResp = 1;
@@ -469,6 +465,7 @@ for task=1:numTask
                         
             KbStrokeWait;
 
+            %record wm data
             WMData(1,block) = letters(1,LTs(1,1));
             WMData(2,block) = letters(1,LTs(1,2));
             WMData(3,block) = letters(1,LTs(1,3));
@@ -483,18 +480,18 @@ for task=1:numTask
             allLowBlock(block).thisBlockTrials=allLowTrials;
             allLowBlock(block).thisBlockWM=WMData;
             Screen('FillRect',window,grey);
-            save('allLowBlockFile.mat','allLowBlock');
+            save('allLowBlockFile.mat','allLowBlock');      %save struct in case crash
             
         end
         
         allLowCueCond(cue).thisCueCondData=allLowBlock;
         allLowCueCond(cue).thisCueCond=cueCond;
-        save('allLowCueCondFile.mat','allLowCueCond');
+        save('allLowCueCondFile.mat','allLowCueCond');      %save struct in case crash
 
     end
     
     allLowTask(task).thisTaskData=allLowCueCond;
-    save([filePath '/' sprintf('sj%02d_allLowTaskFile.mat',sjNum)],'allLowTask');
+    save([filePath '/' sprintf('sj%02d_allLowTaskFile.mat',sjNum)],'allLowTask');       %save struct to data repository
    
 end
 

@@ -18,7 +18,9 @@
 
 %% Medium Interference Condition
 
-function v2_4locMedIntf(sjNum)
+function v2_4locMedIntf(filePath,sjNum,medTaskOrder,numTask,numCue,numBlocks,numTrials,valCueThres,invalCueThres,wmLoadDur,visRespDur,audRespDur,numChannels,soundRep,soundDur,waitForDeviceStart)
+
+%set up the screen
 
 sca;
 PsychDefaultSetup(2);
@@ -38,6 +40,9 @@ while error_ctr == ctr
     end
     ctr = ctr+1;
 end
+
+%set up the keys that will be used to respond
+
 [keyboardIndices, ~, ~] = GetKeyboardIndices('Apple Internal Keyboard / Trackpad');
 KbName('UnifyKeyNames');
 upLeftResp = KbName('e');
@@ -46,6 +51,9 @@ upRightResp = KbName('i');
 downRightResp = KbName('n');
 lowResp=KbName('f');
 highResp=KbName('j');
+
+%set up the stimulus locations
+
 PsychImaging('PrepareConfiguration');
 [xCenter, yCenter] = RectCenter(rect);
 [~, screenYpixels] = Screen('WindowSize', window);
@@ -60,26 +68,10 @@ stimX = x - x1/2;
 stimY = y - y1/2;
 yScale = stimY(1,2);
 xScale = stimX(1,2);
-numChannels = 1;
-soundRep = 1;
-soundDur = 0.25;
-waitForDeviceStart = 0;
-
-numTask = 2;
-numCue = 2;
-
-numBlocks = 8;
-numTrials = 6;
-valCueThres=2/3;
-invalCueThres=1/3;
-
-wmLoadDur=3;
-visRespDur=1;
-audRespDur=2.5;
-
-load('taskCBOrder.mat');
 
 for task=1:numTask
+    
+    %give instructions for the task
         
     Screen('TextSize',window,40);
     Screen('TextFont',window,'Courier');
@@ -95,7 +87,6 @@ for task=1:numTask
         'RESPOND to the PITCH of the TONES \n'...
         'with the F and J keys. \n' ...
         '(F = low and J = high)'];
-
         
     if medTaskOrder==1
         if task==1
@@ -135,6 +126,8 @@ for task=1:numTask
         WMData=nan(10,numBlocks);
         
         for block=1:numBlocks
+            
+            %give instructions for this block
             
             singleTaskInst = ['You are about to see a sequence of letters. \n' ...
                 'Remember these letters in order. \n \n' ... 
@@ -177,7 +170,7 @@ for task=1:numTask
             KbStrokeWait
             WaitSecs(.2)
             
-            %load WM
+            %give WM load
             
             letters = ['A' 'B' 'C' 'D' 'E' 'F' 'G' 'H' 'I' 'J' 'K' 'L' 'M' 'N' 'O' 'P' 'Q' 'R' 'S' 'T' 'U' 'V' 'W' 'X' 'Y' 'Z'];
             rng('shuffle');
@@ -229,23 +222,12 @@ for task=1:numTask
                 allCoords = [xCoords; yCoords];
                 lineWidthPix = 2;
                 crossSize=18;
-                baseRect = [0 0 1.5*stimRect(1,3) -stimY(1,1)+stimY(2,1)+1.5*stimRect(1,4)];
                 boxCenX = xCenter + CenX;
-                centeredRect = CenterRectOnPointd(baseRect, boxCenX, yCenter);
-                rectColor = [0 0 0]; 
                 Screen('BlendFunction', window, 'GL_SRC_ALPHA', 'GL_ONE_MINUS_SRC_ALPHA');
                 Screen('TextSize', window, crossSize);
                 Screen('DrawLines',window,allCoords,lineWidthPix,white,[xCenter yCenter], 2);
                 Screen('Flip', window,[],1);
-                Screen('BlendFunction', window, 'GL_SRC_ALPHA', 'GL_ONE_MINUS_SRC_ALPHA');
-                Screen('FrameRect',window,rectColor,centeredRect,1);
-                Screen('Flip', window);
                 WaitSecs(0.5);
-                Screen('BlendFunction', window, 'GL_SRC_ALPHA', 'GL_ONE_MINUS_SRC_ALPHA');
-                Screen('TextSize', window, crossSize);
-                Screen('DrawLines',window,allCoords,lineWidthPix,white,[xCenter yCenter], 2);
-                Screen('Flip', window,[],1);
-                WaitSecs(0.25);
                 
                 centeredRect1 = CenterRectOnPointd(stimRect, xCenter+stimX(1,1), yCenter+stimY(1,1));
                 centeredRect2 = CenterRectOnPointd(stimRect, xCenter+stimX(2,1), yCenter+stimY(2,1));
@@ -528,6 +510,9 @@ for task=1:numTask
             
             %probe wm
             
+            Screen('FillRect',window,grey)
+            WaitSecs(0.5)
+            
             Screen('TextSize', window, 30);
             Screen('TextFont', window, 'Courier');
             DrawFormattedText(window, 'Type the letters', 'center', yCenter + .75*yScale, white);
@@ -564,7 +549,8 @@ for task=1:numTask
             end
                         
             KbStrokeWait;
-
+            
+            %record wm data
             WMData(1,block) = letters(1,LTs(1,1));
             WMData(2,block) = letters(1,LTs(1,2));
             WMData(3,block) = letters(1,LTs(1,3));
@@ -599,4 +585,3 @@ ShowCursor;
 sca;
 
 return
-

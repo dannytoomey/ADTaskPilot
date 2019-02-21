@@ -53,17 +53,19 @@ for i = 1:size(subjects,2)
         for x=1:nCueCon
             for y=1:nDifCon
                 for z=1:nSoas
-                allAccData(i,colCtr) = accData(x,y,z);
-                fprintf(accFid,'%5.3f\t',allAccData(i,colCtr));
-                allRTdata(i,colCtr) = rtData(x,y,z);
-                fprintf(rtFid,'%7.2f\t',allRTdata(i,colCtr));
-                colCtr = colCtr +1;
+                    allAccData(i,colCtr) = accData(x,y,z);
+                    fprintf(accFid,'%5.3f\t',allAccData(i,colCtr));
+                    allRTdata(i,colCtr) = rtData(x,y,z);
+                    fprintf(rtFid,'%7.2f\t',allRTdata(i,colCtr));
+                    colCtr = colCtr +1;
+                end
             end
         end
     end
 
-        fprintf(accFid,'\n');
-        fprintf(rtFid,'\n');
+    fprintf(accFid,'\n');
+    fprintf(rtFid,'\n');
+    
 end
 
 fclose(accFid);

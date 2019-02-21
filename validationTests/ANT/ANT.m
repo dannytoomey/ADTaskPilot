@@ -16,7 +16,7 @@ nCueCon = 7; % cue conditions no-cue,fix,4 valid, 1 invalid
 if laptopDebug==0
     nBlocks = 7;
 else
-    nBlocks=2;
+    nBlocks=1;
 end
 nRepsPerBlock = 2;
 nTotalTrials = nConCon*nCueCon*nSOA*nRepsPerBlock*nBlocks; %nTotal trials
@@ -64,8 +64,6 @@ messageWindow = Screen('OpenOffScreenWindow',window);
 dummywindow = Screen('OpenOffScreenWindow',window);
 Screen('TextSize',dummywindow,24);
 Screen('TextFont',dummywindow,'Arial');
-
-practice=0;
 
 if practice == 0
     %open logfile
@@ -335,32 +333,32 @@ function [myWindows,arrowDir,CueCode] = make_stream(myWindows,thisCon,thisCue,ta
 tempOffset = 0;
 Screen('TextFont',myWindows(3),'Arial');
 
-upperLoc=-44;
+upperLoc=-44;       
 lowerLoc=44;
 
 if thisCue == 1
     drawFixation(myWindows(3),centerX,centerY,[0 0 0])
     CueCode = 'N';
 elseif thisCue == 2
-    drawCue(myWindows(3),lowerLoc,centerX,centerY,[0 0 0])
-    CueCode = 'C';
-elseif thisCue== 7 %an invalid trial
+    drawCue(myWindows(3),0,centerX,centerY,[0 0 0])      
+    CueCode = 'C';  %for 'center'
+elseif thisCue== 7  %an invalid trial
     if tarLoc == 1
-        drawCue(myWindows(3),lowerLoc,centerX,centerY,[0 0 0])
+        drawCue(myWindows(3),lowerLoc,centerX,centerY,[0 0 0])  %loc was lowerLoc
         drawFixation(myWindows(3),centerX,centerY,[0 0 0])
         CueCode = 'I';
     else
-        drawCue(myWindows(3),upperLoc,centerX,centerY,[0 0 0])
+        drawCue(myWindows(3),upperLoc,centerX,centerY,[0 0 0])  %loc was upperLoc
         drawFixation(myWindows(3),centerX,centerY,[0 0 0])
         CueCode = 'I';
     end
 else
     if tarLoc == 1
-        drawCue(myWindows(3),upperLoc,centerX,centerY,[0 0 0])
+        drawCue(myWindows(3),upperLoc,centerX,centerY,[0 0 0])  %loc was upperLoc
         drawFixation(myWindows(3),centerX,centerY,[0 0 0])
         CueCode = 'V';
     else
-        drawCue(myWindows(3),58,centerX,centerY,[0 0 0])
+        drawCue(myWindows(3),lowerLoc,centerX,centerY,[0 0 0])
         drawFixation(myWindows(3),centerX,centerY,[0 0 0])
         CueCode = 'V';
     end

@@ -35,7 +35,7 @@ ctr = 0;
 error_ctr = 0;
 while error_ctr == ctr
     try
-        [window,rect] = Screen('OpenWindow',screen,[127.5000  127.5000  127.5000]);
+        [window,rect] = Screen('OpenWindow',screen,[255 255 255]);
     catch
         error_ctr = error_ctr+1;
     end
@@ -411,16 +411,19 @@ else
     drawFixation(myWindows(2),centerX,centerY,[0 0 0])
 end
 
-test = 0;
+test = 1;
 
 if test == 1
     
-    myOffset = 100;
+    myOffset = 150;
+    rect=[centerX-myOffset,centerY-myOffset,centerX+myOffset,centerY+myOffset];
     testLoc = Screen('OpenOffScreenWindow',window);
     drawFixation(testLoc,centerX,centerY,[0 0 0])
     drawCue(testLoc,upperLoc,centerX,centerY,[0 0 0])
     drawCue(testLoc,0,centerX,centerY,[0 0 0]);
     drawCue(testLoc,lowerLoc,centerX,centerY,[0 0 0]);
+    Screen('TextSize',testLoc,40);
+    Screen('TextFont',testLoc,'Arial');
     t1Task = '<<<<<';
     [t1TaskBounds]=Screen('TextBounds',testLoc,t1Task);
     t1TaskX=centerX-round(t1TaskBounds(3)/2);
@@ -428,7 +431,7 @@ if test == 1
     Screen('DrawText',testLoc,t1Task,t1TaskX,t1TaskY+upperLoc,[0 0 0]);
     Screen('DrawText',testLoc,t1Task,t1TaskX,t1TaskY+lowerLoc,[0 0 0]);
 
-    Screen('CopyWindow',testLoc,window,[centerX-myOffset,centerY-myOffset,centerX+myOffset,centerY+myOffset],[centerX-myOffset,centerY-myOffset,centerX+myOffset,centerY+myOffset]);
+    Screen('CopyWindow',testLoc,window,rect,rect);
     Screen('Flip',window)
     Screen('WaitBlanking',window,100);
     
@@ -451,31 +454,10 @@ frmrate=FrameRate(window);
 tmp1 = round(.4/(1/frmrate));
 tmp2 = round(1.6/(1/frmrate));
 
-myOffset = 100;
+myOffset = 150;
 %Alter SOA
 
 nsr=round((lag/1000)*frmrate-round(.15*frmrate));
-
-%make critical timing loops
-% streamLoop1 = {
-%     'start=GetSecs;'
-%     'Screen(''CopyWindow'',fixWindow,window,[centerX-150,centerY-150,centerX+150,centerY+150],[centerX-150,centerY-150,centerX+150,centerY+150]);'
-%     'Screen(''Flip'',window)'
-%     'Screen(''WaitBlanking'',window,D);'
-%     'Screen(''CopyWindow'',myWindows(3),window,[centerX-myOffset,centerY-myOffset,centerX+myOffset,centerY+myOffset],[centerX-myOffset,centerY-myOffset,centerX+myOffset,centerY+myOffset]);'
-%     'Screen(''Flip'',window)'
-%     'Screen(''WaitBlanking'',window,round(.15*frmrate));'
-%     'Screen(''CopyWindow'',fixWindow,window,[centerX-150,centerY-150,centerX+150,centerY+150],[centerX-150,centerY-150,centerX+150,centerY+150]);'  
-%     'Screen(''Flip'',window)'
-%     'Screen(''WaitBlanking'',window,nsr);'
-%     'Screen(''CopyWindow'',myWindows(2),window,[centerX-myOffset,centerY-myOffset,centerX+myOffset,centerY+myOffset],[centerX-myOffset,centerY-myOffset,centerX+myOffset,centerY+myOffset]);'
-%     'Screen(''Flip'',window)'
-%     't1On=GetSecs;'
-%     };
-
-
-%priorityLevel =MaxPriority(window,'WaitBlanking');
-
 
 %D = random_range(tmp1,tmp2);    % number of Screen refreshes for initial fixation
 
@@ -489,6 +471,9 @@ elseif c==2
     D=tmp2;
 end
 
+fromScrnRect=[centerX-myOffset,centerY-myOffset,centerX+myOffset,centerY+myOffset];
+toScrnRect=[centerX-myOffset,centerY-myOffset,centerX+myOffset,centerY+myOffset];
+
 %show fixation, fix/cue, fixation, target
 start=GetSecs;
 %clear window
@@ -496,22 +481,22 @@ Screen('FillRect',window,[255 255 255])
 Screen('Flip',window)
 %show fixation for D amount of frames
 Screen('BlendFunction', window, 'GL_SRC_ALPHA', 'GL_ONE_MINUS_SRC_ALPHA');                 
-Screen('CopyWindow',fixWindow,window,[centerX-myOffset,centerY-myOffset,centerX+myOffset,centerY+myOffset],[centerX-myOffset,centerY-myOffset,centerX+myOffset,centerY+myOffset]);  %was +- 150
+Screen('CopyWindow',fixWindow,window,fromScrnRect,toScrnRect);  %was +- 150
 Screen('Flip',window)
 Screen('WaitBlanking',window,D);
 %show cue and fix
 Screen('BlendFunction', window, 'GL_SRC_ALPHA', 'GL_ONE_MINUS_SRC_ALPHA');                 
-Screen('CopyWindow',myWindows(3),window,[centerX-myOffset,centerY-myOffset,centerX+myOffset,centerY+myOffset],[centerX-myOffset,centerY-myOffset,centerX+myOffset,centerY+myOffset]);
+Screen('CopyWindow',myWindows(3),window,fromScrnRect,toScrnRect);
 Screen('Flip',window)
 Screen('WaitBlanking',window,round(.15*frmrate));
 %show fixation
 Screen('BlendFunction', window, 'GL_SRC_ALPHA', 'GL_ONE_MINUS_SRC_ALPHA');                 
-Screen('CopyWindow',fixWindow,window,[centerX-myOffset,centerY-myOffset,centerX+myOffset,centerY+myOffset],[centerX-myOffset,centerY-myOffset,centerX+myOffset,centerY+myOffset]);  %was +- 150
+Screen('CopyWindow',fixWindow,window,fromScrnRect,toScrnRect);  %was +- 150
 Screen('Flip',window)
 Screen('WaitBlanking',window,nsr);
 %show stim and wait for resp
 Screen('BlendFunction', window, 'GL_SRC_ALPHA', 'GL_ONE_MINUS_SRC_ALPHA');                 
-Screen('CopyWindow',myWindows(2),window,[centerX-myOffset,centerY-myOffset,centerX+myOffset,centerY+myOffset],[centerX-myOffset,centerY-myOffset,centerX+myOffset,centerY+myOffset]);
+Screen('CopyWindow',myWindows(2),window,fromScrnRect,toScrnRect);
 Screen('Flip',window)
 t1On=GetSecs;
 

@@ -91,7 +91,7 @@ else
         singleOrder=singleRespCBO(:,1);
     end
 
-    filePath='/Users/labadmin/Documents/Experiments/ADTask/ADTaskPilot/validationTests/dividedTest';
+    filePath='/Users/labadmin/Documents/Experiments/ADTask/ADTaskPilot/validationTests/dividedTest/';
     
     %add counterbalancing measures for letters/pics 
     %add saveFile for behavior room

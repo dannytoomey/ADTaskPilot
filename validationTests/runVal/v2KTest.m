@@ -1,5 +1,5 @@
 
-function v2KTest(sjNum,numTrials,exp,laptopDebug)
+function v2KTest(sjNum,numTrials,exp,KfilePath,laptopDebug)
 
 % PTB3 implementation of a color change detection task following Luck &
 % Vogel (1997).
@@ -115,7 +115,7 @@ for b = 1:p.nBlocks
     fName = [num2str(p.subNum), '_ColorK', num2str(b), '.mat'];
     
     if sjNum~=199   %add b/c idc if it overwrites the files if i'm debugging
-        if exist(fName)
+        if exist([KfilePath fName])
             Screen('CloseAll');
             msgbox('File already exists!', 'modal')
             return;
@@ -140,7 +140,7 @@ for b = 1:p.nBlocks
     %--------------------------------------------------------
     % Load the stimulus sequence
     %--------------------------------------------------------
-    ts=load(sprintf('sj%02d_trialSequences.mat',sjNum));
+    ts=load([KfilePath sprintf('sj%02d_KtrialSequences.mat',sjNum)]);
     setSize = ts.allSessionSequences(1,:,1);
     change = ts.allSessionSequences(1,:,2);
     
@@ -357,7 +357,8 @@ for b = 1:p.nBlocks
     WaitSecs(0.5)
     
     % save data file at the end of each block
-    save(fName,'p','stim'); 
+    saveFile=[KfilePath fName];
+    save(saveFile,'p','stim'); 
     
 end         % end of block loop
 

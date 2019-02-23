@@ -114,7 +114,7 @@ for b = 1:p.nBlocks
     
     fName = [num2str(p.subNum), '_ColorK', num2str(b), '.mat'];
     
-    if laptopDebug~=1   %add b/c idc if it overwrites the files if i'm debugging
+    if sjNum~=199   %add b/c idc if it overwrites the files if i'm debugging
         if exist(fName)
             Screen('CloseAll');
             msgbox('File already exists!', 'modal')
@@ -147,6 +147,8 @@ for b = 1:p.nBlocks
     %--------------------------------------------------------
     % Give instructions
     %--------------------------------------------------------
+    
+    Screen('FillRect',win,[127.5 127.5 127.5])
 
     Screen('TextSize',win,40);
     blockMessage = sprintf('This is Block %d of %d blocks',b,p.nBlocks);
@@ -349,7 +351,10 @@ for b = 1:p.nBlocks
         
         Screen(win,'WaitBlanking',p.delay/2);
         
-    end         % end of trial loop
+    end  
+    % end of trial loop
+    
+    WaitSecs(0.5)
     
     % save data file at the end of each block
     save(fName,'p','stim'); 

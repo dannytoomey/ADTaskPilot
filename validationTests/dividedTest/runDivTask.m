@@ -41,11 +41,11 @@
 %==========================================================================
 function runDivTask
 
-laptopDebug=1;
+laptopDebug=0;
 
 [sjNum,numTask,numTrials,taskOrder,dualOrder,singleOrder,filePath]=setup_divTask(laptopDebug);
 
-practice=1;
+practice=0;
 divTask(sjNum,practice,numTask,numTrials,taskOrder,dualOrder,singleOrder,filePath,laptopDebug)
 
 practice=0;
@@ -83,7 +83,15 @@ if laptopDebug==1
     
 else
     sjNum=input('Input Subject Number ');
-    numTrials=25;
+    if sjNum==199
+        numTask=2;
+        numTrials=5;
+        taskOrder=taskOrderCBO(:,1);
+        dualOrder=dualRespCBO(:,1);
+        singleOrder=singleRespCBO(:,1);
+    end
+
+    filePath='/Users/labadmin/Documents/Experiments/ADTask/ADTaskPilot/validationTests/dividedTest/';
     
     %add counterbalancing measures for letters/pics 
     %add saveFile for behavior room

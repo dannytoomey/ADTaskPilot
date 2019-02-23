@@ -13,7 +13,7 @@ function v2runK
 % design update = numTrials will be 390 for all participants
 %===========================================
 exp=0; %1 for experiment, 0 for testing/debugging
-laptopDebug=1;  %added input to KTest to work on latop. turns off synchronization and sets ifi to 1/60 - D
+laptopDebug=0;  %added input to KTest to work on latop. turns off synchronization and sets ifi to 1/60 - D
 
 if exp == 1
     sjNum = input('Input subject number: ');

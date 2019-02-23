@@ -419,7 +419,7 @@ if test == 1
     rect=[centerX-myOffset,centerY-myOffset,centerX+myOffset,centerY+myOffset];
     testLoc = Screen('OpenOffScreenWindow',window);
     drawFixation(testLoc,centerX,centerY,[0 0 0])
-    drawCue(testLoc,upperLoc+10,centerX,centerY,[0 0 0])        %adding 10 to loc here puts cues below location, adding 10 on desktop places it in correct location?
+    drawCue(testLoc,upperLoc+10+,centerX,centerY,[0 0 0])        %adding 10 to loc here puts cues below location, adding 10 on desktop places it in correct location?
     drawCue(testLoc,0+10,centerX,centerY,[0 0 0]);
     drawCue(testLoc,lowerLoc+10,centerX,centerY,[0 0 0]);
     Screen('TextSize',testLoc,40);

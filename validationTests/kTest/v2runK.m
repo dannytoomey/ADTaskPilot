@@ -21,7 +21,7 @@ if exp == 1
     sjGender = input('Please enter participant gander (M or F): ','s');
     sjHand = input('Please enter participant handedness (L or R):  ','s');
 else
-    sjNum = 99;
+    sjNum = 199;
     sjAge = 22;
     sjGender='M';
     sjHand = 'R';

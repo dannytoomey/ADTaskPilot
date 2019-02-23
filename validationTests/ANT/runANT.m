@@ -32,7 +32,7 @@ nSOA = size(mySOA,2);
 logFileName = sprintf('s%02d_allData.txt',subjectNumber);
 
 makeImgJudgement = 0;
-practice = 1;
+practice = 0;
 [trialMatrix,targets]=ANT(subjectNumber,logFileName,mySOA,practice,laptopDebug);
 
 practice = 0;

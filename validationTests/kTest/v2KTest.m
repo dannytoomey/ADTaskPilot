@@ -114,7 +114,7 @@ for b = 1:p.nBlocks
     
     fName = [num2str(p.subNum), '_ColorK', num2str(b), '.mat'];
     
-    if laptopDebug~=1   %add b/c idc if it overwrites the files if i'm debugging
+    if sjNum~=199   %add b/c idc if it overwrites the files if i'm debugging
         if exist(fName)
             Screen('CloseAll');
             msgbox('File already exists!', 'modal')

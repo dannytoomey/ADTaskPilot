@@ -128,7 +128,7 @@ if practice == 0
             
             for trial = 1:nTrials
                 
-                Screen('BlendFunction', window, 'GL_SRC_ALPHA', 'GL_ONE_MINUS_SRC_ALPHA');                 ;
+                Screen('BlendFunction', window, 'GL_SRC_ALPHA', 'GL_ONE_MINUS_SRC_ALPHA');                 
                 Screen('CopyWindow',fixWindow,window);
                 Screen('Flip',window)
                 FlushEvents('KeyDown');
@@ -289,7 +289,7 @@ Screen('TextSize',thisWin,50);
 Screen('TextFont',thisWin,'Arial');
 cue='*';
 [cueBounds]=Screen('TextBounds',thisWin,cue);
-Screen('DrawText',thisWin,cue,centerX-round(cueBounds(3)/2)-1,centerY-round(cueBounds(4)/2)+loc,color);
+Screen('DrawText',thisWin,cue,centerX-round(cueBounds(3)/2),(centerY-round(cueBounds(4)/2))+loc+10,color);      %added 10 b/c cues were offset on desktop, but in correct place on laptop
     
 end
 %===============================================
@@ -419,7 +419,13 @@ if test == 1
     rect=[centerX-myOffset,centerY-myOffset,centerX+myOffset,centerY+myOffset];
     testLoc = Screen('OpenOffScreenWindow',window);
     drawFixation(testLoc,centerX,centerY,[0 0 0])
+    
     drawCue(testLoc,upperLoc,centerX,centerY,[0 0 0])
+%     Screen('TextSize',testLoc,50)
+%     Screen('TextFont',testLoc,'Arial')
+%     [cueBounds]=Screen('TextBounds',testLoc,'*');
+%     Screen('DrawText',testLoc,'*',centerX-round(cueBounds(3)/2),centerY-round(cueBounds(4)/2)-34,[0 0 0])
+    
     drawCue(testLoc,0,centerX,centerY,[0 0 0]);
     drawCue(testLoc,lowerLoc,centerX,centerY,[0 0 0]);
     Screen('TextSize',testLoc,40);

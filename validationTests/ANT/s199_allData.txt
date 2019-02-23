@@ -1,0 +1,21 @@
+ANT	 Experiment ID
+199	 Subject
+22-Feb-2019 16:04:15	 Run Time
+2	nCongruency conditions (congruent = 1, incongruent = 2)
+7	nCue conditions (1=no cue, 2 = fixation cue, 3-6=valid, 7 = invalid
+2	 nRepsPerBlock
+1	 nBlocks
+60.018043	 FrameRate
+6	 CueDur in frames
+18	36	54	cue-target SOAs
+thisBlock	trial	SOAidx	thisCue	thisCon	arrowDir	Resp	Acc	RT	fixation	lagFrames
+1	1	2	N	1	R	N	0	1700.38	96	27
+1	2	2	C	1	L	N	0	1700.51	96	27
+1	3	1	I	1	R	N	0	1700.26	96	9
+1	4	2	V	2	R	N	0	1700.61	96	27
+1	5	1	V	2	R	N	0	1700.64	24	9
+1	6	3	C	2	L	N	0	1700.30	24	45
+1	7	2	V	1	L	N	0	1700.64	96	27
+1	8	2	V	1	L	N	0	1700.50	24	27
+1	9	3	N	2	R	N	0	1700.17	24	45
+1	10	3	V	1	R	N	0	1700.68	24	45

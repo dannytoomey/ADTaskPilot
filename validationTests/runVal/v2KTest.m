@@ -68,7 +68,16 @@ if laptopDebug==1
     [win, p.sRect]=Screen(s,'OpenWindow', p.backColor);
     ifi=1/60;
 else
-    [win, p.sRect]=Screen(s,'OpenWindow', p.backColor);
+    ctr = 0;
+    error_ctr = 0;
+    while error_ctr == ctr
+        try
+            [win,p.sRect] = Screen('OpenWindow',s,[127.5 127.5 127.5]);
+        catch
+            error_ctr = error_ctr+1;
+        end
+        ctr = ctr+1;
+    end
     ifi = Screen('GetFlipInterval',win,10);
 end
     

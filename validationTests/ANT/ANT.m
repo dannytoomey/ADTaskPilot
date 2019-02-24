@@ -173,12 +173,12 @@ if practice == 0
     fclose(fid);
 
     %Close gracefully
-    WaitSecs(1);    
-    Screen('TextSize',messageWindow,24);
-    Screen('TextFont',messageWindow,'Arial');
-    DrawFormattedText(messageWindow,'The experiment is complete. /n Thank you.','center','center',[255 255 255]);
-    Screen('CopyWindow',messageWindow,window)
-    Screen('Flip',window)
+%     WaitSecs(1);    
+%     Screen('TextSize',messageWindow,24);
+%     Screen('TextFont',messageWindow,'Arial');
+%     DrawFormattedText(messageWindow,'The experiment is complete. /n Thank you.','center','center',[0 0 0]);
+%     Screen('CopyWindow',messageWindow,window)
+%     Screen('Flip',window)
     
 elseif practice ==1
     

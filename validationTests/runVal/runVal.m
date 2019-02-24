@@ -5,7 +5,7 @@
 % counterbalancing
 %==========================================================================
 
-laptopDebug=1;
+laptopDebug=0;
 
 if laptopDebug==1
     Screen('Preference','SkipSyncTests',1)
@@ -13,8 +13,8 @@ if laptopDebug==1
     KfilePath='/Users/dannytoomey/Documents/Research/ADTask/Experiments/ADTaskPilot/validationTests/kTest/';
     DIVfilePath='/Users/dannytoomey/Documents/Research/ADTask/Experiments/ADTaskPilot/validationTests/dividedTest/';
 else
-    ANTfilePath='/Users/labadmin/Documents/Experiments/ADTask/ADTaskPilot/validationTests/ANT';
-    KfilePath='/Users/labadmin/Documents/Experiments/ADTask/ADTaskPilot/validationTests/kTest';
+    ANTfilePath='/Users/labadmin/Documents/Experiments/ADTask/ADTaskPilot/validationTests/ANT/';
+    KfilePath='/Users/labadmin/Documents/Experiments/ADTask/ADTaskPilot/validationTests/kTest/';
     DIVfilePath='/Users/labadmin/Documents/Experiments/ADTask/ADTaskPilot/validationTests/dividedTest/';  
 end
 
@@ -56,8 +56,8 @@ if sjNum==199
     %v2runK(sjNum,laptopDebug,KfilePath,0)
     runDivTask(sjNum,laptopDebug,DIVfilePath)
 else
-    for test=1:size(sjCBO,1)
-
+    for test=2:3%1:size(sjCBO,1)
+        
         thisTest=sjCBO(test,1);
 
         if thisTest==1

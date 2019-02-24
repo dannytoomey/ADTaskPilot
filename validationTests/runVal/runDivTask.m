@@ -46,7 +46,7 @@ function runDivTask(sjNum,laptopDebug,DIVfilePath)
 saveFile=[DIVfilePath 'sj' sprintf('%02d',sjNum) '_DivInfo.mat'];
 save(saveFile,'taskOrder','dualOrder','singleOrder')
 
-practice=0;
+practice=1;
 divTask(sjNum,practice,numTask,numTrials,taskOrder,dualOrder,singleOrder,DIVfilePath,laptopDebug)
 
 practice=0;
@@ -75,9 +75,9 @@ if sjNum==199
     
     numTask=2;
     numTrials=5;
-    taskOrder=1;
-    dualOrder=1;
-    singleOrder=1;
+    taskOrder=taskCBO(:,1);
+    dualOrder=dualRespCBO(:,1);
+    singleOrder=singleRespCBO(:,1);
     
 else
     
@@ -188,9 +188,11 @@ for task=1:numTask
     if practice==1
         if task==1
             thisTask=1;
+            condOrder=singleOrder;
             numBlock=1;
         else
             thisTask=2;
+            condOrder=dualOrder;
             numBlock=1;
         end
         numTrials=5;
@@ -312,17 +314,17 @@ for task=1:numTask
         if thisTask==1
             if condOrder(block,1)==1||condOrder(block,1)==4
                 inst=['Press the space bar when \n'...
-                    'a shape is shown twice in a row. \n \n'...
+                    'a SHAPE is shown twice in a row. \n \n'...
                     'Press any key to begin.'];
             elseif condOrder(block,1)==2||condOrder(block,1)==3
                 inst=['Press the space bar when \n'...
-                    'a letter is shown twice in a row. \n \n'...
+                    'a LETTER is shown twice in a row. \n \n'...
                     'Press any key to begin.'];
             end
             
         elseif thisTask==2
             inst=['Press the space bar when \n'...
-                'a letter and a shape are both \n'...
+                'a letter AND a shape are both \n'...
                 'shown twice in a row.\n \n'...
                 'Press any key to begin.'];
         end

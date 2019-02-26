@@ -5,7 +5,7 @@
 % counterbalancing
 %==========================================================================
 
-laptopDebug=0;
+laptopDebug=1;
 
 if laptopDebug==1
     Screen('Preference','SkipSyncTests',1)
@@ -52,11 +52,13 @@ saveFile=['sj' sprintf('%02d',sjNum) 'Info.mat'];
 save(saveFile,'age','gender','handedness','sjCBO')
 
 if sjNum==199
+    
     %runANT(sjNum,laptopDebug,ANTfilePath)
     %v2runK(sjNum,laptopDebug,KfilePath,0)
     runDivTask(sjNum,laptopDebug,DIVfilePath)
+    
 else
-    for test=2:3%1:size(sjCBO,1)
+    for test=1:size(sjCBO,1)
         
         thisTest=sjCBO(test,1);
 

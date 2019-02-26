@@ -1,5 +1,6 @@
 
-% runfile for 4LocTaskv2
+%runfile for 4LocTaskv2
+%approx run time = 50mins
 
 sjNum = input('Input Subject Number ');
 

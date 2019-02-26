@@ -241,6 +241,11 @@ for task=1:numTask
         %block
         shapeOrder=randi([1,numShapes],1,numTrials*numShapeFlips);
         letterOrder=randi([1,numLets],1,numTrials*numLetFlips);
+        
+        if practice==1
+            shapeOrder= [2  2   1	3	2	2	2	3	2	1	2	1	3	3	3];
+            letterOrder=[2	2	1	2	1	1	1	2	2	1];
+        end
 
         %draw the streams of shapes and letters to be shown during this block
         [shapeWins]=drawShapeStream(window,centerX,centerY,shapeOrder);

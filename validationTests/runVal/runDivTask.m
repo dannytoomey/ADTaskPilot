@@ -144,7 +144,6 @@ ListenChar(0);
 HideCursor;
 screenNumber = max(Screen('Screens'));
 white = [255 255 255];
-black=[0 0 0];
 grey = white./2;
 if laptopDebug==0
     ctr = 0;

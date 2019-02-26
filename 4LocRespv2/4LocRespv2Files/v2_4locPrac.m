@@ -406,8 +406,11 @@ for cond=1:numCond
                     end
 
                     %probe wm
+                    
+                    Screen('FillRect',window,grey)
+                    Screen('Flip',window)
+                    WaitSecs(0.25)
 
-                    Screen('FillRect',window,grey);
                     Screen('TextSize', window, 30);
                     Screen('TextFont', window, 'Courier');
                     DrawFormattedText(window, 'Type the letters', 'center', yCenter + .75*yScale, white);
@@ -884,7 +887,10 @@ for cond=1:numCond
 
                     %probe wm
                     
-                    Screen('FillRect',window,grey);
+                    Screen('FillRect',window,grey)
+                    Screen('Flip',window)
+                    WaitSecs(0.25)
+
                     Screen('TextSize', window, 30);
                     Screen('TextFont', window, 'Courier');
                     DrawFormattedText(window, 'Type the letters', 'center', yCenter + .75*yScale, white);
@@ -1377,7 +1383,9 @@ for cond=1:numCond
 
                     %probe wm
                     
-                    Screen('FillRect',window,grey);
+                    Screen('FillRect',window,grey)
+                    Screen('Flip',window)
+                    WaitSecs(0.25)
 
                     Screen('TextSize', window, 30);
                     Screen('TextFont', window, 'Courier');

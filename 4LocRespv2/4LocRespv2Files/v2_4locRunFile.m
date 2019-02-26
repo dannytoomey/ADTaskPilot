@@ -9,8 +9,8 @@ counterBal=[1	2	3	4	5	6	1	2	3	4	5	6	1	2	3	4	5	6	1	2	3	4	5	6	1	2	3	4	5	6	1	2	3	4	
 
 if sjNum==199
     
+    %set some parameters to use if we're debugging
     numBlocks=1;
-    
     age=22;
     gender=0;
     handedness=1;
@@ -24,9 +24,13 @@ else
     
     numBlocks=8;
     
+    %record sj info
     age = input('Input Age ');
     gender = input('Input Gender (0 = M, 1 = F) ');
     handedness = input('Input Handedness (0 = L, 1 = R) ');
+    
+    %counterbalancing is determined by sjNum to reduce the number of inputs
+    %the experimenter has to make 
     if sjNum<=36
         taskCBOrder=counterBal(1,sjNum);
         condCBOrder=counterBal(2,sjNum);
@@ -43,6 +47,7 @@ else
     end
 end
 
+%1 = single task first, 2 = dual task first
 if taskCBOrder==1
     lowTaskOrder = 1;
     medTaskOrder = 1;
@@ -69,7 +74,10 @@ elseif taskCBOrder==6
     highTaskOrder = 2;
 end
 
-laptopDebug=0;
+%this is for laptop compatability. turns off sync tests and sets filepath
+%to the laptop filepath, so we don't have to worry about messing up the
+%behavior room filepath by mistake
+laptopDebug=1;     
 
 if laptopDebug==1
     Screen('Preference','SkipSyncTests',1)
@@ -95,6 +103,11 @@ soundRep = 1;
 soundDur = 0.25;
 waitForDeviceStart = 0;
 
+%sets the task counterbalancing determined above by sjNum. these
+%functions have a ton of inputs but it's just ensure all the parameters are
+%the same for each intf condition (i.e. it would suck to find out that
+%numTrials was accidentally set to a different number for one condition
+%after collecting a bunch of data)
 if condCBOrder==0
     v2_4locPrac(numTask,numCue,numBlocks,numTrials,valCueThres,invalCueThres,wmLoadDur,visRespDur,audRespDur,numChannels,soundRep,soundDur,waitForDeviceStart)
     v2_4locLowIntf(filePath,sjNum,lowTaskOrder,numTask,numCue,numBlocks,numTrials,valCueThres,invalCueThres,wmLoadDur,visRespDur,audRespDur,numChannels,soundRep,soundDur,waitForDeviceStart)

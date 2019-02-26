@@ -1,7 +1,8 @@
 
 function v2K_make_trialSequences(sjNum,numTrials,KfilePath)
 
-rand('seed',sum(100*clock));
+rng('shuffle')
+%rand('seed',sum(100*clock));
 
 %corrected version to successfulll produce even split of set size and probe
 %loc across blocks 

@@ -268,8 +268,8 @@ for task=1:numTask
                 if boxLctn<=50
                     if cueOrder(1,trial)<=thres
                         if targetLoc<=50
-                            Screen('FillOval', window, red, centeredRect1, maxDiameter);
-                            Screen('FillRect', window, blue, centeredRect2);
+                            Screen('FillOval', window, red, centeredRect1, maxDiameter);    %one red circle
+                            Screen('FillRect', window, blue, centeredRect2);                %three blue squares
                             Screen('FillRect', window, blue, centeredRect3);
                             Screen('FillRect', window, blue, centeredRect4);
                             target=1;
@@ -376,7 +376,8 @@ for task=1:numTask
                 PsychPortAudio('Stop',pahandle,1,1);
                 PsychPortAudio('Close', pahandle);
                 
-                %record auditory resp if dual-task, show fixation if single
+                %record auditory resp if dual-task, show fixation for duration of what would have been the
+                %auditory response if single task
                 
                 audResp=0;
                 audRT=0;
@@ -416,15 +417,15 @@ for task=1:numTask
                     audRT=audTEnd-audTStart;
                 end
                 
-                trialData(1,trial) = cueCond;               %weather cues are more or less valid on this block
+                trialData(1,trial) = cueCond;               %whether cues are more or less valid on this block
                 trialData(2,trial) = cueOrder(1,trial);     %cue val or inval on this trial    
                 trialData(3,trial) = boxCenX;               %location of the cue
-                trialData(4,trial) = targetLoc;             %recording so in case i need to double check that the target is being display in the correct location
+                trialData(4,trial) = targetLoc;             %recording so in case i need to double check that the target is being displayed in the correct location
                 trialData(5,trial) = tone;                  %pitch of the tone
                 trialData(6,trial) = audResp;               %low or high resp
                 trialData(7,trial) = audRT;                 %rt for auditory response
                 trialData(8,trial) = target;                %location of visual target
-                trialData(9,trial) = visResp;               %upper/lower left/right location resp
+                trialData(9,trial) = visResp;               %upper/lower+left/right location resp
                 trialData(10,trial) = visRT;                %rt for visual response
                 
                 allLowTrials(trial).thisTrialData=trialData;
@@ -436,7 +437,8 @@ for task=1:numTask
             %probe wm
             
             Screen('FillRect',window,grey)
-            WaitSecs(0.5)
+            Screen('Flip',window)
+            WaitSecs(0.25)   %purely cosmetic, but a break here feels nice in the flow of the task
             
             Screen('TextSize', window, 30);
             Screen('TextFont', window, 'Courier');

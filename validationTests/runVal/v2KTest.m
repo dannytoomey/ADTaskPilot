@@ -10,9 +10,9 @@ function v2KTest(sjNum,numTrials,exp,KfilePath,laptopDebug)
 ListenChar(2);
 close all;
 clc;
-s = round(sum(100*clock));                          % check to make sure something was typed in
+s = round(sum(100*clock));  % check to make sure something was typed in
 p.subNum = sjNum; 
-p.rndSeed = s;  % grab name & number info out of the gui
+p.rndSeed = s;              % grab name & number info out of the gui
 rand('state',p.rndSeed);
 
 [keyboardIndices, ~, ~] = GetKeyboardIndices('Apple Internal Keyboard / Trackpad');
@@ -21,11 +21,10 @@ sameResp=KbName('f');
 diffResp=KbName('j');
 respTime=1;  %give them one second to respond
 
-
 %----------------------------------------------------
 % General Experimental Parameters
 %----------------------------------------------------
-if exp==1
+if exp==1               %could we move this down to 5 blocks to save time? ~27min -> ~14min
     if numTrials==390
         p.nBlocks=10;
     elseif numTrials==720
@@ -86,10 +85,10 @@ HideCursor;                                             % if we're in fullscreen
 
 % Timing information
 expDurations=100;
-expDurFrames = round((expDurations/1000)./(1/p.refRate)); % 100 ms 
-stimTime=expDurFrames*ifi;
-p.fixDur = round(1000/(1000/p.refRate));                                       % 1s
-p.delay = round(1000/(1000/p.refRate));
+expDurFrames = round((expDurations/1000)./(1/p.refRate));  
+stimTime=expDurFrames*ifi;                                %100ms
+p.fixDur = round(1000/(1000/p.refRate));                  %1s
+p.delay = round(1000/(1000/p.refRate));                   %1s
 
 % compute and store the center of the screen.
 p.xCenter = (p.sRect(3) - p.sRect(1))/2;
@@ -121,7 +120,7 @@ for b = 1:p.nBlocks
     
     % Build an output file and check to make sure that it doesn't exist yet
     
-    fName = [num2str(p.subNum), '_ColorK', num2str(b), '.mat'];
+    fName = ['sj', num2str(p.subNum), '_ColorK.mat'];
     
     if sjNum~=199   %add b/c idc if it overwrites the files if i'm debugging
         if exist([KfilePath fName])
@@ -158,6 +157,21 @@ for b = 1:p.nBlocks
     %--------------------------------------------------------
     
     Screen('FillRect',win,[127.5 127.5 127.5])
+    
+    if b==1
+        inst=['You are about to see \n'...
+            'a series of colored squares \n'...
+            'followed by a single square. \n \n'...
+            'Press "F" if the square was the \n'...
+            'same color in the proceeding array or \n'...
+            'press "J" if the square was a \n' ...
+            'different color in the proceeding array.'];
+        Screen('TextSize',win,40)
+        DrawFormattedText(win,inst,'center','center',[255 255 255])
+        Screen('Flip',win)
+        KbStrokeWait
+    end
+            
 
     Screen('TextSize',win,40);
     blockMessage = sprintf('This is Block %d of %d blocks',b,p.nBlocks);
@@ -219,7 +233,6 @@ for b = 1:p.nBlocks
             SS=4;
         elseif stim.setSize(t)==2
             SS=6;
-            
         elseif stim.setSize(t)==3
             SS=8;
         end
@@ -316,17 +329,20 @@ for b = 1:p.nBlocks
         % Response
         
         resp=0;
+        keepChecking=1;
         
         while GetSecs<=tStart+respTime
             
-            keyIsDown=0;
-            
-            [keyIsDown, tEnd, keyCode] = KbCheck(keyboardIndices);
-            
-            if keyIsDown==1
-                ind=find(keyCode~=0);
-                if size(ind,2)==1
-                    resp = ind;
+            if keepChecking==1
+                
+                [keyIsDown, tEnd, keyCode] = KbCheck(keyboardIndices);
+
+                if keyIsDown==1
+                    ind=find(keyCode~=0);
+                    if size(ind,2)==1
+                        resp = ind;
+                        keepChecking=0;
+                    end
                 end
             end
             
@@ -366,11 +382,18 @@ for b = 1:p.nBlocks
     WaitSecs(0.5)
     
     % save data file at the end of each block
-    saveFile=[KfilePath fName];
-    save(saveFile,'p','stim'); 
+    
+    allData(b).p=p;
+    allData(b).stim=stim;
+    
+    save('KblockDataBackup.mat','allData')
+    
     
 end         % end of block loop
 
+saveFile=[KfilePath fName];
+save(saveFile,'allData'); 
+    
 % pack up and go home
 ListenChar([]);
 sca;

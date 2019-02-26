@@ -10,13 +10,13 @@ function [nt1Acc,nt2Acc,nt2AccGivenT1Acc,trialMatrix,targets] = ANT(sjNum,logFil
 % rand('state',sum(100*clock));
 
 %***********set up conditions and response matrices
-nSOA = size(mySOA,2);
+nSOA = size(mySOA,2);   %3
 nConCon = 2; %easy and hard
 nCueCon = 7; % cue conditions no-cue,fix,4 valid, 1 invalid
 if sjNum==199
     nBlocks = 1;
 else
-    nBlocks=7;
+    nBlocks=7;      %can we move this down to 4 to save time? ~32min -> ~19
 end
 nRepsPerBlock = 2;
 nTotalTrials = nConCon*nCueCon*nSOA*nRepsPerBlock*nBlocks; %nTotal trials
@@ -168,12 +168,12 @@ if practice == 0
     fclose(fid);
     
     %Close gracefully
-    WaitSecs(1);    
-    Screen('TextSize',messageWindow,24);
-    Screen('TextFont',messageWindow,'Arial');
-    DrawFormattedText(messageWindow,'The experiment is complete. \n Thank you.','center','center',[255 255 255]);
-    Screen('CopyWindow',messageWindow,window)
-    Screen('Flip',window)
+%     WaitSecs(1);    
+%     Screen('TextSize',messageWindow,24);
+%     Screen('TextFont',messageWindow,'Arial');
+%     DrawFormattedText(messageWindow,'The experiment is complete. \n Thank you.','center','center',[255 255 255]);
+%     Screen('CopyWindow',messageWindow,window)
+%     Screen('Flip',window)
     
 elseif practice ==1
     

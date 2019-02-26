@@ -263,15 +263,17 @@ for task=1:numTask
                 rng('shuffle');
                 stimLoc=randi(100);
                 
+                %determine location of target and distractors
+                
                 if boxLctn<=50
                     if cueOrder(1,trial)<=thres
                         if targetLoc<=50
                             RGB1=[255 0 0];
                             target=1;
-                            Screen('FillRect', window, RGB1, centeredRect1);
+                            Screen('FillRect', window, RGB1, centeredRect1);                    %one red square
                             if stimLoc<=33
-                                Screen('FillOval', window, RGB2, centeredRect2, maxDiameter);
-                                Screen('FillRect', window, RGB3, centeredRect3);
+                                Screen('FillOval', window, RGB2, centeredRect2, maxDiameter);   %one blue circle
+                                Screen('FillRect', window, RGB3, centeredRect3);                %two blue squares
                                 Screen('FillRect', window, RGB4, centeredRect4);
                             elseif 33<stimLoc&&stimLoc<=66
                                 Screen('FillRect', window, RGB2, centeredRect2);
@@ -502,17 +504,17 @@ for task=1:numTask
                     audRT=audTEnd-audTStart;
                 end
                 
-                trialData(1,trial) = cueCond;
-                trialData(2,trial) = cueOrder(1,trial);
-                trialData(3,trial) = boxCenX;
-                trialData(4,trial) = targetLoc;
-                trialData(5,trial) = stimLoc;
-                trialData(6,trial) = tone;
-                trialData(7,trial) = audResp;
-                trialData(8,trial) = audRT;
-                trialData(9,trial) = target;
-                trialData(10,trial) = visResp;
-                trialData(11,trial) = visRT;
+                trialData(1,trial) = cueCond;               %record if cues are more or less valid
+                trialData(2,trial) = cueOrder(1,trial);     %the validity of the cue on ths trial
+                trialData(3,trial) = boxCenX;               %location of the cue
+                trialData(4,trial) = targetLoc;             %targetLoc and  
+                trialData(5,trial) = stimLoc;               %stimLoc are here in case we want to know the locations of the distractors on a given trial
+                trialData(6,trial) = tone;                  %auditory target (high or low tone)
+                trialData(7,trial) = audResp;               %auditory response
+                trialData(8,trial) = audRT;                 %auditory response time
+                trialData(9,trial) = target;                %visual target (location of red square)
+                trialData(10,trial) = visResp;              %visual response
+                trialData(11,trial) = visRT;                %visual response time
                 
                 allMedTrials(trial).thisTrialData=trialData;
                 
@@ -523,7 +525,8 @@ for task=1:numTask
             %probe wm
             
             Screen('FillRect',window,grey)
-            WaitSecs(0.5)
+            Screen('Flip',window)
+            WaitSecs(0.25)   %purely cosmetic, but a break here feels nice in the flow of the task
             
             Screen('TextSize', window, 30);
             Screen('TextFont', window, 'Courier');

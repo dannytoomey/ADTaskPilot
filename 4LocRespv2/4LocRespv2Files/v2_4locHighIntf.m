@@ -531,17 +531,17 @@ for task=1:numTask
                     audRT=audTEnd-audTStart;
                 end
                 
-                trialData(1,trial) = cueCond;
-                trialData(2,trial) = cueOrder(1,trial);
-                trialData(3,trial) = boxCenX;
-                trialData(4,trial) = targetLoc;
-                trialData(5,trial) = stimLoc;
-                trialData(6,trial) = tone;
-                trialData(7,trial) = audResp;
-                trialData(8,trial) = audRT;
-                trialData(9,trial) = target;
-                trialData(10,trial) = visResp;
-                trialData(11,trial) = visRT;
+                trialData(1,trial) = cueCond;               %cues more or less valid on this block
+                trialData(2,trial) = cueOrder(1,trial);     %cue valid or invalid on this trial
+                trialData(3,trial) = boxCenX;               %cue location
+                trialData(4,trial) = targetLoc;             %recording targetLoc and
+                trialData(5,trial) = stimLoc;               %stimLoc in we want to know the locations of the distractors on a given trial
+                trialData(6,trial) = tone;                  %auditory target (low or high tone)
+                trialData(7,trial) = audResp;               %auditory response
+                trialData(8,trial) = audRT;                 %auditory response time
+                trialData(9,trial) = target;                %visual target (location of red circle)
+                trialData(10,trial) = visResp;              %visual response
+                trialData(11,trial) = visRT;                %visual response time
                 
                 allHighTrials(trial).thisTrialData=trialData;
                 
@@ -552,7 +552,8 @@ for task=1:numTask
             %probe wm
             
             Screen('FillRect',window,grey)
-            WaitSecs(0.5)
+            Screen('Flip',window)
+            WaitSecs(0.25)   %purely cosmetic, but a break here feels nice in the flow of the task
             
             Screen('TextSize', window, 30);
             Screen('TextFont', window, 'Courier');

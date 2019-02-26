@@ -13,7 +13,8 @@ clc;
 s = round(sum(100*clock));  % check to make sure something was typed in
 p.subNum = sjNum; 
 p.rndSeed = s;              % grab name & number info out of the gui
-rand('state',p.rndSeed);
+rng('shuffle')
+%rand('state',p.rndSeed);
 
 [keyboardIndices, ~, ~] = GetKeyboardIndices('Apple Internal Keyboard / Trackpad');
 KbName('UnifyKeyNames');

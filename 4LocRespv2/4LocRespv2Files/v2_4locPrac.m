@@ -24,7 +24,7 @@
 
 %uses hIntf v2
 
-function v2_4locPrac(numTask,numCue,numBlocks,numTrials,valCueThres,invalCueThres,wmLoadDur,visRespDur,audRespDur,numChannels,soundRep,soundDur,waitForDeviceStart)
+function v2_4locPrac(numTask,numCue,numTrials,valCueThres,invalCueThres,wmLoadDur,visRespDur,audRespDur,numChannels,soundRep,soundDur,waitForDeviceStart)
     
 sca;
 PsychDefaultSetup(2);

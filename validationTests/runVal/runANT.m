@@ -20,7 +20,6 @@ function runANT(sjNum,laptopDebug,ANTfilePath)
 %lags are 300 and 700 ms
 
 mySOA = [300,600,900];
-nSOA = size(mySOA,2);
 logFileName = [ANTfilePath sprintf('s%02d_allANTData.txt',sjNum)];
 
 makeImgJudgement = 0;

@@ -31,8 +31,8 @@ expInfo = struct(...
     'searchRadius', 6.5,...%in degrees of visual angle
     'nExpDurations', 1,...
     'expDurations', 100,...%in ms
-    'nSetSizes', 2,...  %shouldn't this be 3?? - D
-    'setSizes', [4 6],...%includes target, so 1= target only
+    'nSetSizes', 2,...  %shouldn't this be 3?? - D // later on it uses nSetSizes+1, so no
+    'setSizes', [4 6],...%includes target, so 1= target only // shouldn't this be [4 6 8]? -D
     'nTrialType', 2,...
     'TrialType', [0 1],...%change or no? 0=no, 1=yes
     'retentInterval', 900,...
@@ -44,7 +44,12 @@ expInfo = struct(...
 nSetSizes = expInfo.nSetSizes;
 nTrialType = expInfo.nTrialType;
 
-if numTrials == 390
+%numTrials/numrepeats has to = 6 
+%so change trials/block to 36, otherwise have to do 9 blocks to get an
+%integer that will work with make_trialTypeMatrix
+if numTrials==180
+    numrepeats=30;  %numTrials/numrepeats still = 6, uses 36 trials/block to get integer value for numTrials and t/b
+elseif numTrials == 390
     numrepeats = 65;
 elseif numTrials == 720
     numrepeats = 120;

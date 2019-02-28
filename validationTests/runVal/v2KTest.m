@@ -43,7 +43,8 @@ if exp==1                   %could we move this down to 5 blocks to save time? ~
         p.nBlocks=27;
     end               
     p.nTrials = numTrials/p.nBlocks;    %number of trials/block
-elseif exp==0||practice==1
+end
+if exp==0||practice==1
     p.nBlocks=2;    %do 2 blocks of 10 trials if practice or debugging
     p.nTrials=10;    
 end                 

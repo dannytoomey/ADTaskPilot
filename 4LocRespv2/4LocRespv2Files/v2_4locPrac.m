@@ -71,6 +71,7 @@ yScale = stimY(1,2);
 xScale = stimX(1,2);
 
 numCond=3;
+numBlocks=1;
 
 for cond=1:numCond
     

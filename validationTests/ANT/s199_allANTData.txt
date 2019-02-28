@@ -1,0 +1,10 @@
+ANT	 Experiment ID
+199	 Subject
+26-Feb-2019 11:17:09	 Run Time
+2	nCongruency conditions (congruent = 1, incongruent = 2)
+7	nCue conditions (1=no cue, 2 = fixation cue, 3-6=valid, 7 = invalid
+2	 nRepsPerBlock
+1	 nBlocks
+59.947903	 FrameRate
+6	 CueDur in frames
+18	36	54	cue-target SOAs

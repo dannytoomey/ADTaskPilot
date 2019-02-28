@@ -4,6 +4,8 @@ function [nt1Acc,nt2Acc,nt2AccGivenT1Acc,trialMatrix,targets] = ANT(sjNum,logFil
 %=========================================================
 %=========================================================
 
+%run 3 blocks during experiment
+
 %Screen('Preference', 'EmulateOldPTB', 1)
     %PTB documentation says this is buggy so let's avoid it if possible
 
@@ -16,8 +18,11 @@ nCueCon = 7; % cue conditions no-cue,fix,4 valid, 1 invalid
 if sjNum==199
     nBlocks = 1;
 else
-    nBlocks=7;      %can we move this down to 4 to save time? ~32min -> ~19
-end
+    nBlocks=3;  %moved this down to 3 to cut down on time. this is a lot less than  //  %can we move this down to 4 to save time? ~32min -> ~19
+end             %the original exp (7 blocks), but it will still have 252 trials (84 trials/block * 3blocks)
+                %which will give 84 measures/soa, 126 measures/difficulty
+                %cond, and 36 measures/cue cond
+                
 nRepsPerBlock = 2;
 nTotalTrials = nConCon*nCueCon*nSOA*nRepsPerBlock*nBlocks; %nTotal trials
 
@@ -62,17 +67,7 @@ for i=2:5
     Screen('TextFont',myWindows(i),'Arial');
 end
 
-respWindow = Screen('OpenOffScreenWindow',window);
-Screen('TextSize',respWindow,24);
-Screen('TextFont',respWindow,'Arial');
-arrowMsg='Was the arrow pointing left or right?';
-[bounds]=Screen('TextBounds',respWindow,arrowMsg);
-Screen('DrawText',respWindow,arrowMsg,centerX-round(bounds(3)/2),centerY-round(bounds(4)/2),[0 0 0]);
-
 messageWindow = Screen('OpenOffScreenWindow',window);
-dummywindow = Screen('OpenOffScreenWindow',window);
-Screen('TextSize',dummywindow,24);
-Screen('TextFont',dummywindow,'Arial');
 
 if practice == 0
     %open logfile
@@ -105,7 +100,7 @@ if practice == 0
         
         nTrials = size(trialSequence,1);
 
-        blockMessage = sprintf('This is Block %d of %d blocks. \n Press space bar to continue.',thisBlock,nBlocks);
+        blockMessage = sprintf('This is %d of %d blocks. \n Press space bar to continue.',thisBlock,nBlocks);
         Screen('TextSize',messageWindow,32);
         Screen('TextFont',messageWindow,'Arial');
         DrawFormattedText(messageWindow,blockMessage,'center','center',[0 0 0]);
@@ -166,14 +161,6 @@ if practice == 0
     end %end block loop
     
     fclose(fid);
-    
-    %Close gracefully
-%     WaitSecs(1);    
-%     Screen('TextSize',messageWindow,24);
-%     Screen('TextFont',messageWindow,'Arial');
-%     DrawFormattedText(messageWindow,'The experiment is complete. \n Thank you.','center','center',[255 255 255]);
-%     Screen('CopyWindow',messageWindow,window)
-%     Screen('Flip',window)
     
 elseif practice ==1
     
@@ -241,13 +228,6 @@ end
 
 Screen('CopyWindow',messageWindow,window,[centerX-200,centerY-150,centerX+200,centerY+150],[centerX-200,centerY-150,centerX+200,centerY+150])
 Screen('Flip',window)
-
-% go = GetChar;
-% while go~='q'
-%     go = GetChar;
-% end
-% 
-% Screen('CloseAll')
 
 KbStrokeWait;
 sca;

@@ -1,10 +1,14 @@
 
-function v2KTest(sjNum,numTrials,exp,KfilePath,laptopDebug)
+function v2KTest(sjNum,numTrials,exp,KfilePath,practice,laptopDebug)
 
 % PTB3 implementation of a color change detection task following Luck &
 % Vogel (1997).
 
 %%
+
+%2/26/19 - add practice block, run 4 blocks during experiment, change resp
+%time to 1.5 sec
+
 % must run K_info_setup and K_make_all_session_trialSequences first
 
 ListenChar(2);
@@ -20,24 +24,29 @@ rng('shuffle')
 KbName('UnifyKeyNames');
 sameResp=KbName('f');
 diffResp=KbName('j');
-respTime=1;  %give them one second to respond
+respTime=1.5;  %give them one second to respond // change to 1.5 - D
 
 %----------------------------------------------------
 % General Experimental Parameters
 %----------------------------------------------------
-if exp==1               %could we move this down to 5 blocks to save time? ~27min -> ~14min
-    if numTrials==390
+
+%do 5 blocks of 36 trials/block
+
+if exp==1                   %could we move this down to 5 blocks to save time? ~27min -> ~14min
+    if numTrials==180       %this will have 36 trials/block for 5 blocks, 180 total trials
+        p.nBlocks=5;        %this gives an integer value for numrepeats (in make_trialSequences) and p.nTrials.
+    elseif numTrials==390   %these all have 40 trials/block. move down to 36 to work with make_trialTypeMatrix
         p.nBlocks=10;
     elseif numTrials==720
         p.nBlocks=18;
     elseif numTrials==1080
         p.nBlocks=27;
     end               
-    p.nTrials = numTrials/p.nBlocks;
-else
-    p.nBlocks=2;
-    p.nTrials=5;    
-end                 % number of trials/block
+    p.nTrials = numTrials/p.nBlocks;    %number of trials/block
+elseif exp==0||practice==1
+    p.nBlocks=2;    %do 2 blocks of 10 trials if practice or debugging
+    p.nTrials=10;    
+end                 
 
 % Stimulus geometry - relative to screen dimensions
 p.fixSize = 3; 
@@ -175,7 +184,11 @@ for b = 1:p.nBlocks
             
 
     Screen('TextSize',win,40);
-    blockMessage = sprintf('This is Block %d of %d blocks',b,p.nBlocks);
+    if practice==1
+        blockMessage=sprintf('This is %d of %d practice blocks',b,p.nBlocks);
+    else
+        blockMessage=sprintf('This is %d of %d blocks',b,p.nBlocks);
+    end
     [normBoundsRect]=Screen('TextBounds',win,blockMessage);
     Screen('DrawText',win,blockMessage,p.xCenter-round(normBoundsRect(3)/2),...
         p.yCenter-(10*round(normBoundsRect(4)/3)),[255 255 255]);
@@ -189,7 +202,7 @@ for b = 1:p.nBlocks
     
     KbWait([],2);
     
-    Screen(win,'FillRect',p.foreColor,foreRect);            % Draw the foreground window
+    Screen('FillRect',win,p.foreColor,foreRect);            % Draw the foreground window
     Screen('Flip',win);
     WaitSecs(2.0);
     
@@ -197,8 +210,8 @@ for b = 1:p.nBlocks
     %--------------------------------------------------------
     % Create and flip up the basic stimulus display
     %--------------------------------------------------------
-    Screen(win,'FillRect',p.foreColor,foreRect);            % Draw the foreground window
-    Screen(win,'FillOval',p.colors(6,:),fixRect);           % Draw the fixation point
+    Screen('FillRect',win,p.foreColor,foreRect);            % Draw the foreground window
+    Screen('FillOval',win,p.colors(6,:),fixRect);           % Draw the fixation point
     Screen('Flip',win);
     %-------------------------------------------------------
     % Begin Trial Loop
@@ -222,8 +235,6 @@ for b = 1:p.nBlocks
         colorIndex = (1:8);
         colormix2 = colors2(mix2(1:2), :);
         colors= [colormix1; colormix2];%randperm(size(colors,1));
-        
-        
         
         % Pick x,y coords for drawing stimuli on this trial, making sure
         % that all stimuli are seperated by >= p.minDist  
@@ -274,20 +285,23 @@ for b = 1:p.nBlocks
         
         % Wait the fixation interval
         for i = 1:p.fixDur
-            Screen(win,'WaitBlanking');
+            Screen('WaitBlanking',win);
         end
         
         % Draw squares on the main window
-        Screen(win,'FillRect',p.foreColor,foreRect);            % Draw the foreground window
-        Screen(win,'FillOval',p.colors(6,:),fixRect);           % Draw the fixation point
+        Screen('FillRect',win,p.foreColor,foreRect);            % Draw the foreground window
+        Screen('FillOval',win,p.colors(6,:),fixRect);           % Draw the fixation point
+        
+        
         for i = 1:SS
-            Screen(win,'FillRect',colors(colorIndex(i),:),[(xPos(i)-p.sqSize/2),(yPos(i)-p.sqSize/2),(xPos(i)+p.sqSize/2),(yPos(i)+p.sqSize/2)]);
-        end
+            Screen('FillRect',win,colors(colorIndex(i),:),[(xPos(i)-p.sqSize/2),(yPos(i)-p.sqSize/2),(xPos(i)+p.sqSize/2),(yPos(i)+p.sqSize/2)]);
+        end        
+        
         Screen('Flip',win);
         WaitSecs(stimTime)
         
-        Screen(win,'FillRect',p.foreColor,foreRect);            % Draw the foreground window
-        Screen(win,'FillOval',p.colors(6,:),fixRect);           % Draw the fixation point
+        Screen('FillRect',win,p.foreColor,foreRect);            % Draw the foreground window
+        Screen('FillOval',win,p.colors(6,:),fixRect);           % Draw the fixation point
         Screen('Flip',win);
         
         %------------------------------------------------------------------
@@ -295,7 +309,9 @@ for b = 1:p.nBlocks
         %------------------------------------------------------------------
         
         changeIndex = randperm(SS);
-        changeLocX = xPos(changeIndex(1)); changeLocY = yPos(changeIndex(1)); sColor = colorIndex(changeIndex(1));
+        changeLocX = xPos(changeIndex(1)); 
+        changeLocY = yPos(changeIndex(1)); 
+        sColor = colorIndex(changeIndex(1));
         
         if sColor > 6
             sColor2 = sColor - 6;
@@ -312,17 +328,19 @@ for b = 1:p.nBlocks
         
         % wait the ISI
         for i = 1:p.delay
-            Screen(win,'WaitBlanking');
+            Screen('WaitBlanking',win);
         end
 
         % Draw a new square on the screen, with the color value determined
         % by whether it's a change trial or not
-        Screen(win,'FillRect',p.foreColor,foreRect);            % Draw the foreground window
-        Screen(win,'FillOval',p.colors(6,:),fixRect);           % Draw the fixation point
-        if stim.change(t)==1
-            Screen(win,'FillRect',changeColor,[(changeLocX-p.sqSize/2),(changeLocY-p.sqSize/2),(changeLocX+p.sqSize/2),(changeLocY+p.sqSize/2)]);
-        else
-            Screen(win,'FillRect',colors(sColor,:),[(changeLocX-p.sqSize/2),(changeLocY-p.sqSize/2),(changeLocX+p.sqSize/2),(changeLocY+p.sqSize/2)]);
+        Screen('FillRect',win,p.foreColor,foreRect);            % Draw the foreground window
+        Screen('FillOval',win,p.colors(6,:),fixRect);           % Draw the fixation point
+        
+        
+        if stim.change(t)==1    %change
+            Screen('FillRect',win,changeColor,[(changeLocX-p.sqSize/2),(changeLocY-p.sqSize/2),(changeLocX+p.sqSize/2),(changeLocY+p.sqSize/2)]);
+        else                    %don't change
+            Screen('FillRect',win,colors(sColor,:),[(changeLocX-p.sqSize/2),(changeLocY-p.sqSize/2),(changeLocX+p.sqSize/2),(changeLocY+p.sqSize/2)]);
         end
         
         tStart = Screen('Flip',win);
@@ -330,38 +348,28 @@ for b = 1:p.nBlocks
         % Response
         
         resp=0;
-        keepChecking=1;
         
         while GetSecs<=tStart+respTime
-            
-            if keepChecking==1
-                
-                [keyIsDown, tEnd, keyCode] = KbCheck(keyboardIndices);
-
-                if keyIsDown==1
-                    ind=find(keyCode~=0);
-                    if size(ind,2)==1
-                        resp = ind;
-                        keepChecking=0;
-                    end
+            [keyIsDown, tEnd, keyCode] = KbCheck(keyboardIndices);
+            if keyIsDown==1
+                ind=find(keyCode~=0);
+                if size(ind,2)==1
+                    resp = ind;
                 end
             end
-            
         end
         
-        %stim.change 1 = same, 2 = different
+        %stim.change 2 = same, 1 = different
         
         stim.response(1,t) = resp;
         if stim.change(1,t)==1
-            stim.correctResp(1,t)=sameResp;
-            if stim.response(1,t)==stim.correctResp(1,t)
+            if stim.response(1,t)==diffResp
                 stim.accuracy(1,t)=1;
             else
                 stim.accuracy(1,t)=0;
             end
         elseif stim.change(1,t)==2
-            stim.correctResp(1,t)=diffResp;
-            if stim.response(1,t)==stim.correctResp(1,t)
+            if stim.response(1,t)==sameResp
                 stim.accuracy(1,t)=1;
             else
                 stim.accuracy(1,t)=0;
@@ -371,11 +379,20 @@ for b = 1:p.nBlocks
         stim.rt(1,t) = reactionTime*1000;
         RestrictKeysForKbCheck([]);   
             
-        Screen(win,'FillRect',p.foreColor,foreRect);            % Draw the foreground window
-        Screen(win,'FillOval',p.colors(6,:),fixRect);           % Draw the fixation poin
+        Screen('FillRect',win,p.foreColor,foreRect);        %Draw the foreground window
+        if practice==1                                      %give practice feedback
+            if stim.accuracy(1,t)==1
+                Screen('FillOval',win,[0 255 0],fixRect)    %green if correct
+            else
+                Screen('FillOval',win,[255 0 0],fixRect)    %red if incorrect
+            end
+        else    
+            Screen('FillOval',win,p.colors(6,:),fixRect);   %Draw the fixation point if exp
+        end
+        
         Screen('Flip',win);
         
-        Screen(win,'WaitBlanking',p.delay/2);
+        Screen('WaitBlanking',win,p.delay/2);
         
     end  
     % end of trial loop
@@ -389,12 +406,13 @@ for b = 1:p.nBlocks
     
     save('KblockDataBackup.mat','allData')
     
-    
 end         % end of block loop
 
-saveFile=[KfilePath fName];
-save(saveFile,'allData'); 
-    
+if practice==0
+    saveFile=[KfilePath fName];
+    save(saveFile,'allData'); 
+end
+
 % pack up and go home
 ListenChar([]);
 sca;

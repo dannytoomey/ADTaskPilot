@@ -18,9 +18,9 @@ else
     DIVfilePath='/Users/labadmin/Documents/Experiments/ADTask/ADTaskPilot/validationTests/dividedTest/';  
 end
 
-testCBO=[1	1	2	2	3	3
-         2	3	1	3	1	2
-         3	2	3	1	2	1];
+testCBO=[1	1   1   1	1   1   2	2   2   2   2	2   3	3   3   3   3   3
+         2	2   2   3	3   3   1	1   1   3   3	3   1	1   1   2   2   2
+         3	3   3   2	2   2   3	3   3   1   1  	1   2	2   2   1   1   1];
 
 sjNum=input('Input Subject Number ');
 
@@ -54,23 +54,33 @@ save(saveFile,'age','gender','handedness','sjCBO')
 if sjNum==199
     
     %runANT(sjNum,laptopDebug,ANTfilePath)
-    %v2runK(sjNum,laptopDebug,KfilePath,0)
-    runDivTask(sjNum,laptopDebug,DIVfilePath)
+    exp=0;   %1 for experiment, 0 for testing/debugging
+    v2runK(sjNum,laptopDebug,KfilePath,exp)
+    %runDivTask(sjNum,laptopDebug,DIVfilePath)
     
 else
-    for test=1:size(sjCBO,1)
+    
+    skipTask=input('Skip Task? ');
+    if skipTask==0
+        taskCBO=sjCBO;
+    elseif skipTask==1
+        taskCBO=sjCBO(2:3,1);
+    elseif skipTask==2
+        taskCBO=sjCBO(3,1);
+    end
+    
+    for task=1:size(taskCBO,1)
         
-        thisTest=sjCBO(test,1);
-
-        if thisTest==1
+        thisTask=taskCBO(task,1);
+        
+        if thisTask==1
             runANT(sjNum,laptopDebug,ANTfilePath)
-        elseif thisTest==2
+        elseif thisTask==2
             exp=1;   %1 for experiment, 0 for testing/debugging
             v2runK(sjNum,laptopDebug,KfilePath,exp)
-        elseif thisTest==3
+        elseif thisTask==3
             runDivTask(sjNum,laptopDebug,DIVfilePath)
         end
-
     end
 end
 

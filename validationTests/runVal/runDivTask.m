@@ -62,12 +62,12 @@ return
 function [numTask,numTrials,taskOrder,dualOrder,singleOrder]=setup_divTask(sjNum)
 
 
-taskCBO=        [1  2
+taskCBO=        [1  2       %1=single first, 2=dual first
                  2  1];
-dualRespCBO=    [1  2       %determines letter or shape stream speed for dual
+dualRespCBO=    [1  2       %determines letter or shape stream speed for dual task
                  2  1];
 singleRespCBO=  [1	2	3	4	4	3	2	1	1	3	2	4	4	2	3	1       %determines single task resp order
-                 2	3	4	1	3	2	1	4	3	2	4	1	2	3	1	4
+                 2	3	4	1	3	2	1	4	3	2	4	1	2	3	1	4       
                  3	4	1	2	2	1	4	3	2	4	1	3	3	1	4	2
                  4	1	2	3	1	4	3	2	4	1	3	2	1	4	2	3];
 
@@ -106,25 +106,6 @@ else
         end
     end
 end 
-
-    %add counterbalancing measures for letters/pics 
-    %add saveFile for behavior room
-    
-% taskOrderCBO=   [1  2       %determines single or dual first
-%                  2  1];
-% 
-% taskCBO=        [1	2	3	4	4	3	2	1	1	3	2	4	4	2	3	1       %determines single task resp order
-%                  2	3	4	1	3	2	1	4	3	2	4	1	2	3	1	4
-%                  3	4	1	2	2	1	4	3	2	4	1	3	3	1	4	2
-%                  4	1	2	3	1	4	3	2	4	1	3	2	1	4	2	3];
-%              
-
-             
-%maybe counterbalance single and dual tasks seperately
-
-% taskCBO=[1	2	3	4	1	2	3	4	1	2	3	4	1	2	3	4       %single/letter, single/shape, dual/letter, dual/shape (task order / dual order)
-%          1	2	3	4	2	3	4	1	3	4	1	2	4	1	2	3];     %FL, SL, FS, SS 
-
 
 return
 %==========================================================================
@@ -188,11 +169,11 @@ for task=1:numTask
         if task==1
             thisTask=1;
             condOrder=singleOrder;
-            numBlock=1;
+            numBlock=2;
         else
             thisTask=2;
             condOrder=dualOrder;
-            numBlock=1;
+            numBlock=2;
         end
         numTrials=5;
     end    
@@ -238,11 +219,13 @@ for task=1:numTask
 
         %this will shuffle the order of the shapes at the start of each
         %block
+        
         shapeOrder=randi([1,numShapes],1,numTrials*numShapeFlips);
         letterOrder=randi([1,numLets],1,numTrials*numLetFlips);
         
+        %manually ensure that everyone gets the same practice run
         if practice==1
-            shapeOrder= [2  2   1	3	2	2	2	3	2	1	2	1	3	3	3];
+            shapeOrder= [2  2   1	3	2	2	1	3	2	1	2	1	3	3	3];
             letterOrder=[2	2	1	2	1	1	1	2	2	1];
         end
 
@@ -287,7 +270,7 @@ for task=1:numTask
             aCheck=shapeOrder;
             bCheck=letterOrder;
             if thisTask==1                      %and condition is single task
-                if condOrder(block,1)==1        %resps are either
+                if condOrder(block,1)==1        %resp is either
                     respCheck=aCheck;           %fast shapes or
                     respTo=1;
                 elseif condOrder(block,1)==3
@@ -303,7 +286,7 @@ for task=1:numTask
             aCheck=letterOrder;
             bCheck=shapeOrder;
             if thisTask==1                      %and condition is single task
-                if condOrder(block,1)==2        %resps are either
+                if condOrder(block,1)==2        %resp is either
                     respCheck=aCheck;           %fast letters or
                     respTo=1;
                 elseif condOrder(block,1)==4
@@ -318,18 +301,17 @@ for task=1:numTask
         if thisTask==1
             if condOrder(block,1)==1||condOrder(block,1)==4
                 inst=['Press the space bar when \n'...
-                    'a SHAPE is shown twice in a row. \n \n'...
+                    'a SHAPE is repeated. \n \n'...
                     'Press any key to begin.'];
             elseif condOrder(block,1)==2||condOrder(block,1)==3
                 inst=['Press the space bar when \n'...
-                    'a LETTER is shown twice in a row. \n \n'...
+                    'a LETTER is repeated. \n \n'...
                     'Press any key to begin.'];
             end
             
         elseif thisTask==2
-            inst=['Press the space bar when \n'...
-                'a letter AND a shape are both \n'...
-                'shown twice in a row.\n \n'...
+            inst=['Press the space bar when a\n'...
+                'LETTER AND a SHAPE are both repeated.\n \n'...
                 'Press any key to begin.'];
         end
 
@@ -385,10 +367,9 @@ for task=1:numTask
             Screen('CopyWindow',aWins(1,aFlips),window,[],aRect)    
             Screen('CopyWindow',bWins(1,bFlips),window,[],bRect)
             resp1On=Screen('Flip',window,[],1);             %get resp here
-            keyIsDown=0;
-            ind=0;
             aClear=0;
             bClear=0;
+            ind=0;
             keepChecking=1;
             while GetSecs<=resp1On+2                        %give them 2sec (time to next flip) to respond
                 [keyIsDown,resp1Off,keyCode]=KbCheck;
@@ -487,7 +468,6 @@ for task=1:numTask
             drawFixation(window,centerX,centerY,[0 0 0])        %clear fixation color incase practice 
             Screen('CopyWindow',aWins(1,aFlips),window,[],aRect)    %aRect w/o bRect
             resp2On=Screen('Flip',window,[],1);                 %get resp here
-            keyIsDown=0;
             ind=0;
             keepChecking=1;
             while GetSecs<=resp2On+1                          %give them 1sec (time to next flip) to respond
@@ -573,7 +553,6 @@ for task=1:numTask
             Screen('CopyWindow',blankWin,window,[],aRect)       %clear aRect
             Screen('CopyWindow',bWins(1,bFlips),window,[],bRect)    %bRect w/o aRect for 1sec
             resp3On=Screen('Flip',window,[],1);                 %get resp here
-            keyIsDown=0;
             ind=0;
             keepChecking=1;
             while GetSecs<=resp3On+1                          %give them 1sec (time to next flip) to respond
@@ -647,7 +626,6 @@ for task=1:numTask
             drawFixation(window,centerX,centerY,[0 0 0])            %clear fix color incase practice
             Screen('CopyWindow',aWins(1,aFlips),window,[],aRect)    %give aRect   
             resp4On=Screen('Flip',window,[],1);                 %get resp here
-            keyIsDown=0;
             ind=0;
             aClear=0;
             bClear=0;

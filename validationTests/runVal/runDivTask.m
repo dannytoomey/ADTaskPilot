@@ -52,6 +52,7 @@ divTask(sjNum,practice,numTask,numTrials,taskOrder,dualOrder,singleOrder,DIVfile
 practice=0;
 divTask(sjNum,practice,numTask,numTrials,taskOrder,dualOrder,singleOrder,DIVfilePath,laptopDebug)
 
+
 return
 %==========================================================================
 %function: setup_divTask

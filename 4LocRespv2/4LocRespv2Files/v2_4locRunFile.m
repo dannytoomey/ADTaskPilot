@@ -2,7 +2,7 @@
 %runfile for 4LocTaskv2
 %approx run time = 50mins
 
-laptopDebug=0;     
+laptopDebug=1;     
 
 sjNum = input('Input Subject Number ');
 
@@ -24,7 +24,7 @@ if sjNum==199
     
 else
     
-    numBlocks=8;
+    numBlocks=7;    %was 8, had to cut down for time
     
     %record sj info
     age = input('Input Age ');
@@ -97,7 +97,7 @@ invalCueThres=1/3;
 
 wmLoadDur=3;
 visRespDur=1;
-audRespDur=2.5;
+audRespDur=2;
 
 numChannels = 1;
 soundRep = 1;

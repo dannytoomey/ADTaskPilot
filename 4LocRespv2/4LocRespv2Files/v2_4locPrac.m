@@ -50,7 +50,7 @@ end
 [keyboardIndices, ~, ~] = GetKeyboardIndices('Apple Internal Keyboard / Trackpad');
 KbName('UnifyKeyNames');
 upLeftResp = KbName('e');
-downLeftResp = KbName('c');
+downLeftResp = KbName('v');
 upRightResp = KbName('i');
 downRightResp = KbName('n');
 lowResp=KbName('f');
@@ -65,8 +65,8 @@ x = x .*pixelScale;
 y = y .*pixelScale;
 x1 = x(1,2);
 y1 = y(2,1);
-stimX = x - x1/2;
-stimY = y - y1/2;
+stimX = (x - x1/2)/1.2;
+stimY = (y - y1/2)/1.2;
 yScale = stimY(1,2);
 xScale = stimX(1,2);
 
@@ -85,14 +85,14 @@ for cond=1:numCond
             Screen('TextSize',window,40);
             Screen('TextFont',window,'Courier');
             ignoreTones=['Respond to the location of the \n'...
-                'RED CIRLCE with the E, C, I, and N keys \n'...
+                'RED CIRLCE with the E, C, I, and V keys \n'...
                 '(E = upper left, I = upper right \n'...
-                'C = lower left, and N = lower right) \n'...
+                'V = lower left, and N = lower right) \n'...
                 'and IGNORE the TONES.'];
             respTones=['Respond to the location of the \n'...
                 'RED CIRCLE with the E, C, I, and N keys. \n'...
                 '(E = upper left, I = upper right \n'...
-                'C = lower left, and N = lower right) \n'...
+                'V = lower left, and N = lower right) \n'...
                 'RESPOND to the PITCH of the TONES \n'...
                 'with the F and J keys. \n' ...
                 '(F = low and J = high)'];
@@ -104,7 +104,10 @@ for cond=1:numCond
             end
 
             Screen('Flip',window);
-            KbStrokeWait;
+            RestrictKeysForKbCheck(KbName('space'))
+            KbStrokeWait
+            RestrictKeysForKbCheck([])
+            WaitSecs(.2)
 
             cueCondOrder=randperm(2);
 
@@ -153,7 +156,9 @@ for cond=1:numCond
                     end
 
                     Screen('Flip',window);
+                    RestrictKeysForKbCheck(KbName('space'))
                     KbStrokeWait
+                    RestrictKeysForKbCheck([])
                     WaitSecs(.2)
 
                     %load WM
@@ -204,13 +209,13 @@ for cond=1:numCond
                         stimRect = [0 0 50 50];
                         maxDiameter = max(stimRect);
 
-                        fixCrossDimPix = 20;
+                        fixCrossDimPix = 10;
                         xCoords = [-fixCrossDimPix fixCrossDimPix 0 0];
                         yCoords = [0 0 -fixCrossDimPix fixCrossDimPix];
                         allCoords = [xCoords; yCoords];
                         lineWidthPix = 2;
                         crossSize=18;
-                        baseRect = [0 0 1.5*stimRect(1,3) -stimY(1,1)+stimY(2,1)+1.5*stimRect(1,4)];
+                        baseRect = [0 0 1.5*(stimRect(1,3)) (-stimY(1,1))+(stimY(2,1))+1.5*(stimRect(1,4))];
                         boxCenX = xCenter + CenX;
                         centeredRect = CenterRectOnPointd(baseRect, boxCenX, yCenter);
                         rectColor = [0 0 0]; 
@@ -218,15 +223,16 @@ for cond=1:numCond
                         Screen('TextSize', window, crossSize);
                         Screen('DrawLines',window,allCoords,lineWidthPix,white,[xCenter yCenter], 2);
                         Screen('Flip', window,[],1);
+                        WaitSecs(0.3)
                         Screen('BlendFunction', window, 'GL_SRC_ALPHA', 'GL_ONE_MINUS_SRC_ALPHA');
                         Screen('FrameRect',window,rectColor,centeredRect,6);
                         Screen('Flip', window);
-                        WaitSecs(0.5);
+                        WaitSecs(0.2);
                         Screen('BlendFunction', window, 'GL_SRC_ALPHA', 'GL_ONE_MINUS_SRC_ALPHA');
                         Screen('TextSize', window, crossSize);
                         Screen('DrawLines',window,allCoords,lineWidthPix,white,[xCenter yCenter], 2);
                         Screen('Flip', window,[],1);
-                        WaitSecs(0.25);
+                        WaitSecs(0.2);
 
                         centeredRect1 = CenterRectOnPointd(stimRect, xCenter+stimX(1,1), yCenter+stimY(1,1));
                         centeredRect2 = CenterRectOnPointd(stimRect, xCenter+stimX(2,1), yCenter+stimY(2,1));
@@ -465,12 +471,12 @@ for cond=1:numCond
             ignoreTones=['Respond to the location of the \n'...
                 'RED SQUARE with the E, C, I, and N keys \n'...
                 '(E = upper left, I = upper right \n'...
-                'C = lower left, and N = lower right) \n'...
+                'V = lower left, and N = lower right) \n'...
                 'and IGNORE the TONES.'];
             respTones=['Respond to the location of the \n'...
                 'RED SQUARE with the E, C, I, and N keys. \n'...
                 '(E = upper left, I = upper right \n'...
-                'C = lower left, and N = lower right) \n'...
+                'V = lower left, and N = lower right) \n'...
                 'RESPOND to the PITCH of the TONES \n'...
                 'with the F and J keys. \n' ...
                 '(F = low and J = high)'];
@@ -482,7 +488,10 @@ for cond=1:numCond
             end
 
             Screen('Flip',window);
-            KbStrokeWait;
+            RestrictKeysForKbCheck(KbName('space'))
+            KbStrokeWait
+            RestrictKeysForKbCheck([])
+            WaitSecs(.2)
 
             cueCondOrder=randperm(2);
 
@@ -531,7 +540,9 @@ for cond=1:numCond
                     end
 
                     Screen('Flip',window);
+                    RestrictKeysForKbCheck(KbName('space'))
                     KbStrokeWait
+                    RestrictKeysForKbCheck([])
                     WaitSecs(.2)
 
                     %load WM
@@ -594,15 +605,16 @@ for cond=1:numCond
                         Screen('TextSize', window, crossSize);
                         Screen('DrawLines',window,allCoords,lineWidthPix,white,[xCenter yCenter], 2);
                         Screen('Flip', window,[],1);
+                        WaitSecs(0.3)
                         Screen('BlendFunction', window, 'GL_SRC_ALPHA', 'GL_ONE_MINUS_SRC_ALPHA');
                         Screen('FrameRect',window,rectColor,centeredRect,6);
                         Screen('Flip', window);
-                        WaitSecs(0.5);
+                        WaitSecs(0.2);
                         Screen('BlendFunction', window, 'GL_SRC_ALPHA', 'GL_ONE_MINUS_SRC_ALPHA');
                         Screen('TextSize', window, crossSize);
                         Screen('DrawLines',window,allCoords,lineWidthPix,white,[xCenter yCenter], 2);
                         Screen('Flip', window,[],1);
-                        WaitSecs(0.25);
+                        WaitSecs(0.2);
 
                         centeredRect1 = CenterRectOnPointd(stimRect, xCenter+stimX(1,1), yCenter+stimY(1,1));
                         centeredRect2 = CenterRectOnPointd(stimRect, xCenter+stimX(2,1), yCenter+stimY(2,1));
@@ -945,12 +957,12 @@ for cond=1:numCond
             ignoreTones=['Respond to the location of the \n'...
                 'RED CIRCLE with the E, C, I, and N keys \n'...
                 '(E = upper left, I = upper right \n'...
-                'C = lower left, and N = lower right) \n'...
+                'V = lower left, and N = lower right) \n'...
                 'and IGNORE the TONES.'];
             respTones=['Respond to the location of the \n'...
                 'RED CIRCLE with the E, C, I, and N keys. \n'...
                 '(E = upper left, I = upper right \n'...
-                'C = lower left, and N = lower right) \n'...
+                'V = lower left, and N = lower right) \n'...
                 'RESPOND to the PITCH of the TONES \n'...
                 'with the F and J keys. \n' ...
                 '(F = low and J = high)'];
@@ -962,7 +974,10 @@ for cond=1:numCond
             end
 
             Screen('Flip',window);
-            KbStrokeWait;
+            RestrictKeysForKbCheck(KbName('space'))
+            KbStrokeWait
+            RestrictKeysForKbCheck([])
+            WaitSecs(.2)
 
             cueCondOrder=randperm(2);
 
@@ -1011,7 +1026,9 @@ for cond=1:numCond
                     end
 
                     Screen('Flip',window);
+                    RestrictKeysForKbCheck(KbName('space'))
                     KbStrokeWait
+                    RestrictKeysForKbCheck([])
                     WaitSecs(.2)
 
                     %load WM
@@ -1074,15 +1091,16 @@ for cond=1:numCond
                         Screen('TextSize', window, crossSize);
                         Screen('DrawLines',window,allCoords,lineWidthPix,white,[xCenter yCenter], 2);
                         Screen('Flip', window,[],1);
+                        WaitSecs(0.3)
                         Screen('BlendFunction', window, 'GL_SRC_ALPHA', 'GL_ONE_MINUS_SRC_ALPHA');
                         Screen('FrameRect',window,rectColor,centeredRect,6);
                         Screen('Flip', window);
-                        WaitSecs(0.5);
+                        WaitSecs(0.2);
                         Screen('BlendFunction', window, 'GL_SRC_ALPHA', 'GL_ONE_MINUS_SRC_ALPHA');
                         Screen('TextSize', window, crossSize);
                         Screen('DrawLines',window,allCoords,lineWidthPix,white,[xCenter yCenter], 2);
                         Screen('Flip', window,[],1);
-                        WaitSecs(0.25);
+                        WaitSecs(0.2);
 
                         centeredRect1 = CenterRectOnPointd(stimRect, xCenter+stimX(1,1), yCenter+stimY(1,1));
                         centeredRect2 = CenterRectOnPointd(stimRect, xCenter+stimX(2,1), yCenter+stimY(2,1));

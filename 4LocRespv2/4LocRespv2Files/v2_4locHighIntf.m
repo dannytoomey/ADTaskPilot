@@ -51,7 +51,7 @@ end
 [keyboardIndices, ~, ~] = GetKeyboardIndices('Apple Internal Keyboard / Trackpad');
 KbName('UnifyKeyNames');
 upLeftResp = KbName('e');
-downLeftResp = KbName('c');
+downLeftResp = KbName('v');
 upRightResp = KbName('i');
 downRightResp = KbName('n');
 lowResp=KbName('f');
@@ -69,8 +69,8 @@ x = x .*pixelScale;
 y = y .*pixelScale;
 x1 = x(1,2);
 y1 = y(2,1);
-stimX = x - x1/2;
-stimY = y - y1/2;
+stimX = (x - x1/2)/1.2;
+stimY = (y - y1/2)/1.2;
 yScale = stimY(1,2);
 xScale = stimX(1,2);
 
@@ -83,12 +83,12 @@ for task=1:numTask
     ignoreTones=['Respond to the location of the \n'...
         'RED CIRCLE with the E, C, I, and N keys \n'...
         '(E = upper left, I = upper right \n'...
-        'C = lower left, and N = lower right) \n'...
+        'V = lower left, and N = lower right) \n'...
         'and IGNORE the TONES.'];
     respTones=['Respond to the location of the \n'...
         'RED CIRCLE with the E, C, I, and N keys. \n'...
         '(E = upper left, I = upper right \n'...
-        'C = lower left, and N = lower right) \n'...
+        'V = lower left, and N = lower right) \n'...
         'RESPOND to the PITCH of the TONES \n'...
         'with the F and J keys. \n' ...
         '(F = low and J = high)'];
@@ -108,7 +108,10 @@ for task=1:numTask
     end
 
     Screen('Flip',window);
-    KbStrokeWait;
+    RestrictKeysForKbCheck(KbName('space'))
+    KbStrokeWait
+    RestrictKeysForKbCheck([])
+    WaitSecs(.2)
 
     cueCondOrder=randperm(2);
         
@@ -172,9 +175,11 @@ for task=1:numTask
             end
             
             Screen('Flip',window);
+            RestrictKeysForKbCheck(KbName('space'))
             KbStrokeWait
+            RestrictKeysForKbCheck([])
             WaitSecs(.2)
-            
+
             %give wm load
             
             letters = ['A' 'B' 'C' 'D' 'E' 'F' 'G' 'H' 'I' 'J' 'K' 'L' 'M' 'N' 'O' 'P' 'Q' 'R' 'S' 'T' 'U' 'V' 'W' 'X' 'Y' 'Z'];
@@ -235,16 +240,16 @@ for task=1:numTask
                 Screen('TextSize', window, crossSize);
                 Screen('DrawLines',window,allCoords,lineWidthPix,white,[xCenter yCenter], 2);
                 Screen('Flip', window,[],1);
-                %draw cue
+                WaitSecs(0.3)       %show fix for 300ms
                 Screen('BlendFunction', window, 'GL_SRC_ALPHA', 'GL_ONE_MINUS_SRC_ALPHA');
                 Screen('FrameRect',window,rectColor,centeredRect,6);
                 Screen('Flip', window);
-                WaitSecs(0.5);      %show cue and fix for 0.5sec
+                WaitSecs(0.2)       %show cue and fix for 200ms
                 Screen('BlendFunction', window, 'GL_SRC_ALPHA', 'GL_ONE_MINUS_SRC_ALPHA');
                 Screen('TextSize', window, crossSize);
                 Screen('DrawLines',window,allCoords,lineWidthPix,white,[xCenter yCenter], 2);
                 Screen('Flip', window,[],1);
-                WaitSecs(0.25);     %show just fix for 0.25sec
+                WaitSecs(0.2)       %show just fix for 200ms
 
                 centeredRect1 = CenterRectOnPointd(stimRect, xCenter+stimX(1,1), yCenter+stimY(1,1));
                 centeredRect2 = CenterRectOnPointd(stimRect, xCenter+stimX(2,1), yCenter+stimY(2,1));

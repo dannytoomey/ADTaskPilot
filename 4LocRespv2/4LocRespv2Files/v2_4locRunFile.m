@@ -2,7 +2,7 @@
 %runfile for 4LocTaskv2
 %approx run time = 50mins
 
-laptopDebug=1;     
+laptopDebug=0;     
 
 sjNum = input('Input Subject Number ');
 

@@ -226,7 +226,7 @@ for task=1:numTask
                 stimRect = [0 0 50 50];
                 maxDiameter = max(stimRect);
 
-                fixCrossDimPix = 20;
+                fixCrossDimPix = 10;
                 xCoords = [-fixCrossDimPix fixCrossDimPix 0 0];
                 yCoords = [0 0 -fixCrossDimPix fixCrossDimPix];
                 allCoords = [xCoords; yCoords];

@@ -73,6 +73,8 @@ xScale = stimX(1,2);
 numCond=3;
 numBlocks=1;
 
+fixCrossDimPix = 10;    
+
 for cond=1:numCond
     
     
@@ -209,7 +211,6 @@ for cond=1:numCond
                         stimRect = [0 0 50 50];
                         maxDiameter = max(stimRect);
 
-                        fixCrossDimPix = 10;
                         xCoords = [-fixCrossDimPix fixCrossDimPix 0 0];
                         yCoords = [0 0 -fixCrossDimPix fixCrossDimPix];
                         allCoords = [xCoords; yCoords];
@@ -591,7 +592,6 @@ for cond=1:numCond
                         stimRect = [0 0 50 50];
                         maxDiameter = max(stimRect);
 
-                        fixCrossDimPix = 20;
                         xCoords = [-fixCrossDimPix fixCrossDimPix 0 0];
                         yCoords = [0 0 -fixCrossDimPix fixCrossDimPix];
                         allCoords = [xCoords; yCoords];
@@ -1077,7 +1077,6 @@ for cond=1:numCond
                         stimRect = [0 0 50 50];
                         maxDiameter = max(stimRect);
 
-                        fixCrossDimPix = 20;
                         xCoords = [-fixCrossDimPix fixCrossDimPix 0 0];
                         yCoords = [0 0 -fixCrossDimPix fixCrossDimPix];
                         allCoords = [xCoords; yCoords];

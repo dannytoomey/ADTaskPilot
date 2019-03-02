@@ -82,10 +82,13 @@ end
 
 if laptopDebug==1
     Screen('Preference','SkipSyncTests',1)
-    filePath='/Users/dannytoomey/Documents/Research/ADTask/Experiments/ADTaskPilot/4LocRespv2/4LocRespv2Files';
+    filePath='/Users/dannytoomey/Documents/Research/ADTask/Experiments/ADTaskPilot/4LocRespv2/4LocRespv2Files/';
 else
-    filePath = '/Users/labadmin/Documents/Experiments/ADTask/ADTaskPilot/4LocRespv2/4LocRespv2Data';
+    filePath = '/Users/labadmin/Documents/Experiments/ADTask/ADTaskPilot/4LocRespv2/4LocRespv2Data/';
+    backup='/Users/labadmin/Documents/Experiments/ADTask/backup/';
+    temp='/Users/labadmin/Documents/Experiments/ADTask/tempData/';
     save([filePath '/' sprintf('sj%02d_SubjectInfo.mat',sjNum)],'age','gender','handedness','condCBOrder','taskCBOrder');
+    save([backup '/' sprintf('sj%02d_SubjectInfo.mat',sjNum)],'age','gender','handedness','condCBOrder','taskCBOrder');
 end
 
 numTask = 2;
@@ -133,11 +136,11 @@ for task=1:size(thisConds,1)
     if thisTask==1
         v2_4locPrac(numTask,numCue,numTrials,valCueThres,invalCueThres,wmLoadDur,visRespDur,audRespDur,numChannels,soundRep,soundDur,waitForDeviceStart)
     elseif thisTask==2
-        v2_4locLowIntf(filePath,sjNum,lowTaskOrder,numTask,numCue,numBlocks,numTrials,valCueThres,invalCueThres,wmLoadDur,visRespDur,audRespDur,numChannels,soundRep,soundDur,waitForDeviceStart)
+        v2_4locLowIntf(filePath,backup,temp,sjNum,lowTaskOrder,numTask,numCue,numBlocks,numTrials,valCueThres,invalCueThres,wmLoadDur,visRespDur,audRespDur,numChannels,soundRep,soundDur,waitForDeviceStart)
     elseif thisTask==3
-        v2_4locMedIntf(filePath,sjNum,medTaskOrder,numTask,numCue,numBlocks,numTrials,valCueThres,invalCueThres,wmLoadDur,visRespDur,audRespDur,numChannels,soundRep,soundDur,waitForDeviceStart)
+        v2_4locMedIntf(filePath,backup,temp,sjNum,medTaskOrder,numTask,numCue,numBlocks,numTrials,valCueThres,invalCueThres,wmLoadDur,visRespDur,audRespDur,numChannels,soundRep,soundDur,waitForDeviceStart)
     elseif thisTask==4
-        v2_4locHighIntf(filePath,sjNum,highTaskOrder,numTask,numCue,numBlocks,numTrials,valCueThres,invalCueThres,wmLoadDur,visRespDur,audRespDur,numChannels,soundRep,soundDur,waitForDeviceStart)
+        v2_4locHighIntf(filePath,backup,temp,sjNum,highTaskOrder,numTask,numCue,numBlocks,numTrials,valCueThres,invalCueThres,wmLoadDur,visRespDur,audRespDur,numChannels,soundRep,soundDur,waitForDeviceStart)
     end
 end
 

@@ -23,7 +23,7 @@
 %distractors, so only one dim shared. essentially second medIntf. in this
 %version, two dim shared (shape and color). 
 
-function v2_4locHighIntf(filePath,sjNum,highTaskOrder,numTask,numCue,numBlocks,numTrials,valCueThres,invalCueThres,wmLoadDur,visRespDur,audRespDur,numChannels,soundRep,soundDur,waitForDeviceStart)
+function v2_4locHighIntf(filePath,backup,temp,sjNum,highTaskOrder,numTask,numCue,numBlocks,numTrials,valCueThres,invalCueThres,wmLoadDur,visRespDur,audRespDur,numChannels,soundRep,soundDur,waitForDeviceStart)
 
 %set up screen
 
@@ -552,7 +552,7 @@ for task=1:numTask
                 
             end
             
-            save('allHighTrialsFile.mat','allHighTrials');
+            save([temp 'allHighTrialsFile.mat'],'allHighTrials');
             
             %probe wm
             
@@ -611,18 +611,19 @@ for task=1:numTask
             allHighBlock(block).thisBlockTrials=allHighTrials;
             allHighBlock(block).thisBlockWM=WMData;
             Screen('FillRect',window,grey);
-            save('allHighBlockFile.mat','allHighBlock');
+            save([temp 'allHighBlockFile.mat'],'allHighBlock');
             
         end
         
         allHighCueCond(cue).thisCueCondData=allHighBlock;
         allHighCueCond(cue).thisCueCond=cueCond;
-        save('allHighCueCondFile.mat','allHighCueCond');
+        save([temp 'allHighCueCondFile.mat'],'allHighCueCond');
 
     end
     
     allHighTask(task).thisTaskData=allHighCueCond;
-    save([filePath '/' sprintf('sj%02d_allHighTaskFile.mat',sjNum)],'allHighTask');
+    save([filePath sprintf('sj%02d_allHighTaskFile.mat',sjNum)],'allHighTask');
+    save([backup sprintf('sj%02d_allHighTaskFile.mat',sjNum)],'allHighTask');
    
 end
 

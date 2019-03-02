@@ -18,7 +18,7 @@
 
 %% Low Interference Condition
 
-function v2_4locLowIntf(filePath,sjNum,lowTaskOrder,numTask,numCue,numBlocks,numTrials,valCueThres,invalCueThres,wmLoadDur,visRespDur,audRespDur,numChannels,soundRep,soundDur,waitForDeviceStart)
+function v2_4locLowIntf(filePath,backup,temp,sjNum,lowTaskOrder,numTask,numCue,numBlocks,numTrials,valCueThres,invalCueThres,wmLoadDur,visRespDur,audRespDur,numChannels,soundRep,soundDur,waitForDeviceStart)
 
 %set up the screen
 
@@ -437,7 +437,7 @@ for task=1:numTask
                 
             end
             
-            save('allLowTrialsFile.mat','allLowTrials');
+            save([temp 'allLowTrialsFile.mat'],'allLowTrials');
             
             %probe wm
             
@@ -499,18 +499,19 @@ for task=1:numTask
             allLowBlock(block).thisBlockTrials=allLowTrials;
             allLowBlock(block).thisBlockWM=WMData;
             Screen('FillRect',window,grey);
-            save('allLowBlockFile.mat','allLowBlock');      %save struct in case crash
+            save([temp 'allLowBlockFile.mat'],'allLowBlock');      %save struct in case crash
             
         end
         
         allLowCueCond(cue).thisCueCondData=allLowBlock;
         allLowCueCond(cue).thisCueCond=cueCond;
-        save('allLowCueCondFile.mat','allLowCueCond');      %save struct in case crash
+        save([temp 'allLowCueCondFile.mat'],'allLowCueCond');      %save struct in case crash
 
     end
     
     allLowTask(task).thisTaskData=allLowCueCond;
-    save([filePath '/' sprintf('sj%02d_allLowTaskFile.mat',sjNum)],'allLowTask');       %save struct to data repository
+    save([filePath sprintf('sj%02d_allLowTaskFile.mat',sjNum)],'allLowTask');       %save struct to data repository
+    save([backup sprintf('sj%02d_allLowTaskFile.mat',sjNum)],'allLowTask'); 
    
 end
 

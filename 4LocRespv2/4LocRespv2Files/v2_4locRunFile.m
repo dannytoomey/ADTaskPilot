@@ -82,7 +82,9 @@ end
 
 if laptopDebug==1
     Screen('Preference','SkipSyncTests',1)
-    filePath='/Users/dannytoomey/Documents/Research/ADTask/Experiments/ADTaskPilot/4LocRespv2/4LocRespv2Files/';
+    filePath='/Users/dannytoomey/Documents/Research/ADTask/Experiments/testData/';
+    backup='/Users/dannytoomey/Documents/Research/ADTask/Experiments/testData/';
+    temp='/Users/dannytoomey/Documents/Research/ADTask/Experiments/testData/';
 else
     filePath = '/Users/labadmin/Documents/Experiments/ADTask/ADTaskPilot/4LocRespv2/4LocRespv2Data/';
     backup='/Users/labadmin/Documents/Experiments/ADTask/backup/';

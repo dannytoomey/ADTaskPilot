@@ -18,7 +18,7 @@
 
 %% Medium Interference Condition
 
-function v2_4locMedIntf(filePath,sjNum,medTaskOrder,numTask,numCue,numBlocks,numTrials,valCueThres,invalCueThres,wmLoadDur,visRespDur,audRespDur,numChannels,soundRep,soundDur,waitForDeviceStart)
+function v2_4locMedIntf(filePath,backup,temp,sjNum,medTaskOrder,numTask,numCue,numBlocks,numTrials,valCueThres,invalCueThres,wmLoadDur,visRespDur,audRespDur,numChannels,soundRep,soundDur,waitForDeviceStart)
 
 %set up the screen
 
@@ -525,7 +525,7 @@ for task=1:numTask
                 
             end
             
-            save('allMedTrialsFile.mat','allMedTrials');
+            save([temp 'allMedTrialsFile.mat'],'allMedTrials');
             
             %probe wm
             
@@ -585,18 +585,19 @@ for task=1:numTask
             allMedBlock(block).thisBlockTrials=allMedTrials;
             allMedBlock(block).thisBlockWM=WMData;
             Screen('FillRect',window,grey);
-            save('allMedBlockFile.mat','allMedBlock');
+            save([temp 'allMedBlockFile.mat'],'allMedBlock');
             
         end
         
         allMedCueCond(cue).thisCueCondData=allMedBlock;
         allMedCueCond(cue).thisCueCond=cueCond;
-        save('allMedCueCondFile.mat','allMedCueCond');
+        save([temp 'allMedCueCondFile.mat'],'allMedCueCond');
 
     end
     
     allMedTask(task).thisTaskData=allMedCueCond;
-    save([filePath '/' sprintf('sj%02d_allMedTaskFile.mat',sjNum)],'allMedTask');
+    save([filePath sprintf('sj%02d_allMedTaskFile.mat',sjNum)],'allMedTask');
+    save([backup sprintf('sj%02d_allMedTaskFile.mat',sjNum)],'allMedTask');
    
 end
 

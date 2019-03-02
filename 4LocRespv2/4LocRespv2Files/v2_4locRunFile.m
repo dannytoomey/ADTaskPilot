@@ -24,7 +24,7 @@ if sjNum==199
     
 else
     
-    numBlocks=7;    %was 8, had to cut down for time
+    numBlocks=6;    %was 8, had to cut down for time
     
     %record sj info
     age = input('Input Age ');

@@ -1,5 +1,5 @@
 
-function v2runK(sjNum,laptopDebug,KfilePath,exp)
+function v2runK(sjNum,laptopDebug,KfilePath,exp,backup)
 
 %===========================================
 % Purpose: run KTest
@@ -26,9 +26,9 @@ numTrials=180;  %5 blocks*36 trials/block. changed from 40 to 36 to work with ma
 v2K_make_trialSequences(sjNum,numTrials,KfilePath)
 
 practice=1;  %run a practice block
-v2KTest(sjNum,numTrials,exp,KfilePath,practice,laptopDebug)  %laptopDebug turns off synchronization and sets ifi to 1/60 - D
+v2KTest(sjNum,numTrials,exp,KfilePath,practice,laptopDebug,backup)  %laptopDebug turns off synchronization and sets ifi to 1/60 - D
 practice=0;  %run the experiment
-v2KTest(sjNum,numTrials,exp,KfilePath,practice,laptopDebug)
+v2KTest(sjNum,numTrials,exp,KfilePath,practice,laptopDebug,backup)
 
 ShowCursor;
     

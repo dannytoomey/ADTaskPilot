@@ -89,8 +89,16 @@ else
     filePath = '/Users/labadmin/Documents/Experiments/ADTask/ADTaskPilot/4LocRespv2/4LocRespv2Data/';
     backup='/Users/labadmin/Documents/Experiments/ADTask/backup/';
     temp='/Users/labadmin/Documents/Experiments/ADTask/tempData/';
-    save([filePath '/' sprintf('sj%02d_SubjectInfo.mat',sjNum)],'age','gender','handedness','condCBOrder','taskCBOrder');
-    save([backup '/' sprintf('sj%02d_SubjectInfo.mat',sjNum)],'age','gender','handedness','condCBOrder','taskCBOrder');
+    saveFile=sprintf('sj%02d_SubjectInfo.mat',sjNum);
+    if sjNum~=199   %add b/c idc if it overwrites the files if i'm debugging
+        if exist([filePath saveFile],'file')
+            sca;
+            msgbox('File already exists!', 'modal')
+            return;
+        end
+    end
+    save([filePath saveFile],'age','gender','handedness','condCBOrder','taskCBOrder');
+    save([backup saveFile],'age','gender','handedness','condCBOrder','taskCBOrder');
 end
 
 numTask = 2;

@@ -133,14 +133,6 @@ for b = 1:p.nBlocks
     
     fName = ['sj', num2str(p.subNum), '_AllKTaskData.mat'];
     
-    if sjNum~=199   %add b/c idc if it overwrites the files if i'm debugging
-        if exist([KfilePath fName])
-            Screen('CloseAll');
-            msgbox('File already exists!', 'modal')
-            return;
-        end
-    end
-
     %--------------------------------------------------------
     % Preallocate some vectors to control experimental params
     %--------------------------------------------------------

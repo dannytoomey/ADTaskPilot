@@ -39,7 +39,7 @@
 %function: runDivTask
 %purpose: runfile for divided attention validation task
 %==========================================================================
-function runDivTask(sjNum,laptopDebug,DIVfilePath)
+function runDivTask(sjNum,laptopDebug,DIVfilePath,backup)
 
 [numTask,numTrials,taskOrder,dualOrder,singleOrder]=setup_divTask(sjNum);
 
@@ -47,10 +47,10 @@ saveFile=[DIVfilePath 'sj' sprintf('%02d',sjNum) '_DivInfo.mat'];
 save(saveFile,'taskOrder','dualOrder','singleOrder')
 
 practice=1;
-divTask(sjNum,practice,numTask,numTrials,taskOrder,dualOrder,singleOrder,DIVfilePath,laptopDebug)
+divTask(sjNum,practice,numTask,numTrials,taskOrder,dualOrder,singleOrder,DIVfilePath,laptopDebug,backup)
 
 practice=0;
-divTask(sjNum,practice,numTask,numTrials,taskOrder,dualOrder,singleOrder,DIVfilePath,laptopDebug)
+divTask(sjNum,practice,numTask,numTrials,taskOrder,dualOrder,singleOrder,DIVfilePath,laptopDebug,backup)
 
 
 return
@@ -115,7 +115,7 @@ return
 %inputs: sjNum,practice,numTask,numTrials,taskOrder,dualOrder,singleOrder,DIVfilePath,laptopDebug
 %outputs: none, data saved in a struct
 %==========================================================================
-function divTask(sjNum,practice,numTask,numTrials,taskOrder,dualOrder,singleOrder,DIVfilePath,laptopDebug)
+function divTask(sjNum,practice,numTask,numTrials,taskOrder,dualOrder,singleOrder,DIVfilePath,laptopDebug,backup)
 
 
 %setup the screen
@@ -740,15 +740,17 @@ for task=1:numTask
         blockData(block).shapeOrder=shapeOrder;
         blockData(block).letterOrder=letterOrder;
 
-        save('DIVblockDataBackup.mat','blockData')
+        save([backup 'DIVblockDataBackup.mat'],'blockData')
 
     end
     
     allData(task).condData=blockData;
     allData(task).thisTask=thisTask;
     
-    saveFile=[DIVfilePath sprintf('sj%02d_allData.mat',sjNum)];
+    saveFile=[DIVfilePath sprintf('sj%02d_allDivData.mat',sjNum)];
     save(saveFile,'allData')
+    backupFile=[backup sprintf('sj%02d_allDivData.mat',sjNum)];
+    save(backupFile,'allData')
     
 end
 

@@ -75,7 +75,7 @@ singleRespCBO=  [1	2	3	4	4	3	2	1	1	3	2	4	4	2	3	1       %determines single task r
 if sjNum==199
     
     numTask=2;
-    numTrials=5;
+    numTrials=25;
     taskOrder=taskCBO(:,1);
     dualOrder=dualRespCBO(:,1);
     singleOrder=singleRespCBO(:,1);

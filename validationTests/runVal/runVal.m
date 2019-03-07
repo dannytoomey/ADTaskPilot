@@ -20,24 +20,25 @@ else
     backup='/Users/labadmin/Documents/Experiments/ADTask/backup/';
 end
 
-testCBO=[1	1   1   1	1   1   2	2   2   2   2	2   3	3   3   3   3   3
-         2	2   2   3	3   3   1	1   1   3   3	3   1	1   1   2   2   2
-         3	3   3   2	2   2   3	3   3   1   1  	1   2	2   2   1   1   1];
+testCBO=    [1  1   2   2   3   3
+             2  3   1   3   1   2
+             3  2   3   1   2   1];
 
+sessNum=input('Input Session Number ');
 sjNum=input('Input Subject Number ');
 
-if sjNum==199
+if sessNum==199
     
     sjCBO=testCBO(:,1);
     
 else
     
-    if sjNum<=size(testCBO,2)
-        sjCBO=testCBO(:,sjNum);
+    if sessNum<=size(testCBO,2)
+        sjCBO=testCBO(:,sessNum);
     else
-        cycle=floor(sjNum/size(testCBO,2));
-        if sjNum-(size(testCBO,2)*cycle)~=0
-            sjCBO=testCBO(:,sjNum-(size(testCBO,2)*cycle));
+        cycle=floor(sessNum/size(testCBO,2));
+        if sessNum-(size(testCBO,2)*cycle)~=0
+            sjCBO=testCBO(:,sessNum-(size(testCBO,2)*cycle));
         else
             sjCBO=testCBO(:,size(testCBO,2));
         end
@@ -58,9 +59,8 @@ save(saveFile,'sjCBO')
 
 if sjNum==199
     
-    runANT(sjNum,laptopDebug,ANTfilePath,backup)
-    exp=1;   %1 for experiment, 0 for testing/debugging
-    v2runK(sjNum,laptopDebug,KfilePath,exp,backup)
+    %runANT(sjNum,laptopDebug,ANTfilePath,backup)
+    %v2runK(sjNum,laptopDebug,KfilePath,1,backup)  %1 for experiment, 0 for testing/debugging
     runDivTask(sjNum,laptopDebug,DIVfilePath,backup)
     
 else

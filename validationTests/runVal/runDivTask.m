@@ -224,33 +224,62 @@ for task=1:numTask
 %         
 %         for b=1:60
 %             
-%             start=GetSecs;
+%            start=GetSecs;
 % 
-%             while 1
-% 
+%            rng('shuffle')
+%            
+%            while 1
+%                
 %                 shapeOrder=randi([1,numShapes],1,numTrials*numShapeFlips);
 %                 letterOrder=randi([1,numLets],1,numTrials*numLetFlips);
 % 
 %                 blockStim=zeros(2,12*numTrials);
 %                 shapestim=1;
 %                 letstim=1;
+%                 if fastShapeStream==1
+%                     shapeOffset=3;
+%                     letOffset=5;
+%                 else
+%                     shapeOffset=5;
+%                     letOffset=3;
+%                 end
 %                 for shapeflip=1:numShapeFlips*numTrials
-%                     blockStim(1,shapestim:shapestim+3)=shapeOrder(1,shapeflip);
-%                     shapestim=shapestim+4;
+%                     blockStim(1,shapestim:shapestim+shapeOffset)=shapeOrder(1,shapeflip);
+%                     shapestim=shapestim+shapeOffset+1;
 %                 end
 %                 for letflip=1:numLetFlips*numTrials
-%                     blockStim(2,letstim:letstim+5)=letterOrder(1,letflip);
-%                     letstim=letstim+6;
+%                     blockStim(2,letstim:letstim+letOffset)=letterOrder(1,letflip);
+%                     letstim=letstim+letOffset+1;
 %                 end
 %                 numtargetspace=0;
-%                 for check=5:size(blockStim,2)
-%                     if blockStim(1,check)==blockStim(1,check-4)&&blockStim(2,check)==blockStim(2,check-4)
-%                         numtargetspace=numtargetspace+1;
+%                 if thisTask==1
+%                     if condOrder(block,1)<=2
+%                         startCheck=5;
+%                     else
+%                         startCheck=7;
+%                     end
+%                     for check=startCheck:size(blockStim,2)
+%                         if condOrder(block,1)==1||condOrder(block,1)==4     %single task, shape resp
+%                             if blockStim(1,check)==blockStim(1,check-(shapeOffset+1))
+%                                 numtargetspace=numtargetspace+1;
+%                             end
+%                         elseif condOrder(block,1)==2||condOrder(block,1)==3 %single task, letter resp
+%                             if blockStim(1,check)==blockStim(1,check-(letOffset+1))
+%                                 numtargetspace=numtargetspace+1;
+%                             end
+%                         end
+%                     end
+%                 end
+%                 if thisTask==2
+%                     for check=7:size(blockStim,2)
+%                         if blockStim(1,check)==blockStim(1,check-(shapeOffset+1))&&blockStim(2,check)==blockStim(2,check-(letOffset+1))
+%                             numtargetspace=numtargetspace+1;
+%                         end
 %                     end
 %                 end
 %                 numTargets=numtargetspace/4;
 % 
-%                 if numTargets==(numTrials*4/3)
+%                 if numTargets==(numTrials*4/3)  %ensure target given on 1/3 of all possible resps for all conditions
 %                     break
 %                 end
 % 
@@ -281,6 +310,8 @@ for task=1:numTask
             Screen('Flip',window)
                         
             while 1
+                
+                rng('shuffle')
 
                 shapeOrder=randi([1,numShapes],1,numTrials*numShapeFlips);
                 letterOrder=randi([1,numLets],1,numTrials*numLetFlips);

@@ -5,7 +5,7 @@
 % counterbalancing
 %==========================================================================
 
-laptopDebug=1;
+laptopDebug=0;
 
 if laptopDebug==1
     Screen('Preference','SkipSyncTests',1)
@@ -58,9 +58,9 @@ save(saveFile,'sjCBO')
 
 if sjNum==199
     
-    runANT(sjNum,laptopDebug,ANTfilePath,backup)
+    %runANT(sjNum,laptopDebug,ANTfilePath,backup)
     exp=1;   %1 for experiment, 0 for testing/debugging
-    v2runK(sjNum,laptopDebug,KfilePath,exp,backup)
+    %v2runK(sjNum,laptopDebug,KfilePath,exp,backup)
     runDivTask(sjNum,laptopDebug,DIVfilePath,backup)
     
 else

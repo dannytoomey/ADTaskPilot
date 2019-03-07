@@ -41,19 +41,14 @@
 %==========================================================================
 function runDivTask(sjNum,laptopDebug,DIVfilePath,backup)
 
-[numTask,numTrials,taskOrder,dualOrder,singleOrder]=setup_divTask(sjNum);
-
-saveFile=[DIVfilePath 'sj' sprintf('%02d',sjNum) '_DivInfo.mat'];
-save(saveFile,'taskOrder','dualOrder','singleOrder')
-
-
-
-practice=0;%1
-
-
+practice=1;
+[numTask,numTrials,taskOrder,dualOrder,singleOrder]=setup_divTask(sjNum,practice);
 divTask(sjNum,practice,numTask,numTrials,taskOrder,dualOrder,singleOrder,DIVfilePath,laptopDebug,backup)
 
 practice=0;
+[numTask,numTrials,taskOrder,dualOrder,singleOrder]=setup_divTask(sjNum,practice);
+saveFile=[DIVfilePath 'sj' sprintf('%02d',sjNum) '_DivInfo.mat'];
+save(saveFile,'taskOrder','dualOrder','singleOrder')
 divTask(sjNum,practice,numTask,numTrials,taskOrder,dualOrder,singleOrder,DIVfilePath,laptopDebug,backup)
 
 
@@ -64,7 +59,7 @@ return
 %inputs: laptopDebug
 %outputs: sjNum,numTask,numTrials,taskOrder,dualOrder,singleOrder,DIVfilePath
 %==========================================================================
-function [numTask,numTrials,taskOrder,dualOrder,singleOrder]=setup_divTask(sjNum)
+function [numTask,numTrials,taskOrder,dualOrder,singleOrder]=setup_divTask(sjNum,practice)
 
 
 taskCBO=        [1  2       %1=single first, 2=dual first
@@ -79,7 +74,7 @@ singleRespCBO=  [1	2	3	4	4	3	2	1	1	3	2	4	4	2	3	1       %determines single task r
 if sjNum==199
     
     numTask=2;
-    numTrials=6;
+    numTrials=18;
     taskOrder=taskCBO(:,1);
     dualOrder=dualRespCBO(:,1);
     singleOrder=singleRespCBO(:,1);
@@ -276,12 +271,17 @@ for task=1:numTask
             end
         else
             
+            Screen('FillRect',window,grey)
+            Screen('Flip',window)
+
             apology='I''m not broken, just thinking';
             DrawFormattedText(window,apology,'center','center',[0 0 0])
             Screen('Flip',window)
+            
+            rng('shuffle')
                         
             while 1
-
+               
                 shapeOrder=randi([1,numShapes],1,numTrials*numShapeFlips);
                 letterOrder=randi([1,numLets],1,numTrials*numLetFlips);
 
@@ -433,7 +433,7 @@ for task=1:numTask
         if practice==1
 
             Screen('FillRect',window,grey)
-            text=['This is ' sprintf('%d of 2 practice blocks.',blockNum) '\n \n'...
+            text=['This is ' sprintf('%d of 4 practice blocks.',blockNum) '\n \n'...
                   sprintf('%s',inst)];
             DrawFormattedText(window,text,'center','center',[0 0 0])
             Screen('Flip',window)
@@ -841,7 +841,7 @@ for task=1:numTask
             trialData(trial).target3=isTarget3;
             trialData(trial).resp4=rt4;
             trialData(trial).target4=isTarget4;
-
+           
         end
 
         blockData(block).blockTrials=trialData;

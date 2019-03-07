@@ -1,4 +1,4 @@
-function runANT(sjNum,laptopDebug,ANTfilePath)
+function runANT(sjNum,laptopDebug,ANTfilePath,backup)
 %=========================================================
 % function: runiLab01Sj
 % purpose: to run the ilab experiment
@@ -21,11 +21,12 @@ function runANT(sjNum,laptopDebug,ANTfilePath)
 
 mySOA = [300,600,900];
 logFileName = [ANTfilePath sprintf('s%02d_allANTData.txt',sjNum)];
+backupFile=[backup sprintf('s%02d_allANTData.txt',sjNum)];
 
 makeImgJudgement = 0;
 practice = 1;
-[trialMatrix,targets]=ANT(sjNum,logFileName,mySOA,practice,laptopDebug);
+[trialMatrix,targets]=ANT(sjNum,logFileName,mySOA,practice,laptopDebug,backupFile);
 
 practice = 0;
-[trialMatrix,targets]=ANT(sjNum,logFileName,mySOA,practice,laptopDebug);
+[trialMatrix,targets]=ANT(sjNum,logFileName,mySOA,practice,laptopDebug,backupFile);
 

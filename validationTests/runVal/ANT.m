@@ -1,5 +1,5 @@
 
-function [nt1Acc,nt2Acc,nt2AccGivenT1Acc,trialMatrix,targets] = ANT(sjNum,logFileName,mySOA,practice,laptopDebug)
+function [nt1Acc,nt2Acc,nt2AccGivenT1Acc,trialMatrix,targets] = ANT(sjNum,logFileName,mySOA,practice,laptopDebug,backupFile)
 %[nt1Acc,nt2Acc,nt2AccGivenT1Acc,trialMatrix,targets]
 %=========================================================
 %=========================================================
@@ -16,7 +16,7 @@ nSOA = size(mySOA,2);   %3
 nConCon = 2; %easy and hard
 nCueCon = 7; % cue conditions no-cue,fix,4 valid, 1 invalid
 if sjNum==199
-    nBlocks = 1;
+    nBlocks = 3;
 else
     nBlocks=3;  %moved this down to 3 to cut down on time. this is a lot less than  //  %can we move this down to 4 to save time? ~32min -> ~19
 end             %the original exp (7 blocks), but it will still have 252 trials (84 trials/block * 3blocks)
@@ -70,8 +70,9 @@ end
 messageWindow = Screen('OpenOffScreenWindow',window);
 
 if practice == 0
-    %open logfile
+    %open logfile and backupfile
     fid = fopen(logFileName,'w');
+    bid=fopen(backupFile,'w');
 
     %write some header information
     fprintf(fid,'ANT\t Experiment ID\n');
@@ -83,10 +84,23 @@ if practice == 0
     fprintf(fid,'%d\t nBlocks\n',nBlocks);
     fprintf(fid,'%f\t FrameRate\n',FrameRate(window));
     fprintf(fid,'%d\t CueDur in frames\n',round(.1*FrameRate(window)));
+    %prepare the backup file (there's probably a better way to do this)
+    fprintf(bid,'ANT\t Experiment ID\n');
+    fprintf(bid,'%d\t Subject\n',sjNum);
+    fprintf(bid,'%s\t Run Time\n',datestr(now));
+    fprintf(bid,'%d\tnCongruency conditions (congruent = 1, incongruent = 2)\n',nConCon);
+    fprintf(bid,'%d\tnCue conditions (1=no cue, 2 = fixation cue, 3-6=valid, 7 = invalid\n',nCueCon);
+    fprintf(bid,'%d\t nRepsPerBlock\n',nRepsPerBlock);
+    fprintf(bid,'%d\t nBlocks\n',nBlocks);
+    fprintf(bid,'%f\t FrameRate\n',FrameRate(window));
+    fprintf(bid,'%d\t CueDur in frames\n',round(.1*FrameRate(window)));
+    
     for i = 1:nSOA
         fprintf(fid,'%d\t',round((mySOA(i)/1000)*FrameRate(window)));
+        fprintf(bid,'%d\t',round((mySOA(i)/1000)*FrameRate(window)));
     end
     fprintf(fid,'cue-target SOAs\n');
+    fprintf(bid,'cue-target SOAs\n');
     thisBlock = 1;
     while thisBlock <= nBlocks
         
@@ -141,9 +155,12 @@ if practice == 0
                 
                 if trial == 1 && thisBlock == 1
                     fprintf(fid,'thisBlock\ttrial\tSOAidx\tthisCue\tthisCon\tarrowDir\tResp\tAcc\tRT\tfixation\tlagFrames\n');
+                    fprintf(bid,'thisBlock\ttrial\tSOAidx\tthisCue\tthisCon\tarrowDir\tResp\tAcc\tRT\tfixation\tlagFrames\n');
                 end
 
                 fprintf(fid,'%d\t%d\t%d\t%c\t%d\t%c\t%c\t%d\t%7.2f\t%d\t%d\n',...
+                    thisBlock,trial,SOAidx,CueCode,thisCon,arrowDir,Resp,Acc,RT*1000,D,nsr);
+                fprintf(bid,'%d\t%d\t%d\t%c\t%d\t%c\t%c\t%d\t%7.2f\t%d\t%d\n',...
                     thisBlock,trial,SOAidx,CueCode,thisCon,arrowDir,Resp,Acc,RT*1000,D,nsr);
                 
                 %clear windows for next trial
@@ -161,6 +178,7 @@ if practice == 0
     end %end block loop
     
     fclose(fid);
+    fclose(bid);
     
 elseif practice ==1
     

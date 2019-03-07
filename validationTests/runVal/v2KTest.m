@@ -1,5 +1,5 @@
 
-function v2KTest(sjNum,numTrials,exp,KfilePath,practice,laptopDebug)
+function v2KTest(sjNum,numTrials,exp,KfilePath,practice,laptopDebug,backup)
 
 % PTB3 implementation of a color change detection task following Luck &
 % Vogel (1997).
@@ -131,16 +131,8 @@ for b = 1:p.nBlocks
     
     % Build an output file and check to make sure that it doesn't exist yet
     
-    fName = ['sj', num2str(p.subNum), '_ColorK.mat'];
+    fName = ['sj', num2str(p.subNum), '_AllKTaskData.mat'];
     
-    if sjNum~=199   %add b/c idc if it overwrites the files if i'm debugging
-        if exist([KfilePath fName])
-            Screen('CloseAll');
-            msgbox('File already exists!', 'modal')
-            return;
-        end
-    end
-
     %--------------------------------------------------------
     % Preallocate some vectors to control experimental params
     %--------------------------------------------------------
@@ -405,13 +397,15 @@ for b = 1:p.nBlocks
     allData(b).p=p;
     allData(b).stim=stim;
     
-    save('KblockDataBackup.mat','allData')
+    save([backup 'KblockDataBackup.mat'],'allData')
     
 end         % end of block loop
 
 if practice==0
     saveFile=[KfilePath fName];
-    save(saveFile,'allData'); 
+    save(saveFile,'allData') 
+    backupFile=[backup fName];
+    save(backupFile,'allData')
 end
 
 % pack up and go home

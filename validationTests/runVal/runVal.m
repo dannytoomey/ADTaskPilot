@@ -58,15 +58,9 @@ save(saveFile,'sjCBO')
 
 if sjNum==199
     
-<<<<<<< HEAD
-    %runANT(sjNum,laptopDebug,ANTfilePath,backup)
-    exp=0;   %1 for experiment, 0 for testing/debugging
-    %v2runK(sjNum,laptopDebug,KfilePath,exp,backup)
-=======
     runANT(sjNum,laptopDebug,ANTfilePath,backup)
     exp=1;   %1 for experiment, 0 for testing/debugging
     v2runK(sjNum,laptopDebug,KfilePath,exp,backup)
->>>>>>> fa150399bc9f902e56e9480f382f360f45b083fb
     runDivTask(sjNum,laptopDebug,DIVfilePath,backup)
     
 else

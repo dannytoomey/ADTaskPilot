@@ -79,11 +79,7 @@ singleRespCBO=  [1	2	3	4	4	3	2	1	1	3	2	4	4	2	3	1       %determines single task r
 if sjNum==199
     
     numTask=2;
-<<<<<<< HEAD
     numTrials=6;
-=======
-    numTrials=25;
->>>>>>> fa150399bc9f902e56e9480f382f360f45b083fb
     taskOrder=taskCBO(:,1);
     dualOrder=dualRespCBO(:,1);
     singleOrder=singleRespCBO(:,1);
@@ -184,9 +180,7 @@ for task=1:numTask
         numBlock=2;
         numTrials=5;
     end    
-    
-    thisTask=2;
-
+   
     for block=1:numBlock
 
         %determine which stream will be faster for each block

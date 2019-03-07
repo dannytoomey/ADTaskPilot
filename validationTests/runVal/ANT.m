@@ -16,7 +16,7 @@ nSOA = size(mySOA,2);   %3
 nConCon = 2; %easy and hard
 nCueCon = 7; % cue conditions no-cue,fix,4 valid, 1 invalid
 if sjNum==199
-    nBlocks = 1;
+    nBlocks = 3;
 else
     nBlocks=3;  %moved this down to 3 to cut down on time. this is a lot less than  //  %can we move this down to 4 to save time? ~32min -> ~19
 end             %the original exp (7 blocks), but it will still have 252 trials (84 trials/block * 3blocks)

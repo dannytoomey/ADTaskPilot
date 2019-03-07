@@ -5,7 +5,7 @@
 % counterbalancing
 %==========================================================================
 
-laptopDebug=0;
+laptopDebug=1;
 
 if laptopDebug==1
     Screen('Preference','SkipSyncTests',1)

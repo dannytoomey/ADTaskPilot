@@ -46,7 +46,11 @@ function runDivTask(sjNum,laptopDebug,DIVfilePath,backup)
 saveFile=[DIVfilePath 'sj' sprintf('%02d',sjNum) '_DivInfo.mat'];
 save(saveFile,'taskOrder','dualOrder','singleOrder')
 
-practice=1;
+
+
+practice=0;%1
+
+
 divTask(sjNum,practice,numTask,numTrials,taskOrder,dualOrder,singleOrder,DIVfilePath,laptopDebug,backup)
 
 practice=0;
@@ -75,7 +79,7 @@ singleRespCBO=  [1	2	3	4	4	3	2	1	1	3	2	4	4	2	3	1       %determines single task r
 if sjNum==199
     
     numTask=2;
-    numTrials=25;
+    numTrials=6;
     taskOrder=taskCBO(:,1);
     dualOrder=dualRespCBO(:,1);
     singleOrder=singleRespCBO(:,1);
@@ -83,27 +87,33 @@ if sjNum==199
 else
     
     numTask=2;
-    numTrials=25;
-    order=0;
-    breakLoop=0;
-    for dual=1:2
-        dualOrder=dualRespCBO(:,dual);
-        for single=1:16
-            singleOrder=singleRespCBO(:,single);
-            for task=1:2
-                taskOrder=taskCBO(:,task);
-                order=order+1;
-                if sjNum==order
-                    breakLoop=1;
-                    break
+    numTrials=18; %was, 25 cut for time
+    if practice==1
+        taskOrder=taskCBO(:,1);
+        dualOrder=dualRespCBO(:,1);
+        singleOrder=singleRespCBO(:,1);
+    else
+        order=0;
+        breakLoop=0;
+        for dual=1:2
+            dualOrder=dualRespCBO(:,dual);
+            for single=1:16
+                singleOrder=singleRespCBO(:,single);
+                for task=1:2
+                    taskOrder=taskCBO(:,task);
+                    order=order+1;
+                    if sjNum==order
+                        breakLoop=1;
+                        break
+                    end
+                end
+                if breakLoop==1
+                   break
                 end
             end
             if breakLoop==1
                break
             end
-        end
-        if breakLoop==1
-           break
         end
     end
 end 
@@ -167,18 +177,10 @@ for task=1:numTask
     end
     
     if practice==1
-        if task==1
-            thisTask=1;
-            condOrder=singleOrder;
-            numBlock=2;
-        else
-            thisTask=2;
-            condOrder=dualOrder;
-            numBlock=2;
-        end
+        numBlock=2;
         numTrials=5;
     end    
-
+   
     for block=1:numBlock
 
         %determine which stream will be faster for each block
@@ -206,28 +208,138 @@ for task=1:numTask
             streamCond=2;
         end
 
-        if practice==1 
-            shapeDur=2;
-            numShapes=3;
-            letDur=3;
-            numLets=2;
-            streamCond=1;
-        end
-
         trialDur=6;
         numShapeFlips=trialDur/shapeDur;
         numLetFlips=trialDur/letDur;
 
         %this will shuffle the order of the shapes at the start of each
-        %block
+        %block. reshuffle if there are less than 25 valid dual targets per
+        %block (4 resps/trial *25 trials = 100 possible resps, let's make
+        %it 25%)
         
-        shapeOrder=randi([1,numShapes],1,numTrials*numShapeFlips);
-        letterOrder=randi([1,numLets],1,numTrials*numLetFlips);
+        %use this loop to time different trial/resp combinations and ensure
+        %they don't take too long to create
         
+%         time=zeros(1,60);
+%         
+%         for b=1:60
+%             
+%             start=GetSecs;
+% 
+%             while 1
+% 
+%                 shapeOrder=randi([1,numShapes],1,numTrials*numShapeFlips);
+%                 letterOrder=randi([1,numLets],1,numTrials*numLetFlips);
+% 
+%                 blockStim=zeros(2,12*numTrials);
+%                 shapestim=1;
+%                 letstim=1;
+%                 for shapeflip=1:numShapeFlips*numTrials
+%                     blockStim(1,shapestim:shapestim+3)=shapeOrder(1,shapeflip);
+%                     shapestim=shapestim+4;
+%                 end
+%                 for letflip=1:numLetFlips*numTrials
+%                     blockStim(2,letstim:letstim+5)=letterOrder(1,letflip);
+%                     letstim=letstim+6;
+%                 end
+%                 numtargetspace=0;
+%                 for check=5:size(blockStim,2)
+%                     if blockStim(1,check)==blockStim(1,check-4)&&blockStim(2,check)==blockStim(2,check-4)
+%                         numtargetspace=numtargetspace+1;
+%                     end
+%                 end
+%                 numTargets=numtargetspace/4;
+% 
+%                 if numTargets==(numTrials*4/3)
+%                     break
+%                 end
+% 
+%             end
+%             
+%             End=GetSecs;
+%        
+%             time(1,b)=End-start;
+%             
+%         end
+% 
+%         mean(time)
+%         std(time)
+%             
         %manually ensure that everyone gets the same practice run
         if practice==1
-            shapeOrder= [2  2   1	3	2	2	1	3	2	1	2	1	3	3	3];
-            letterOrder=[2	2	1	2	1	1	1	2	2	1];
+            if streamCond==1
+                shapeOrder= [1     1     1     1     3     3     1     1     1     1     1     1     1     2     2];
+                letterOrder=[2     2     2     1     1     1     1     1     1     2];
+            else
+                letterOrder= [1     1     1     1     3     3     1     1     1     1     1     1     1     2     2];
+                shapeOrder=  [2     2     2     1     1     1     1     1     1     2];
+            end
+        else
+            
+            apology='I''m not broken, just thinking';
+            DrawFormattedText(window,apology,'center','center',[0 0 0])
+            Screen('Flip',window)
+                        
+            while 1
+
+                shapeOrder=randi([1,numShapes],1,numTrials*numShapeFlips);
+                letterOrder=randi([1,numLets],1,numTrials*numLetFlips);
+
+                blockStim=zeros(2,12*numTrials);
+                shapestim=1;
+                letstim=1;
+                if fastShapeStream==1
+                    shapeOffset=3;
+                    letOffset=5;
+                else
+                    shapeOffset=5;
+                    letOffset=3;
+                end
+                for shapeflip=1:numShapeFlips*numTrials
+                    blockStim(1,shapestim:shapestim+shapeOffset)=shapeOrder(1,shapeflip);
+                    shapestim=shapestim+shapeOffset+1;
+                end
+                for letflip=1:numLetFlips*numTrials
+                    blockStim(2,letstim:letstim+letOffset)=letterOrder(1,letflip);
+                    letstim=letstim+letOffset+1;
+                end
+                numtargetspace=0;
+                if thisTask==1
+                    if condOrder(block,1)<=2
+                        startCheck=5;
+                    else
+                        startCheck=7;
+                    end
+                    for check=startCheck:size(blockStim,2)
+                        if condOrder(block,1)==1||condOrder(block,1)==4     %single task, shape resp
+                            if blockStim(1,check)==blockStim(1,check-(shapeOffset+1))
+                                numtargetspace=numtargetspace+1;
+                            end
+                        elseif condOrder(block,1)==2||condOrder(block,1)==3 %single task, letter resp
+                            if blockStim(1,check)==blockStim(1,check-(letOffset+1))
+                                numtargetspace=numtargetspace+1;
+                            end
+                        end
+                    end
+                end
+                if thisTask==2
+                    for check=7:size(blockStim,2)
+                        if blockStim(1,check)==blockStim(1,check-(shapeOffset+1))&&blockStim(2,check)==blockStim(2,check-(letOffset+1))
+                            numtargetspace=numtargetspace+1;
+                        end
+                    end
+                end
+                numTargets=numtargetspace/4;
+
+                if numTargets==(numTrials*4/3)  %ensure target given on 1/3 of all possible resps for all conditions
+                    break
+                end
+
+            end
+            
+            Screen('FillRect',window,grey)
+            Screen('Flip',window)
+            
         end
 
         %draw the streams of shapes and letters to be shown during this block
@@ -341,20 +453,12 @@ for task=1:numTask
             blockNum=blockNum+1;
 
         end
-
-        aFlips=1;
-        bFlips=1;
+        
+        aFlips=0;
+        bFlips=0;
 
         for trial=1:numTrials
-
-            if thisTask==1
-                if respTo==1
-                    respFlips=aFlips;
-                elseif respTo==2
-                    respFlips=bFlips;
-                end
-            end
-
+            
             rt1=0;          %resp between 0-2sec
             isTarget1=0;    %record if flip contained target for easier data analysis
             rt2=0;          %resp between 2-3sec
@@ -365,9 +469,18 @@ for task=1:numTask
             isTarget4=0;
 
             drawFixation(window,centerX,centerY,[0 0 0])
-            Screen('CopyWindow',aWins(1,aFlips),window,[],aRect)    
+            aFlips=aFlips+1;
+            Screen('CopyWindow',aWins(1,aFlips),window,[],aRect)  
+            bFlips=bFlips+1;
             Screen('CopyWindow',bWins(1,bFlips),window,[],bRect)
             resp1On=Screen('Flip',window,[],1);             %get resp here
+            if thisTask==1
+                if respTo==1
+                    respFlips=aFlips;
+                elseif respTo==2
+                    respFlips=bFlips;
+                end
+            end
             aClear=0;
             bClear=0;
             ind=0;
@@ -404,7 +517,6 @@ for task=1:numTask
                     if 1<respFlips
                         if practice==1
                             if respCheck(1,respFlips)==respCheck(1,respFlips-1)&&keepChecking==1
-                                isTarget1=1;
                                 if ind~=0
                                     drawFixation(window,centerX,centerY,[0 255 0])
                                     Screen('Flip',window,[],1)
@@ -431,7 +543,6 @@ for task=1:numTask
                     if 1<aFlips&&1<bFlips
                         if practice==1
                             if aCheck(1,aFlips)==aCheck(1,aFlips-1)&&bCheck(1,bFlips)==bCheck(1,bFlips-1)&&keepChecking==1
-                                isTarget1=1;
                                 if ind~=0
                                     drawFixation(window,centerX,centerY,[0 255 0])
                                     Screen('Flip',window,[],1)
@@ -454,10 +565,11 @@ for task=1:numTask
                     end
                 end
             end 
-
+            
+            drawFixation(window,centerX,centerY,[0 0 0])        %clear fixation color incase practice 
             aFlips=aFlips+1;
-            bFlips=bFlips+1;
-
+            Screen('CopyWindow',aWins(1,aFlips),window,[],aRect)    %aRect w/o bRect
+            resp2On=Screen('Flip',window,[],1);                 %get resp here
             if thisTask==1
                 if respTo==1
                     respFlips=aFlips;
@@ -465,10 +577,6 @@ for task=1:numTask
                     respFlips=bFlips;
                 end
             end
-
-            drawFixation(window,centerX,centerY,[0 0 0])        %clear fixation color incase practice 
-            Screen('CopyWindow',aWins(1,aFlips),window,[],aRect)    %aRect w/o bRect
-            resp2On=Screen('Flip',window,[],1);                 %get resp here
             ind=0;
             keepChecking=1;
             while GetSecs<=resp2On+1                          %give them 1sec (time to next flip) to respond
@@ -487,26 +595,28 @@ for task=1:numTask
 
                 if thisTask==1
                     if 1<respFlips
-                        if practice==1
-                            if respCheck(1,respFlips)==respCheck(1,respFlips-1)&&keepChecking==1
-                                isTarget2=1;
-                                if ind~=0
-                                    drawFixation(window,centerX,centerY,[0 255 0])
-                                    Screen('Flip',window,[],1)
-                                    keepChecking=0;
-                                else
-                                    drawFixation(window,centerX,centerY,[255 0 0])
-                                    Screen('Flip',window,[],1)
+                        if respTo==1
+                            if practice==1
+                                if respCheck(1,respFlips)==respCheck(1,respFlips-1)&&keepChecking==1
+                                    isTarget2=1;
+                                    if ind~=0
+                                        drawFixation(window,centerX,centerY,[0 255 0])
+                                        Screen('Flip',window,[],1)
+                                        keepChecking=0;
+                                    else
+                                        drawFixation(window,centerX,centerY,[255 0 0])
+                                        Screen('Flip',window,[],1)
+                                    end
+                                elseif ind~=0
+                                    if respCheck(1,respFlips)~=respCheck(1,respFlips-1)
+                                        drawFixation(window,centerX,centerY,[255 0 0])
+                                        Screen('Flip',window,[],1)
+                                    end
                                 end
-                            elseif ind~=0
-                                if respCheck(1,respFlips)~=respCheck(1,respFlips-1)
-                                    drawFixation(window,centerX,centerY,[255 0 0])
-                                    Screen('Flip',window,[],1)
+                            elseif practice==0
+                                if respCheck(1,respFlips)==respCheck(1,respFlips-1)
+                                    isTarget2=1;
                                 end
-                            end
-                        elseif practice==0
-                            if respCheck(1,respFlips)==respCheck(1,respFlips-1)
-                                isTarget2=1;
                             end
                         end
                     end
@@ -539,9 +649,12 @@ for task=1:numTask
                     end
                 end
             end
-
-            aFlips=aFlips+1;
-
+            
+            drawFixation(window,centerX,centerY,[0 0 0])        %clear fixation color incase practice 
+            Screen('CopyWindow',blankWin,window,[],aRect)       %clear aRect
+            bFlips=bFlips+1;
+            Screen('CopyWindow',bWins(1,bFlips),window,[],bRect)    %bRect w/o aRect for 1sec
+            resp3On=Screen('Flip',window,[],1);                 %get resp here
             if thisTask==1
                 if respTo==1
                     respFlips=aFlips;
@@ -549,11 +662,6 @@ for task=1:numTask
                     respFlips=bFlips;
                 end
             end
-
-            drawFixation(window,centerX,centerY,[0 0 0])        %clear fixation color incase practice 
-            Screen('CopyWindow',blankWin,window,[],aRect)       %clear aRect
-            Screen('CopyWindow',bWins(1,bFlips),window,[],bRect)    %bRect w/o aRect for 1sec
-            resp3On=Screen('Flip',window,[],1);                 %get resp here
             ind=0;
             keepChecking=1;
             while GetSecs<=resp3On+1                          %give them 1sec (time to next flip) to respond
@@ -571,26 +679,28 @@ for task=1:numTask
                 %presented or not
                 if thisTask==1
                     if 1<respFlips
-                        if practice==1
-                            if respCheck(1,respFlips)==respCheck(1,respFlips-1)&&keepChecking==1
-                                isTarget3=1;
-                                if ind~=0
-                                    drawFixation(window,centerX,centerY,[0 255 0])
-                                    Screen('Flip',window,[],1)
-                                    keepChecking=0;
-                                else
-                                    drawFixation(window,centerX,centerY,[255 0 0])
-                                    Screen('Flip',window,[],1)
+                        if respTo==2
+                            if practice==1
+                                if respCheck(1,respFlips)==respCheck(1,respFlips-1)&&keepChecking==1
+                                    isTarget3=1;
+                                    if ind~=0
+                                        drawFixation(window,centerX,centerY,[0 255 0])
+                                        Screen('Flip',window,[],1)
+                                        keepChecking=0;
+                                    else
+                                        drawFixation(window,centerX,centerY,[255 0 0])
+                                        Screen('Flip',window,[],1)
+                                    end
+                                elseif ind~=0
+                                    if respCheck(1,respFlips)~=respCheck(1,respFlips-1)
+                                        drawFixation(window,centerX,centerY,[255 0 0])
+                                        Screen('Flip',window,[],1)
+                                    end
                                 end
-                            elseif ind~=0
-                                if respCheck(1,respFlips)~=respCheck(1,respFlips-1)
-                                    drawFixation(window,centerX,centerY,[255 0 0])
-                                    Screen('Flip',window,[],1)
+                            elseif practice==0
+                                if respCheck(1,respFlips)==respCheck(1,respFlips-1)
+                                    isTarget3=1;
                                 end
-                            end
-                        elseif practice==0
-                            if respCheck(1,respFlips)==respCheck(1,respFlips-1)
-                                isTarget3=1;
                             end
                         end
                     end
@@ -625,8 +735,16 @@ for task=1:numTask
             end
 
             drawFixation(window,centerX,centerY,[0 0 0])            %clear fix color incase practice
+            aFlips=aFlips+1;
             Screen('CopyWindow',aWins(1,aFlips),window,[],aRect)    %give aRect   
             resp4On=Screen('Flip',window,[],1);                 %get resp here
+            if thisTask==1
+                if respTo==1
+                    respFlips=aFlips;
+                elseif respTo==2
+                    respFlips=bFlips;
+                end
+            end
             ind=0;
             aClear=0;
             bClear=0;
@@ -660,26 +778,28 @@ for task=1:numTask
                 %presented or not
                 if thisTask==1
                     if 1<respFlips
-                        if practice==1
-                            if respCheck(1,respFlips)==respCheck(1,respFlips-1)&&keepChecking==1
-                                isTarget4=1;
-                                if ind~=0
-                                    drawFixation(window,centerX,centerY,[0 255 0])
-                                    Screen('Flip',window,[],1)
-                                    keepChecking=0;
-                                else
-                                    drawFixation(window,centerX,centerY,[255 0 0])
-                                    Screen('Flip',window,[],1)
+                        if respTo==1
+                            if practice==1
+                                if respCheck(1,respFlips)==respCheck(1,respFlips-1)&&keepChecking==1
+                                    isTarget4=1;
+                                    if ind~=0
+                                        drawFixation(window,centerX,centerY,[0 255 0])
+                                        Screen('Flip',window,[],1)
+                                        keepChecking=0;
+                                    else
+                                        drawFixation(window,centerX,centerY,[255 0 0])
+                                        Screen('Flip',window,[],1)
+                                    end
+                                elseif ind~=0
+                                    if respCheck(1,respFlips)~=respCheck(1,respFlips-1)
+                                        drawFixation(window,centerX,centerY,[255 0 0])
+                                        Screen('Flip',window,[],1)
+                                    end
                                 end
-                            elseif ind~=0
-                                if respCheck(1,respFlips)~=respCheck(1,respFlips-1)
-                                    drawFixation(window,centerX,centerY,[255 0 0])
-                                    Screen('Flip',window,[],1)
+                            elseif practice==0
+                                if respCheck(1,respFlips)==respCheck(1,respFlips-1)
+                                    isTarget4=1;
                                 end
-                            end
-                        elseif practice==0
-                            if respCheck(1,respFlips)==respCheck(1,respFlips-1)
-                                isTarget4=1;
                             end
                         end
                     end
@@ -712,18 +832,7 @@ for task=1:numTask
                     end
                 end
             end
-
-            aFlips=aFlips+1;
-            bFlips=bFlips+1;
-
-            if thisTask==1
-                if respTo==1
-                    respFlips=aFlips;
-                elseif respTo==2
-                    respFlips=bFlips;
-                end
-            end
-
+            
             trialData(trial).resp1=rt1;
             trialData(trial).target1=isTarget1;
             trialData(trial).resp2=rt2;

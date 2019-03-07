@@ -9,13 +9,15 @@ laptopDebug=0;
 
 if laptopDebug==1
     Screen('Preference','SkipSyncTests',1)
-    ANTfilePath='/Users/dannytoomey/Documents/Research/ADTask/Experiments/ADTaskPilot/validationTests/ANT/';
-    KfilePath='/Users/dannytoomey/Documents/Research/ADTask/Experiments/ADTaskPilot/validationTests/kTest/';
-    DIVfilePath='/Users/dannytoomey/Documents/Research/ADTask/Experiments/ADTaskPilot/validationTests/dividedTest/';
+    ANTfilePath='/Users/dannytoomey/Documents/Research/ADTask/Experiments/testData/';
+    KfilePath='/Users/dannytoomey/Documents/Research/ADTask/Experiments/testData/';
+    DIVfilePath='/Users/dannytoomey/Documents/Research/ADTask/Experiments/testData/';
+    backup='/Users/dannytoomey/Documents/Research/ADTask/Experiments/testData/';
 else
     ANTfilePath='/Users/labadmin/Documents/Experiments/ADTask/ADTaskPilot/validationTests/ANT/';
     KfilePath='/Users/labadmin/Documents/Experiments/ADTask/ADTaskPilot/validationTests/kTest/';
-    DIVfilePath='/Users/labadmin/Documents/Experiments/ADTask/ADTaskPilot/validationTests/dividedTest/';  
+    DIVfilePath='/Users/labadmin/Documents/Experiments/ADTask/ADTaskPilot/validationTests/dividedTest/';
+    backup='/Users/labadmin/Documents/Experiments/ADTask/backup/';
 end
 
 testCBO=[1	1   1   1	1   1   2	2   2   2   2	2   3	3   3   3   3   3
@@ -26,16 +28,10 @@ sjNum=input('Input Subject Number ');
 
 if sjNum==199
     
-    age=22;
-    gender=0;
-    handedness=1;
     sjCBO=testCBO(:,1);
     
 else
     
-    age=input('Type age and press enter ');
-    gender=input('Type gender (0 = M, 1 = F) and press enter ');
-    handedness=input('Type handedness (0 = L, 1 = R) and press enter ');    
     if sjNum<=size(testCBO,2)
         sjCBO=testCBO(:,sjNum);
     else
@@ -48,15 +44,24 @@ else
     end
 end
 
-saveFile=['sj' sprintf('%02d',sjNum) 'Info.mat'];
-save(saveFile,'age','gender','handedness','sjCBO')
+saveFile=['sj' sprintf('%02d',sjNum) 'ValInfo.mat'];
+
+if sjNum~=199   %add b/c idc if it overwrites the files if i'm debugging
+    if exist(saveFile,'file')
+        sca;
+        msgbox('File already exists!', 'modal')
+        return;
+    end
+end
+
+save(saveFile,'sjCBO')
 
 if sjNum==199
     
-    %runANT(sjNum,laptopDebug,ANTfilePath)
-    exp=0;   %1 for experiment, 0 for testing/debugging
-    v2runK(sjNum,laptopDebug,KfilePath,exp)
-    %runDivTask(sjNum,laptopDebug,DIVfilePath)
+    runANT(sjNum,laptopDebug,ANTfilePath,backup)
+    exp=1;   %1 for experiment, 0 for testing/debugging
+    v2runK(sjNum,laptopDebug,KfilePath,exp,backup)
+    runDivTask(sjNum,laptopDebug,DIVfilePath,backup)
     
 else
     
@@ -74,12 +79,12 @@ else
         thisTask=taskCBO(task,1);
         
         if thisTask==1
-            runANT(sjNum,laptopDebug,ANTfilePath)
+            runANT(sjNum,laptopDebug,ANTfilePath,backup)
         elseif thisTask==2
             exp=1;   %1 for experiment, 0 for testing/debugging
-            v2runK(sjNum,laptopDebug,KfilePath,exp)
+            v2runK(sjNum,laptopDebug,KfilePath,exp,backup)
         elseif thisTask==3
-            runDivTask(sjNum,laptopDebug,DIVfilePath)
+            runDivTask(sjNum,laptopDebug,DIVfilePath,backup)
         end
     end
 end

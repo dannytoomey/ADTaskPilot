@@ -41,19 +41,14 @@
 %==========================================================================
 function runDivTask(sjNum,laptopDebug,DIVfilePath,backup)
 
-[numTask,numTrials,taskOrder,dualOrder,singleOrder]=setup_divTask(sjNum);
-
-saveFile=[DIVfilePath 'sj' sprintf('%02d',sjNum) '_DivInfo.mat'];
-save(saveFile,'taskOrder','dualOrder','singleOrder')
-
-
-
-practice=0;%1
-
-
+practice=1;
+[numTask,numTrials,taskOrder,dualOrder,singleOrder]=setup_divTask(sjNum,practice);
 divTask(sjNum,practice,numTask,numTrials,taskOrder,dualOrder,singleOrder,DIVfilePath,laptopDebug,backup)
 
 practice=0;
+[numTask,numTrials,taskOrder,dualOrder,singleOrder]=setup_divTask(sjNum,practice);
+saveFile=[DIVfilePath 'sj' sprintf('%02d',sjNum) '_DivInfo.mat'];
+save(saveFile,'taskOrder','dualOrder','singleOrder')
 divTask(sjNum,practice,numTask,numTrials,taskOrder,dualOrder,singleOrder,DIVfilePath,laptopDebug,backup)
 
 
@@ -64,7 +59,7 @@ return
 %inputs: laptopDebug
 %outputs: sjNum,numTask,numTrials,taskOrder,dualOrder,singleOrder,DIVfilePath
 %==========================================================================
-function [numTask,numTrials,taskOrder,dualOrder,singleOrder]=setup_divTask(sjNum)
+function [numTask,numTrials,taskOrder,dualOrder,singleOrder]=setup_divTask(sjNum,practice)
 
 
 taskCBO=        [1  2       %1=single first, 2=dual first
@@ -79,7 +74,7 @@ singleRespCBO=  [1	2	3	4	4	3	2	1	1	3	2	4	4	2	3	1       %determines single task r
 if sjNum==199
     
     numTask=2;
-    numTrials=6;
+    numTrials=18;
     taskOrder=taskCBO(:,1);
     dualOrder=dualRespCBO(:,1);
     singleOrder=singleRespCBO(:,1);
@@ -178,7 +173,7 @@ for task=1:numTask
     
     if practice==1
         numBlock=2;
-        numTrials=5;
+        numTrials=6;
     end    
    
     for block=1:numBlock
@@ -224,62 +219,33 @@ for task=1:numTask
 %         
 %         for b=1:60
 %             
-%            start=GetSecs;
+%             start=GetSecs;
 % 
-%            rng('shuffle')
-%            
-%            while 1
-%                
+%             while 1
+% 
 %                 shapeOrder=randi([1,numShapes],1,numTrials*numShapeFlips);
 %                 letterOrder=randi([1,numLets],1,numTrials*numLetFlips);
 % 
 %                 blockStim=zeros(2,12*numTrials);
 %                 shapestim=1;
 %                 letstim=1;
-%                 if fastShapeStream==1
-%                     shapeOffset=3;
-%                     letOffset=5;
-%                 else
-%                     shapeOffset=5;
-%                     letOffset=3;
-%                 end
 %                 for shapeflip=1:numShapeFlips*numTrials
-%                     blockStim(1,shapestim:shapestim+shapeOffset)=shapeOrder(1,shapeflip);
-%                     shapestim=shapestim+shapeOffset+1;
+%                     blockStim(1,shapestim:shapestim+3)=shapeOrder(1,shapeflip);
+%                     shapestim=shapestim+4;
 %                 end
 %                 for letflip=1:numLetFlips*numTrials
-%                     blockStim(2,letstim:letstim+letOffset)=letterOrder(1,letflip);
-%                     letstim=letstim+letOffset+1;
+%                     blockStim(2,letstim:letstim+5)=letterOrder(1,letflip);
+%                     letstim=letstim+6;
 %                 end
 %                 numtargetspace=0;
-%                 if thisTask==1
-%                     if condOrder(block,1)<=2
-%                         startCheck=5;
-%                     else
-%                         startCheck=7;
-%                     end
-%                     for check=startCheck:size(blockStim,2)
-%                         if condOrder(block,1)==1||condOrder(block,1)==4     %single task, shape resp
-%                             if blockStim(1,check)==blockStim(1,check-(shapeOffset+1))
-%                                 numtargetspace=numtargetspace+1;
-%                             end
-%                         elseif condOrder(block,1)==2||condOrder(block,1)==3 %single task, letter resp
-%                             if blockStim(1,check)==blockStim(1,check-(letOffset+1))
-%                                 numtargetspace=numtargetspace+1;
-%                             end
-%                         end
-%                     end
-%                 end
-%                 if thisTask==2
-%                     for check=7:size(blockStim,2)
-%                         if blockStim(1,check)==blockStim(1,check-(shapeOffset+1))&&blockStim(2,check)==blockStim(2,check-(letOffset+1))
-%                             numtargetspace=numtargetspace+1;
-%                         end
+%                 for check=5:size(blockStim,2)
+%                     if blockStim(1,check)==blockStim(1,check-4)&&blockStim(2,check)==blockStim(2,check-4)
+%                         numtargetspace=numtargetspace+1;
 %                     end
 %                 end
 %                 numTargets=numtargetspace/4;
 % 
-%                 if numTargets==(numTrials*4/3)  %ensure target given on 1/3 of all possible resps for all conditions
+%                 if numTargets==(numTrials*4/3)
 %                     break
 %                 end
 % 
@@ -305,14 +271,17 @@ for task=1:numTask
             end
         else
             
+            Screen('FillRect',window,grey)
+            Screen('Flip',window)
+
             apology='I''m not broken, just thinking';
             DrawFormattedText(window,apology,'center','center',[0 0 0])
             Screen('Flip',window)
+            
+            rng('shuffle')
                         
             while 1
-                
-                rng('shuffle')
-
+               
                 shapeOrder=randi([1,numShapes],1,numTrials*numShapeFlips);
                 letterOrder=randi([1,numLets],1,numTrials*numLetFlips);
 
@@ -464,7 +433,7 @@ for task=1:numTask
         if practice==1
 
             Screen('FillRect',window,grey)
-            text=['This is ' sprintf('%d of 2 practice blocks.',blockNum) '\n \n'...
+            text=['This is ' sprintf('%d of 4 practice blocks.',blockNum) '\n \n'...
                   sprintf('%s',inst)];
             DrawFormattedText(window,text,'center','center',[0 0 0])
             Screen('Flip',window)
@@ -872,7 +841,7 @@ for task=1:numTask
             trialData(trial).target3=isTarget3;
             trialData(trial).resp4=rt4;
             trialData(trial).target4=isTarget4;
-
+           
         end
 
         blockData(block).blockTrials=trialData;

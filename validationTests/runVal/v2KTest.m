@@ -401,6 +401,12 @@ for b = 1:p.nBlocks
     
 end         % end of block loop
 
+if practice==1
+    DrawFormattedText(win,'Please wait for the administrator''s cue to start','center','center',[255 255 255])
+    Screen('Flip',win)
+    KbStrokeWait
+end
+
 if practice==0
     saveFile=[KfilePath fName];
     save(saveFile,'allData') 

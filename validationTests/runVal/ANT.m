@@ -238,16 +238,14 @@ elseif practice ==1
 
     %Close gracefully
     WaitSecs(1);
-    Screen('TextSize',messageWindow,24);
-    Screen('TextFont',messageWindow,'Arial');
-    DrawFormattedText(messageWindow,'Practice is complete. \n Get Experimenter.','center','center',[0 0 0]);
-    
+    Screen('TextSize',window,24);
+    Screen('TextFont',window,'Arial');
+    DrawFormattedText(window,'Please wait for the administrator''s cue to start','center','center',[0 0 0]);
+    Screen('Flip',window)
+    KbStrokeWait;
+   
 end
 
-Screen('CopyWindow',messageWindow,window,[centerX-200,centerY-150,centerX+200,centerY+150],[centerX-200,centerY-150,centerX+200,centerY+150])
-Screen('Flip',window)
-
-KbStrokeWait;
 sca;
 
 end

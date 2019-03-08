@@ -263,11 +263,11 @@ for task=1:numTask
         %manually ensure that everyone gets the same practice run
         if practice==1
             if streamCond==1
-                shapeOrder= [1     1     1     1     3     3     1     1     1     1     1     1     1     2     2];
-                letterOrder=[2     2     2     1     1     1     1     1     1     2];
+                shapeOrder= [1     1     1     1     3     3     1     1     1     1     1     1     1     2     2  1   1   2];
+                letterOrder=[2     2     2     1     1     1     1     1     1     2    2   1];
             else
-                letterOrder= [1     1     1     1     3     3     1     1     1     1     1     1     1     2     2];
-                shapeOrder=  [2     2     2     1     1     1     1     1     1     2];
+                letterOrder= [1     1     1     1     3     3     1     1     1     1     1     1     1     2     2 1   1   2];
+                shapeOrder=  [2     2     2     1     1     1     1     1     1     2   2   1];
             end
         else
             

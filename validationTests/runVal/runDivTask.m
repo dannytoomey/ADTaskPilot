@@ -41,7 +41,7 @@
 %==========================================================================
 function runDivTask(sjNum,laptopDebug,DIVfilePath,backup)
 
-practice=0;
+practice=1;
 [numTask,numTrials,taskOrder,dualOrder,singleOrder]=setup_divTask(sjNum,practice);
 divTask(sjNum,practice,numTask,numTrials,taskOrder,dualOrder,singleOrder,DIVfilePath,laptopDebug,backup)
 
@@ -209,59 +209,6 @@ for task=1:numTask
         numShapeFlips=trialDur/shapeDur;
         numLetFlips=trialDur/letDur;
 
-        %this will shuffle the order of the shapes at the start of each
-        %block. reshuffle if there are less than 25 valid dual targets per
-        %block (4 resps/trial *25 trials = 100 possible resps, let's make
-        %it 25%)
-        
-        %use this loop to time different trial/resp combinations and ensure
-        %they don't take too long to create
-        
-%         time=zeros(1,60);
-%         
-%         for b=1:60
-%             
-%             start=GetSecs;
-% 
-%             while 1
-% 
-%                 shapeOrder=randi([1,numShapes],1,numTrials*numShapeFlips);
-%                 letterOrder=randi([1,numLets],1,numTrials*numLetFlips);
-% 
-%                 blockStim=zeros(2,12*numTrials);
-%                 shapestim=1;
-%                 letstim=1;
-%                 for shapeflip=1:numShapeFlips*numTrials
-%                     blockStim(1,shapestim:shapestim+3)=shapeOrder(1,shapeflip);
-%                     shapestim=shapestim+4;
-%                 end
-%                 for letflip=1:numLetFlips*numTrials
-%                     blockStim(2,letstim:letstim+5)=letterOrder(1,letflip);
-%                     letstim=letstim+6;
-%                 end
-%                 numtargetspace=0;
-%                 for check=5:size(blockStim,2)
-%                     if blockStim(1,check)==blockStim(1,check-4)&&blockStim(2,check)==blockStim(2,check-4)
-%                         numtargetspace=numtargetspace+1;
-%                     end
-%                 end
-%                 numTargets=numtargetspace/4;
-% 
-%                 if numTargets==(numTrials*4/3)
-%                     break
-%                 end
-% 
-%             end
-%             
-%             End=GetSecs;
-%        
-%             time(1,b)=End-start;
-%             
-%         end
-% 
-%         mean(time)
-%         std(time)
-%             
         %manually ensure that everyone gets the same practice run
         if practice==1
             if streamCond==1
@@ -276,75 +223,6 @@ for task=1:numTask
             letterOrder=Sj(sjNum).Task(task).Block(block).letters;
             shapeOrder=Sj(sjNum).Task(task).Block(block).shapes;
             
-%             Screen('FillRect',window,grey)
-%             Screen('Flip',window)
-% 
-%             apology='I''m not broken, just thinking';
-%             DrawFormattedText(window,apology,'center','center',[255 255 255])
-%             Screen('Flip',window)
-%             
-%             rng('shuffle')
-%                         
-%             while 1
-%                
-%                 shapeOrder=randi([1,numShapes],1,numTrials*numShapeFlips);
-%                 letterOrder=randi([1,numLets],1,numTrials*numLetFlips);
-% 
-%                 blockStim=zeros(2,12*numTrials);
-%                 shapestim=1;
-%                 letstim=1;
-%                 if fastShapeStream==1
-%                     shapeOffset=3;
-%                     letOffset=5;
-%                 else
-%                     shapeOffset=5;
-%                     letOffset=3;
-%                 end
-%                 for shapeflip=1:numShapeFlips*numTrials
-%                     blockStim(1,shapestim:shapestim+shapeOffset)=shapeOrder(1,shapeflip);
-%                     shapestim=shapestim+shapeOffset+1;
-%                 end
-%                 for letflip=1:numLetFlips*numTrials
-%                     blockStim(2,letstim:letstim+letOffset)=letterOrder(1,letflip);
-%                     letstim=letstim+letOffset+1;
-%                 end
-%                 numtargetspace=0;
-%                 if thisTask==1
-%                     if condOrder(block,1)<=2
-%                         startCheck=5;
-%                     else
-%                         startCheck=7;
-%                     end
-%                     for check=startCheck:size(blockStim,2)
-%                         if condOrder(block,1)==1||condOrder(block,1)==4     %single task, shape resp
-%                             if blockStim(1,check)==blockStim(1,check-(shapeOffset+1))
-%                                 numtargetspace=numtargetspace+1;
-%                             end
-%                         elseif condOrder(block,1)==2||condOrder(block,1)==3 %single task, letter resp
-%                             if blockStim(1,check)==blockStim(1,check-(letOffset+1))
-%                                 numtargetspace=numtargetspace+1;
-%                             end
-%                         end
-%                     end
-%                 end
-%                 if thisTask==2
-%                     for check=7:size(blockStim,2)
-%                         if blockStim(1,check)==blockStim(1,check-(shapeOffset+1))&&blockStim(2,check)==blockStim(2,check-(letOffset+1))
-%                             numtargetspace=numtargetspace+1;
-%                         end
-%                     end
-%                 end
-%                 numTargets=numtargetspace/4;
-% 
-%                 if numTargets==(numTrials*4/3)  %ensure target given on 1/3 of all possible resps for all conditions
-%                     break
-%                 end
-% 
-%             end
-%             
-%             Screen('FillRect',window,grey)
-%             Screen('Flip',window)
-%             
         end
 
         %draw the streams of shapes and letters to be shown during this block
@@ -442,6 +320,7 @@ for task=1:numTask
                   sprintf('%s',inst)];
             DrawFormattedText(window,text,'center','center',[255 255 255])
             Screen('Flip',window)
+            WaitSecs(2)
             KbStrokeWait
             Screen('FillRect',window,grey)
             blockNum=blockNum+1;
@@ -453,6 +332,7 @@ for task=1:numTask
                   sprintf('%s',inst)];
             DrawFormattedText(window,text,'center','center',[255 255 255])
             Screen('Flip',window)
+            WaitSecs(2)
             KbStrokeWait
             Screen('FillRect',window,grey)
             blockNum=blockNum+1;

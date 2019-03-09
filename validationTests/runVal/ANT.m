@@ -238,6 +238,7 @@ elseif practice ==1
 
     %Close gracefully
     WaitSecs(1);
+    Screen('FillRect',window,[255 255 255])
     Screen('TextSize',window,24);
     Screen('TextFont',window,'Arial');
     DrawFormattedText(window,'Please wait for the administrator''s cue to start','center','center',[0 0 0]);

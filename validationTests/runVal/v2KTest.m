@@ -402,6 +402,7 @@ for b = 1:p.nBlocks
 end         % end of block loop
 
 if practice==1
+    Screen('FillRect',win,[127.5 127.5 127.5])
     DrawFormattedText(win,'Please wait for the administrator''s cue to start','center','center',[255 255 255])
     Screen('Flip',win)
     KbStrokeWait

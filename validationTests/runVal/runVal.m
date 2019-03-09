@@ -5,7 +5,7 @@
 % counterbalancing
 %==========================================================================
 
-laptopDebug=0;
+laptopDebug=1;
 
 if laptopDebug==1
     Screen('Preference','SkipSyncTests',1)
@@ -49,9 +49,13 @@ saveFile=['sj' sprintf('%02d',sjNum) 'ValInfo.mat'];
 
 if sjNum~=199   %add b/c idc if it overwrites the files if i'm debugging
     if exist(saveFile,'file')
-        sca;
-        msgbox('File already exists!', 'modal')
-        return;
+        resp=input('File already exists! Continue? ');
+        if resp==1
+            save(saveFile,'sjCBO')
+        else
+            sca
+            return;
+        end
     end
 end
 
@@ -60,7 +64,7 @@ save(saveFile,'sjCBO')
 if sjNum==199
     
     %runANT(sjNum,laptopDebug,ANTfilePath,backup)
-    v2runK(sjNum,laptopDebug,KfilePath,1,backup)  %1 for experiment, 0 for testing/debugging
+    %v2runK(sjNum,laptopDebug,KfilePath,1,backup)  %1 for experiment, 0 for testing/debugging
     runDivTask(sjNum,laptopDebug,DIVfilePath,backup)
     
 else

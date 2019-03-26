@@ -1,92 +1,33 @@
 
 %graph! the! data!
 
-function v2dataGraph4Loc
+function v2dataGraph4Loc(sjRange)
 
-load('dataAnFile.mat');
+load('allDataStruct.mat')
 
 numCond=3;
 numTask=2;
 numCue=2;
 numSub=size(sjRange,2);
-numVar=6;
+numVar=5;
 
 dataMat=nan(numVar,numCond,numTask,numCue,numSub);
 
 for var=1:numVar
     for cond=1:numCond
-        if cond==1
-            thisCond='low';
-        elseif cond==2
-            thisCond='med';
-        elseif cond==3
-            thisCond='high';
-        end
         for task=1:numTask
-            if task==1
-                thisTask='si';
-            elseif task==2
-                thisTask='du';
-            end
             for cue=1:numCue
-                if cue==1
-                    thisCue='33';
-                elseif cue==2
-                    thisCue='66';
-                end
                 for sub=1:numSub
-                    sjNum=sjRange(1,sub);
-                    if sjNum<=9
-                        thisSj=['sj0' sprintf('%d',sjNum)];
-                    elseif 9<sjNum
-                        thisSj=['sj' sprintf('%d',sjNum)];
-                    end
-                    fileLoad=[thisSj '_' thisCond thisTask thisCue '.mat'];
-                    
-                    
-                    %added to get rid of highIntf wrong task inst
-                    
-                    
-                    if cond==1||cond==2
-                        
-                        load(fileLoad);
-
-                        if var==1
-                            dataMat(var,cond,task,cue,sub)=errorOm;
-                        elseif var==2
-                            dataMat(var,cond,task,cue,sub)=errorCom;
-                        elseif var==3
-                            dataMat(var,cond,task,cue,sub)=accuracyWM;
-                        elseif var==4
-                            dataMat(var,cond,task,cue,sub)=meanRT;
-                        elseif var==5
-                            dataMat(var,cond,task,cue,sub)=accuracy;
-                        elseif var==6
-                            dataMat(var,cond,task,cue,sub)=oriEf;
-                        end
-                        
-                    elseif cond==3
-                        
-                        useHighSj=[7:9,13:15,19:21,25:27,31:33];
-                        
-                        if find(useHighSj==sjNum)~=0
-                            
-                            load(fileLoad);
-
-                            if var==1
-                                dataMat(var,cond,task,cue,sub)=errorOm;
-                            elseif var==2
-                                dataMat(var,cond,task,cue,sub)=errorCom;
-                            elseif var==3
-                                dataMat(var,cond,task,cue,sub)=accuracyWM;
-                            elseif var==4
-                                dataMat(var,cond,task,cue,sub)=meanRT;
-                            elseif var==5
-                                dataMat(var,cond,task,cue,sub)=accuracy;
-                            elseif var==6
-                                dataMat(var,cond,task,cue,sub)=oriEf;
-                            end
-                        end
+                    if var==1
+                        dataMat(var,cond,task,cue,sub)=allDataStruct(cond).task(task).cue(cue).visMeanRT(sub);
+                    elseif var==2
+                        dataMat(var,cond,task,cue,sub)=allDataStruct(cond).task(task).cue(cue).visAccuracy(sub);
+                    elseif var==3
+                        dataMat(var,cond,task,cue,sub)=allDataStruct(cond).task(task).cue(cue).audAccuracy(sub);
+                    elseif var==4
+                        dataMat(var,cond,task,cue,sub)=allDataStruct(cond).task(task).cue(cue).oriEf(sub);
+                    elseif var==5
+                        dataMat(var,cond,task,cue,sub)=allDataStruct(cond).task(task).cue(cue).accuracyWM(sub);
                     end
                 end
             end
@@ -120,24 +61,22 @@ for var=1:numVar
                 end
                 normGraph=normScores(~isnan(normScores));
                 varBins(1,count)=mean(normGraph);
-                varSEM(1,count)=std(normGraph)/size(normGraph,2);
+                varSEM(1,count)=std(normGraph)/size(sjRange,2);
                 count=count+1;
             end
         end
     end
     
     if var==1
-        thisVar='Errors of Omission (4loc)';
+        thisVar='Selective Attention RT';
     elseif var==2
-        thisVar='Errors of Comission (4loc)';
+        thisVar='Selective Attention Accuracy';
     elseif var==3
-        thisVar='Working Memory Accuracy (4loc)';
+        thisVar='Dual Task Accuracy';
     elseif var==4
-        thisVar='Mean Response Time (4loc)';
+        thisVar='Orienting Effect';
     elseif var==5
-        thisVar='Accuracy (4loc)';
-    elseif var==6
-        thisVar='Orienting Effect (4loc)';
+        thisVar='Working Memory Accuracy';
     end
     
     newplot
@@ -145,9 +84,10 @@ for var=1:numVar
     bar(varBins);
     ylabel(thisVar,'FontSize',12);
     errorbar(varBins,varSEM,'.');
-    file=['/Users/dannytoomey/Documents/Research/ADTask/ADTaskPilot/4LocResp/4LocResp/graphs/' sprintf('%s',thisVar)];
+    file=['/Users/dannytoomey/Documents/Research/ADTask/Experiments/ADTaskPilot/4LocRespv2/dataRunv2/' sprintf('%s',thisVar)];
     saveas(gcf,file,'png'); 
     hold off
+    
 end
 
 numCond=2;

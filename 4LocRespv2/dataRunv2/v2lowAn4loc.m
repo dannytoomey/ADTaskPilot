@@ -1,10 +1,10 @@
 
 %low cond data analysis
 
-function v2lowAn4loc
+function v2lowAn4loc(sjNum,lowTaskOrder,lowLoad,numTask,numCue,blockTrials,saveFile)
 
-load('dataAnFile.mat');
 load(lowLoad);
+load('allDataStruct.mat')
 
 for task=1:numTask
     
@@ -30,28 +30,12 @@ for task=1:numTask
         block4=allLowTask(task).thisTaskData(cue).thisCueCondData(4).thisBlockTrials(blockTrials).thisTrialData;
         block5=allLowTask(task).thisTaskData(cue).thisCueCondData(5).thisBlockTrials(blockTrials).thisTrialData;
         block6=allLowTask(task).thisTaskData(cue).thisCueCondData(6).thisBlockTrials(blockTrials).thisTrialData;
-        block7=allLowTask(task).thisTaskData(cue).thisCueCondData(7).thisBlockTrials(blockTrials).thisTrialData;
-        block8=allLowTask(task).thisTaskData(cue).thisCueCondData(8).thisBlockTrials(blockTrials).thisTrialData;
         
-        data=[block1,block2,block3,block4,block5,block6,block7,block8];
+        data=[block1,block2,block3,block4,block5,block6];
         
-        wmData=allLowTask(task).thisTaskData(cue).thisCueCondData(8).thisBlockWM;
+        wmData=allLowTask(task).thisTaskData(cue).thisCueCondData(6).thisBlockWM;
         
         cueCond=allLowTask(task).thisTaskData(cue).thisCueCond;
-        
-        if taskCond==1
-            if cueCond==1
-                blockID='lowsi66.mat';
-            elseif cueCond==2
-                blockID='lowsi33.mat';
-            end
-        elseif taskCond==2
-            if cueCond==1
-                blockID='lowdu66.mat';
-            elseif cueCond==2
-                blockID='lowdu33.mat';
-            end
-        end
         
         cueOrder=2;
         toneRow=5;
@@ -61,7 +45,7 @@ for task=1:numTask
         rtRow=10;
         
         numTrials=size(data,2);
-        numBlocks=8;
+        numBlocks=6;
         
         visErrorOm=0;
         audErrorOm=0;
@@ -114,19 +98,20 @@ for task=1:numTask
                 end
             end
 
-            visMeanRT=mean(useTrials);
-            visAccuracy=(size(correctTrials,2)+size(correctHighTrials,2))/numTrials;
+            useAud=find(audCorrect~=0);
+            audAccuracy=(size(useAud,2))/numTrials;
 
         end
 
         if cueCond==1
             thres=blockTrials*(2/3);
+            valTrials=zeros(1,numTrials*(2/3));
+            invalTrials=zeros(1,numTrials*(1/3));
         elseif cueCond==2
             thres=blockTrials*(1/3);
+            valTrials=zeros(1,numTrials*(1/3));
+            invalTrials=zeros(1,numTrials*(2/3));
         end
-
-        valTrials=zeros(1,thres);
-        invalTrials=zeros(1,numTrials-thres);
 
         for trial=1:size(correctTrials,2)
             if data(cueOrder,correctTrials(1,trial))<=thres
@@ -148,8 +133,14 @@ for task=1:numTask
         end
 
         oriEf=mean(invalTrialTimes)-mean(valTrialTimes);
-
-        save([saveFile '_' sprintf('%s',blockID)],'accuracyWM','meanRT','errorOm','errorCom','accuracy','oriEf');
+        
+        allDataStruct(1).task(taskCond).cue(cueCond).accuracyWM(sjNum)=accuracyWM;
+        allDataStruct(1).task(taskCond).cue(cueCond).visMeanRT(sjNum)=visMeanRT;
+        allDataStruct(1).task(taskCond).cue(cueCond).visAccuracy(sjNum)=visAccuracy;
+        allDataStruct(1).task(taskCond).cue(cueCond).audAccuracy(sjNum)=audAccuracy;
+        allDataStruct(1).task(taskCond).cue(cueCond).oriEf(sjNum)=oriEf;
+        
+        save([saveFile 'allDataStruct.mat'],'allDataStruct');
         
     end
     

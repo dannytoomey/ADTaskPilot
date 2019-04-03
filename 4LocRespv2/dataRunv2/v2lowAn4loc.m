@@ -50,7 +50,6 @@ for task=1:numTask
         visErrorOm=0;
         audErrorOm=0;
         audAccuracy=0;
-        audMeanRT=0;
         
         wmLoad=wmData(1:5,:);
         wmProbe=wmData(6:10,:);

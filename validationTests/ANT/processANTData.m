@@ -1,8 +1,9 @@
+
 function [rtData accData] = processANTData(dataFile)
 
-sjProcess=99;%input('input sj data file for processing ');
-
-dataFile=sprintf('s%02d_allData.txt',sjProcess);
+% sjProcess=99;%input('input sj data file for processing ');
+% 
+% dataFile=sprintf('s%02d_allData.txt',sjProcess);
 
 fid=fopen(dataFile,'r');
 
@@ -20,6 +21,7 @@ t2Gt1Data = rtData;
 moreData = 1;
 maxTrials = 2000;
 trialNum=1;
+
 while moreData==1&&trialNum<(maxTrials+1)
     
     thisTrial = fgetl(fid);
@@ -27,9 +29,16 @@ while moreData==1&&trialNum<(maxTrials+1)
     
     if read(2)==0&&length(thisTrial)>10
         
+        scan=textscan(thisTrial,'%d\t%d\t%d\t%c\t%d\t%c\t%c\t%d\t%7.2f\t%d\t%d');
+        thisBlock=scan(1);
+        trial=scan(2);
+        thisSoa=scan(3);
+        thisCue=scan(4);
+        
         [thisBlock,trial,thisSoa,thisCue,...
             thisCon,arrowDir,resp,acc,rt,fixation,nFrames]=...
             textscan(thisTrial,'%d\t%d\t%d\t%c\t%d\t%c\t%c\t%d\t%7.2f\t%d\t%d');
+            
         if thisCue == 'V'
             cueIdx = 1;
         elseif thisCue == 'I'
@@ -54,6 +63,7 @@ while moreData==1&&trialNum<(maxTrials+1)
 
 
 end
+
 rtData = rtData./accData;
 accData = accData./trialCtr;
 fclose(fid);

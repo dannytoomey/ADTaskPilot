@@ -1,10 +1,10 @@
 
 %med cond data analysis
 
-function v2medAn4Loc
+function v2medAn4Loc(sjNum,medTaskOrder,medLoad,numTask,numCue,blockTrials,saveFile)
 
-load('dataAnFile.mat');
 load(medLoad);
+load('allDataStruct.mat')
 
 for task=1:numTask
     
@@ -30,41 +30,29 @@ for task=1:numTask
         block4=allMedTask(task).thisTaskData(cue).thisCueCondData(4).thisBlockTrials(blockTrials).thisTrialData;
         block5=allMedTask(task).thisTaskData(cue).thisCueCondData(5).thisBlockTrials(blockTrials).thisTrialData;
         block6=allMedTask(task).thisTaskData(cue).thisCueCondData(6).thisBlockTrials(blockTrials).thisTrialData;
-        block7=allMedTask(task).thisTaskData(cue).thisCueCondData(7).thisBlockTrials(blockTrials).thisTrialData;
-        block8=allMedTask(task).thisTaskData(cue).thisCueCondData(8).thisBlockTrials(blockTrials).thisTrialData;
         
-        data=[block1,block2,block3,block4,block5,block6,block7,block8];
+        data=[block1,block2,block3,block4,block5,block6];
         
-        wmData=allMedTask(task).thisTaskData(cue).thisCueCondData(8).thisBlockWM;
+        wmData=allMedTask(task).thisTaskData(cue).thisCueCondData(6).thisBlockWM;
         
         cueCond=allMedTask(task).thisTaskData(cue).thisCueCond;
         
-        if taskCond==1
-            if cueCond==1
-                blockID='medsi66.mat';
-            elseif cueCond==2
-                blockID='medsi33.mat';
-            end
-        elseif taskCond==2
-            if cueCond==1
-                blockID='meddu66.mat';
-            elseif cueCond==2
-                blockID='meddu33.mat';
-            end
-        end
-        
         cueOrder=2;
+        cueLocRow=3;
+        targetLocRow=4;
         stimLocRow=5;
         toneRow=6;
-        targetRow=7;
-        respRow=8;
-        rtRow=9;
+        audRespRow=7;
+        targetRow=9;
+        visRespRow=10;
+        rtRow=11;
         
         numTrials=size(data,2);
-        numBlocks=8;
+        numBlocks=6;
         
-        errorOm=0;
-        errorCom=0;
+        visErrorOm=0;
+        audErrorOm=0;
+        audAccuracy=0;
         
         wmLoad=wmData(1:5,:);
         wmProbe=wmData(6:10,:);
@@ -80,66 +68,52 @@ for task=1:numTask
         end
         
         accuracyWM=correctWM/(numBlocks*numLetter);
-        
-        if taskCond==1
 
-            correct=zeros(1,numTrials);
+        visCorrect=zeros(1,numTrials);
 
-            for trial=1:numTrials
-                if data(targetRow,trial)==data(respRow,trial)
-                    correct(1,trial)=data(rtRow,trial);
-                elseif data(respRow,trial)==0
-                    errorOm=errorOm+1;
-                end
+        for trial=1:numTrials
+            if data(targetRow,trial)==data(visRespRow,trial)
+                visCorrect(1,trial)=data(rtRow,trial);
+            elseif data(visRespRow,trial)==0
+                visErrorOm=visErrorOm+1;
             end
-
-            correctTrials=find(correct~=0);
-            useTrials=zeros(1,size(correctTrials,2));
-            for trial=1:size(useTrials,2)
-                useTrials(1,trial)=data(rtRow,correctTrials(1,trial));
-            end    
-
-            meanRT=mean(useTrials);
-            accuracy=size(useTrials,2)/numTrials;
-
         end
 
-        if taskCond==2
+        correctTrials=find(visCorrect~=0);
+        useTrials=zeros(1,size(correctTrials,2));
+        for trial=1:size(useTrials,2)
+            useTrials(1,trial)=data(rtRow,correctTrials(1,trial));
+        end    
 
-            lowToneCorrect=zeros(1,numTrials*(2/3));
-            highToneCorrect=zeros(1,numTrials*(1/3));
+        visMeanRT=mean(useTrials);
+        visAccuracy=size(useTrials,2)/numTrials;
+
+        if taskCond==2
+            
+            audCorrect=zeros(1,numTrials);
+            
             for trial=1:numTrials
-                if data(toneRow,trial)==300&&data(targetRow,trial)==data(respRow,trial)
-                    lowToneCorrect(1,trial)=1;
-                elseif data(toneRow,trial)==300&&data(respRow,trial)==0
-                    errorOm=errorOm+1;
-                elseif data(toneRow,trial)==600&&data(respRow,trial)==0
-                    highToneCorrect(1,trial)=1;
-                elseif data(toneRow,trial)==600&&data(respRow,trial)~=0
-                    errorCom=errorCom+1;
+                if data(toneRow,trial)==300&&data(audRespRow,trial)==1||data(toneRow,trial)==600&&data(audRespRow,trial)==2
+                    audCorrect(1,trial)=1;
+                elseif data(audRespRow,trial)==0
+                    audErrorOm=audErrorOm+1;
                 end
             end
 
-            correctTrials=find(lowToneCorrect~=0);
-            correctHighTrials=find(highToneCorrect~=0);
-            useTrials=zeros(1,size(correctTrials,2));
-            for trial=1:size(useTrials,2)
-                useTrials(1,trial)=data(rtRow,correctTrials(1,trial));
-            end
-
-            meanRT=mean(useTrials);
-            accuracy=(size(correctTrials,2)+size(correctHighTrials,2))/numTrials;
+            useAud=find(audCorrect~=0);
+            audAccuracy=(size(useAud,2))/numTrials;
 
         end
 
         if cueCond==1
             thres=blockTrials*(2/3);
+            valTrials=zeros(1,numTrials*(2/3));
+            invalTrials=zeros(1,numTrials*(1/3));
         elseif cueCond==2
             thres=blockTrials*(1/3);
+            valTrials=zeros(1,numTrials*(1/3));
+            invalTrials=zeros(1,numTrials*(2/3));
         end
-
-        valTrials=zeros(1,thres);
-        invalTrials=zeros(1,numTrials-thres);
 
         for trial=1:size(correctTrials,2)
             if data(cueOrder,correctTrials(1,trial))<=thres
@@ -162,89 +136,104 @@ for task=1:numTask
 
         oriEf=mean(invalTrialTimes)-mean(valTrialTimes);
         
-        adjColRT=zeros(1,numTrials);
-        adjRowRT=zeros(1,numTrials);
-        diagRT=zeros(1,numTrials);
+        adjColRT=NaN;
+        adjRowRT=NaN;
+        diagRT=NaN;
         
-        for trial=1:numTrials
-            if data(targetRow,trial)==1
-                if data(stimLocRow,trial)<=33
-                    circleLoc=2;
-                elseif 33<data(stimLocRow,trial)<=66
-                    circleLoc=3;
-                elseif 66<data(stimLocRow,trial)
-                    circleLoc=4;
+        for trial=1:size(useTrials,2)
+            if data(cueLocRow,correctTrials(1,trial))<600   %this is 600 b/c boxCenX is 533.33 if it's on the left and 746.66 if it's on the right
+                if data(cueOrder,correctTrials(1,trial))<=thres
+                    if data(targetLocRow,correctTrials(1,trial))<=50
+                        if data(stimLocRow,correctTrials(1,trial))<=33
+                            adjColRT(1,trial)=data(rtRow,correctTrials(1,trial));
+                        elseif 33<data(stimLocRow,correctTrials(1,trial))<=66
+                            adjRowRT(1,trial)=data(rtRow,correctTrials(1,trial));
+                        elseif 66<data(stimLocRow,correctTrials(1,trial))
+                            diagRT(1,trial)=data(rtRow,correctTrials(1,trial));
+                        end
+                    elseif 50<data(targetLocRow,correctTrials(1,trial))
+                        if data(stimLocRow,correctTrials(1,trial))<=33
+                            adjColRT(1,trial)=data(rtRow,correctTrials(1,trial));
+                        elseif 33<data(stimLocRow,correctTrials(1,trial))<=66
+                            diagRT(1,trial)=data(rtRow,correctTrials(1,trial));
+                        elseif 66<data(stimLocRow,correctTrials(1,trial))
+                            adjRowRT(1,trial)=data(rtRow,correctTrials(1,trial));
+                        end
+                    end
+                elseif thres<data(cueOrder,correctTrials(1,trial))
+                    if data(targetLocRow,correctTrials(1,trial))<=50
+                        if data(stimLocRow,correctTrials(1,trial))<=33
+                            adjRowRT(1,trial)=data(rtRow,correctTrials(1,trial));
+                        elseif 33<data(stimLocRow,correctTrials(1,trial))<=66
+                            diagRT(1,trial)=data(rtRow,correctTrials(1,trial));
+                        elseif 66<data(stimLocRow,correctTrials(1,trial))
+                            adjColRT(1,trial)=data(rtRow,correctTrials(1,trial));
+                        end
+                    elseif 50<data(targetLocRow,correctTrials(1,trial))
+                        if data(stimLocRow,correctTrials(1,trial))<=33
+                            diagRT(1,trial)=data(rtRow,correctTrials(1,trial));
+                        elseif 33<data(stimLocRow,correctTrials(1,trial))<=66
+                            adjRowRT(1,trial)=data(rtRow,correctTrials(1,trial));
+                        elseif 66<data(stimLocRow,correctTrials(1,trial))
+                            adjColRT(1,trial)=data(rtRow,correctTrials(1,trial));
+                        end
+                    end
                 end
-                adjCol=2;
-                adjRow=3;
-                diag=4;
-            elseif data(targetRow,trial)==2
-                if data(stimLocRow,trial)<=33
-                    circleLoc=1;
-                elseif 33<data(stimLocRow,trial)<=66
-                    circleLoc=3;
-                elseif 66<data(stimLocRow,trial)
-                    circleLoc=4;
+            elseif 600<data(cueLocRow,correctTrials(1,trial))   %this is 600 b/c boxCenX is 533.33 if it's on the left and 746.66 if it's on the right
+                if data(cueOrder,correctTrials(1,trial))<=thres
+                    if data(targetLocRow,correctTrials(1,trial))<=50
+                        if data(stimLocRow,correctTrials(1,trial))<=33
+                            adjRowRT(1,trial)=data(rtRow,correctTrials(1,trial));
+                        elseif 33<data(stimLocRow,correctTrials(1,trial))<=66
+                            diagRT(1,trial)=data(rtRow,correctTrials(1,trial));
+                        elseif 66<data(stimLocRow,correctTrials(1,trial))
+                            adjColRT(1,trial)=data(rtRow,correctTrials(1,trial));
+                        end
+                    elseif 50<data(targetLocRow,correctTrials(1,trial))
+                        if data(stimLocRow,correctTrials(1,trial))<=33
+                            diagRT(1,trial)=data(rtRow,correctTrials(1,trial));
+                        elseif 33<data(stimLocRow,correctTrials(1,trial))<=66
+                            adjRowRT(1,trial)=data(rtRow,correctTrials(1,trial));
+                        elseif 66<data(stimLocRow,correctTrials(1,trial))
+                            adjColRT(1,trial)=data(rtRow,correctTrials(1,trial));
+                        end
+                    end
+                elseif thres<data(cueOrder,correctTrials(1,trial))
+                    if data(targetLocRow,correctTrials(1,trial))<=50
+                        if data(stimLocRow,correctTrials(1,trial))<=33
+                            adjColRT(1,trial)=data(rtRow,correctTrials(1,trial));
+                        elseif 33<data(stimLocRow,correctTrials(1,trial))<=66
+                            adjRowRT(1,trial)=data(rtRow,correctTrials(1,trial));
+                        elseif 66<data(stimLocRow,correctTrials(1,trial))
+                            diagRT(1,trial)=data(rtRow,correctTrials(1,trial));
+                        end
+                    elseif 50<data(targetLocRow,correctTrials(1,trial))
+                        if data(stimLocRow,correctTrials(1,trial))<=33
+                            adjColRT(1,trial)=data(rtRow,correctTrials(1,trial));
+                        elseif 33<data(stimLocRow,correctTrials(1,trial))<=66
+                            diagRT(1,trial)=data(rtRow,correctTrials(1,trial));
+                        elseif 66<data(stimLocRow,correctTrials(1,trial))
+                            adjRowRT(1,trial)=data(rtRow,correctTrials(1,trial));
+                        end
+                    end
                 end
-                adjCol=1;
-                adjRow=4;
-                diag=3;
-            elseif data(targetRow,trial)==3
-                if data(stimLocRow,trial)<=33
-                    circleLoc=1;
-                elseif 33<data(stimLocRow,trial)<=66
-                    circleLoc=2;
-                elseif 66<data(stimLocRow,trial)
-                    circleLoc=4;
-                end
-                adjCol=4;
-                adjRow=1;
-                diag=2;
-            elseif data(targetRow,trial)==4
-                if data(stimLocRow,trial)<=33
-                    circleLoc=1;
-                elseif 33<data(stimLocRow,trial)<=66
-                    circleLoc=2;
-                elseif 66<data(stimLocRow,trial)
-                    circleLoc=3;
-                end
-                adjCol=3;
-                adjRow=2;
-                diag=1;
             end
-            
-            if circleLoc==adjCol
-                adjColRT(1,trial)=data(rtRow,trial);
-            elseif circleLoc==adjRow
-                adjRowRT(1,trial)=data(rtRow,trial);
-            elseif circleLoc==diag
-                diagRT(1,trial)=data(rtRow,trial);
-            end
-            
         end
         
-        useAC=find(adjColRT~=0);
-        useAR=find(adjRowRT~=0);
-        useD=find(diagRT~=0);
-        useCol=zeros(1,numel(useAC));
-        useRow=zeros(1,numel(useAR));
-        useDiag=zeros(1,numel(useD));
+        meanColRT=mean(adjColRT);
+        meanRowRT=mean(adjRowRT);
+        meanDiagRT=mean(diagRT);
         
-        for trial=1:numel(useCol)
-            useCol(1,trial)=adjColRT(1,useAC(1,trial));
-        end
-        for trial=1:numel(useRow)
-            useRow(1,trial)=adjRowRT(1,useAR(1,trial));
-        end
-        for trial=1:numel(useDiag)
-            useDiag(1,trial)=diagRT(1,useD(1,trial));
-        end
+        allDataStruct(2).task(taskCond).cue(cueCond).accuracyWM(sjNum)=accuracyWM;
+        allDataStruct(2).task(taskCond).cue(cueCond).visMeanRT(sjNum)=visMeanRT;
+        allDataStruct(2).task(taskCond).cue(cueCond).visAccuracy(sjNum)=visAccuracy;
+        allDataStruct(2).task(taskCond).cue(cueCond).audAccuracy(sjNum)=audAccuracy;
+        allDataStruct(2).task(taskCond).cue(cueCond).oriEf(sjNum)=oriEf;
+        allDataStruct(2).task(taskCond).cue(cueCond).meanColRT(sjNum)=meanColRT;
+        allDataStruct(2).task(taskCond).cue(cueCond).meanRowRT(sjNum)=meanRowRT;
+        allDataStruct(2).task(taskCond).cue(cueCond).meanDiagRT(sjNum)=meanDiagRT;
         
-        colRT=mean(useCol);
-        rowRT=mean(useRow);
-        diagRT=mean(useDiag);
-            
-        save([saveFile '_' sprintf('%s',blockID)],'accuracyWM','meanRT','errorOm','errorCom','accuracy','oriEf','colRT','rowRT','diagRT');
+        save([saveFile 'allDataStruct.mat'],'allDataStruct');
         
     end
     

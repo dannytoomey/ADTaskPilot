@@ -19,6 +19,8 @@ function analyzeANT(subjects,fileIdentifier)
 % author:  Barry
 %=========================================================
 
+%use [4,6,9,11,13,15:22,24:28,31,32]
+
 nCueCon = 4;
 cueCon = ['val';'ivl';'ctr';'non'];
 nDifCon = 2;
@@ -31,7 +33,8 @@ accFid = fopen(['accData' fileIdentifier '.txt'],'w');
 rtFid = fopen(['rtData' fileIdentifier '.txt'],'w');
 
 for i = 1:size(subjects,2)
-    dataFile = sprintf('s%02d_allData.txt',subjects(i));
+    
+    dataFile = sprintf('s%02d_allANTData.txt',subjects(i));
 
     [rtData accData] = processANTData(dataFile);
     if i == 1
@@ -50,19 +53,18 @@ for i = 1:size(subjects,2)
 
     colCtr = 1;
 
-        for x=1:nCueCon
-            for y=1:nDifCon
-                for z=1:nSoas
-                    allAccData(i,colCtr) = accData(x,y,z);
-                    fprintf(accFid,'%5.3f\t',allAccData(i,colCtr));
-                    allRTdata(i,colCtr) = rtData(x,y,z);
-                    fprintf(rtFid,'%7.2f\t',allRTdata(i,colCtr));
-                    colCtr = colCtr +1;
-                end
+    for x=1:nCueCon
+        for y=1:nDifCon
+            for z=1:nSoas
+                allAccData(i,colCtr) = accData(x,y,z);
+                fprintf(accFid,'%5.3f\t',allAccData(i,colCtr));
+                allRTdata(i,colCtr) = rtData(x,y,z);
+                fprintf(rtFid,'%7.2f\t',allRTdata(i,colCtr));
+                colCtr = colCtr +1;
             end
         end
     end
-
+    
     fprintf(accFid,'\n');
     fprintf(rtFid,'\n');
     

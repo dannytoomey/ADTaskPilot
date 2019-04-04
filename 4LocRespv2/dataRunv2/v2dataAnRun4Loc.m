@@ -4,9 +4,10 @@
 function v2dataAnRun4Loc
 
 %skip sj 1, 2, 3, 5, 8
-%[4,6,7,9:34]
+%[4,6,9:26,28:34]
 
-sjRange=input('Input Subjects ');
+%sjRange=input('Input Subjects ');
+sjRange=[4,6,9:26,28:34];
 
 for sj=1:size(sjRange,2)
     

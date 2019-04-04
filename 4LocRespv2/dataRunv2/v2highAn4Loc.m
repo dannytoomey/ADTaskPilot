@@ -38,6 +38,9 @@ for task=1:numTask
         cueCond=allHighTask(task).thisTaskData(cue).thisCueCond;
         
         cueOrder=2;
+        cueLocRow=3;
+        targetLocRow=4;
+        stimLocRow=5;
         toneRow=6;
         audRespRow=7;
         targetRow=9;
@@ -50,7 +53,6 @@ for task=1:numTask
         visErrorOm=0;
         audErrorOm=0;
         audAccuracy=0;
-        audMeanRT=0;
         
         wmLoad=wmData(1:5,:);
         wmProbe=wmData(6:10,:);
@@ -134,11 +136,102 @@ for task=1:numTask
 
         oriEf=mean(invalTrialTimes)-mean(valTrialTimes);
         
+        adjColRT=NaN;
+        adjRowRT=NaN;
+        diagRT=NaN;
+        
+        for trial=1:size(useTrials,2)
+            if data(cueLocRow,correctTrials(1,trial))<600   %this is 600 b/c boxCenX is 533.33 if it's on the left and 746.66 if it's on the right
+                if data(cueOrder,correctTrials(1,trial))<=thres
+                    if data(targetLocRow,correctTrials(1,trial))<=50
+                        if data(stimLocRow,correctTrials(1,trial))<=33
+                            adjColRT(1,trial)=data(rtRow,correctTrials(1,trial));
+                        elseif 33<data(stimLocRow,correctTrials(1,trial))<=66
+                            adjRowRT(1,trial)=data(rtRow,correctTrials(1,trial));
+                        elseif 66<data(stimLocRow,correctTrials(1,trial))
+                            diagRT(1,trial)=data(rtRow,correctTrials(1,trial));
+                        end
+                    elseif 50<data(targetLocRow,correctTrials(1,trial))
+                        if data(stimLocRow,correctTrials(1,trial))<=33
+                            adjColRT(1,trial)=data(rtRow,correctTrials(1,trial));
+                        elseif 33<data(stimLocRow,correctTrials(1,trial))<=66
+                            diagRT(1,trial)=data(rtRow,correctTrials(1,trial));
+                        elseif 66<data(stimLocRow,correctTrials(1,trial))
+                            adjRowRT(1,trial)=data(rtRow,correctTrials(1,trial));
+                        end
+                    end
+                elseif thres<data(cueOrder,correctTrials(1,trial))
+                    if data(targetLocRow,correctTrials(1,trial))<=50
+                        if data(stimLocRow,correctTrials(1,trial))<=33
+                            adjRowRT(1,trial)=data(rtRow,correctTrials(1,trial));
+                        elseif 33<data(stimLocRow,correctTrials(1,trial))<=66
+                            diagRT(1,trial)=data(rtRow,correctTrials(1,trial));
+                        elseif 66<data(stimLocRow,correctTrials(1,trial))
+                            adjColRT(1,trial)=data(rtRow,correctTrials(1,trial));
+                        end
+                    elseif 50<data(targetLocRow,correctTrials(1,trial))
+                        if data(stimLocRow,correctTrials(1,trial))<=33
+                            diagRT(1,trial)=data(rtRow,correctTrials(1,trial));
+                        elseif 33<data(stimLocRow,correctTrials(1,trial))<=66
+                            adjRowRT(1,trial)=data(rtRow,correctTrials(1,trial));
+                        elseif 66<data(stimLocRow,correctTrials(1,trial))
+                            adjColRT(1,trial)=data(rtRow,correctTrials(1,trial));
+                        end
+                    end
+                end
+            elseif 600<data(cueLocRow,correctTrials(1,trial))   %this is 600 b/c boxCenX is 533.33 if it's on the left and 746.66 if it's on the right
+                if data(cueOrder,correctTrials(1,trial))<=thres
+                    if data(targetLocRow,correctTrials(1,trial))<=50
+                        if data(stimLocRow,correctTrials(1,trial))<=33
+                            adjRowRT(1,trial)=data(rtRow,correctTrials(1,trial));
+                        elseif 33<data(stimLocRow,correctTrials(1,trial))<=66
+                            diagRT(1,trial)=data(rtRow,correctTrials(1,trial));
+                        elseif 66<data(stimLocRow,correctTrials(1,trial))
+                            adjColRT(1,trial)=data(rtRow,correctTrials(1,trial));
+                        end
+                    elseif 50<data(targetLocRow,correctTrials(1,trial))
+                        if data(stimLocRow,correctTrials(1,trial))<=33
+                            diagRT(1,trial)=data(rtRow,correctTrials(1,trial));
+                        elseif 33<data(stimLocRow,correctTrials(1,trial))<=66
+                            adjRowRT(1,trial)=data(rtRow,correctTrials(1,trial));
+                        elseif 66<data(stimLocRow,correctTrials(1,trial))
+                            adjColRT(1,trial)=data(rtRow,correctTrials(1,trial));
+                        end
+                    end
+                elseif thres<data(cueOrder,correctTrials(1,trial))
+                    if data(targetLocRow,correctTrials(1,trial))<=50
+                        if data(stimLocRow,correctTrials(1,trial))<=33
+                            adjColRT(1,trial)=data(rtRow,correctTrials(1,trial));
+                        elseif 33<data(stimLocRow,correctTrials(1,trial))<=66
+                            adjRowRT(1,trial)=data(rtRow,correctTrials(1,trial));
+                        elseif 66<data(stimLocRow,correctTrials(1,trial))
+                            diagRT(1,trial)=data(rtRow,correctTrials(1,trial));
+                        end
+                    elseif 50<data(targetLocRow,correctTrials(1,trial))
+                        if data(stimLocRow,correctTrials(1,trial))<=33
+                            adjColRT(1,trial)=data(rtRow,correctTrials(1,trial));
+                        elseif 33<data(stimLocRow,correctTrials(1,trial))<=66
+                            diagRT(1,trial)=data(rtRow,correctTrials(1,trial));
+                        elseif 66<data(stimLocRow,correctTrials(1,trial))
+                            adjRowRT(1,trial)=data(rtRow,correctTrials(1,trial));
+                        end
+                    end
+                end
+            end
+        end
+        
+        meanColRT=mean(adjColRT);
+        meanRowRT=mean(adjRowRT);
+        meanDiagRT=mean(diagRT);
+        
         allDataStruct(3).task(taskCond).cue(cueCond).accuracyWM(sjNum)=accuracyWM;
         allDataStruct(3).task(taskCond).cue(cueCond).visMeanRT(sjNum)=visMeanRT;
         allDataStruct(3).task(taskCond).cue(cueCond).visAccuracy(sjNum)=visAccuracy;
         allDataStruct(3).task(taskCond).cue(cueCond).audAccuracy(sjNum)=audAccuracy;
         allDataStruct(3).task(taskCond).cue(cueCond).oriEf(sjNum)=oriEf;
+        allDataStruct(3).task(taskCond).cue(cueCond).meanColRT(sjNum)=meanColRT;
+        allDataStruct(3).task(taskCond).cue(cueCond).meanRowRT(sjNum)=meanRowRT;
+        allDataStruct(3).task(taskCond).cue(cueCond).meanDiagRT(sjNum)=meanDiagRT;
         
         save([saveFile 'allDataStruct.mat'],'allDataStruct');
         

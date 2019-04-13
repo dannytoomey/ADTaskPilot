@@ -1,9 +1,7 @@
 
 function analyzeDiv
 
-load('divDataMat.mat')
-
-subjects=[11,13,15:22,24:28,31,32];
+subjects=[11,13,15:22,24:28,31,32,35,37,38,40:44,46,47,50,51];
 numTrials=18;
 
 for sub=1:size(subjects,2)
@@ -48,6 +46,13 @@ for sub=1:size(subjects,2)
                     
                 end
                 
+%                 task
+%                 cond
+%                 trial
+%                 thisSub
+%                 
+                
+                
             end
             
         end
@@ -56,7 +61,8 @@ for sub=1:size(subjects,2)
     
 end
 
-save('divDataMat.mat','divDataMat')
+save('allRTMat.mat','rtMat')
+save('allAccMat.mat','accMat')
 
 end
 

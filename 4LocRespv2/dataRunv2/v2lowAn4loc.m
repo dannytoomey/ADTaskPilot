@@ -64,7 +64,7 @@ for task=1:numTask
             end
         end
         
-        accuracyWM=correctWM/(numBlocks*numLetter);
+        accuracyWM=(correctWM/(numBlocks*numLetter))*100;
 
         visCorrect=zeros(1,numTrials);
 
@@ -82,8 +82,8 @@ for task=1:numTask
             useTrials(1,trial)=data(rtRow,correctTrials(1,trial));
         end    
 
-        visMeanRT=mean(useTrials);
-        visAccuracy=size(useTrials,2)/numTrials;
+        visMeanRT=(mean(useTrials))*1000;
+        visAccuracy=(size(useTrials,2)/numTrials)*100;
 
         if taskCond==2
             
@@ -98,7 +98,7 @@ for task=1:numTask
             end
 
             useAud=find(audCorrect~=0);
-            audAccuracy=(size(useAud,2))/numTrials;
+            audAccuracy=((size(useAud,2))/numTrials)*100;
 
         end
 
@@ -131,7 +131,7 @@ for task=1:numTask
             invalTrialTimes(1,trial)=invalTrials(1,useInvalTrials(1,trial));
         end
 
-        oriEf=mean(invalTrialTimes)-mean(valTrialTimes);
+        oriEf=(mean(invalTrialTimes)-mean(valTrialTimes))*1000;
         
         allDataStruct(1).task(taskCond).cue(cueCond).accuracyWM(sjNum)=accuracyWM;
         allDataStruct(1).task(taskCond).cue(cueCond).visMeanRT(sjNum)=visMeanRT;

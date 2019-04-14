@@ -67,15 +67,15 @@ for var=1:numVar
     end
     
     if var==1
-        thisVar='Selective Attention RT';
+        thisVar='All Data Selective Attention RT (ms)';
     elseif var==2
-        thisVar='Selective Attention Accuracy';
+        thisVar='All Data Selective Attention Accuracy (%)';
     elseif var==3
-        thisVar='Dual Task Accuracy';
+        thisVar='All Data Dual Task Accuracy (%)';
     elseif var==4
-        thisVar='Orienting Effect';
+        thisVar='All Data Orienting Effect (ms)';
     elseif var==5
-        thisVar='Working Memory Accuracy';
+        thisVar='All Data Working Memory Accuracy (%)';
     end
     
     graphLabel=[thisVar ', N = ' sprintf('%d',size(sjRange,2))];
@@ -148,7 +148,7 @@ for var=1:numVar
     
 end
 
-thisVar='Unique Distractor RT';
+thisVar='All Data Unique Distractor RT (ms)';
 graphLabel=[thisVar ', N = ' sprintf('%d',size(sjRange,2))];
 newplot
 hold

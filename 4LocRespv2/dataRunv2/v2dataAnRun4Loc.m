@@ -7,7 +7,7 @@ function v2dataAnRun4Loc
 %[4,6,9:26,28:34]
 
 %sjRange=input('Input Subjects ');
-sjRange=[6,9:11,13,15:28,31,32,35,37:50];
+sjRange=[6,9:11,13,15:22,24:28,31,32,35,37:44,46,47,50,51,53:63,65:70];
 
 for sj=1:size(sjRange,2)
     

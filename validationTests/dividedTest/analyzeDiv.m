@@ -1,7 +1,10 @@
 
 function analyzeDiv
 
-subjects=[11,13,15:22,24:28,31,32,35,37,38,40:44,46,47,50,51];
+load('allAccMat.mat')
+load('allRTMat.mat')
+
+subjects=99;%[11,13,15:22,24:28,31,32,35,37,38,40:44,46,47,50,51];
 numTrials=18;
 
 for sub=1:size(subjects,2)
@@ -9,15 +12,34 @@ for sub=1:size(subjects,2)
     thisSub=subjects(1,sub);
     load(['sj' sprintf('%02d',thisSub) '_allDivData.mat'])
     
-    for task=1:size(allData,2)
+    if thisSub==99
+        tasks=size(testData,2);
+    else
+        tasks=size(all,2);
+    end 
+    
+    for task=1:tasks
         
-        thisTask=allData(task).thisTask;
-        condData=allData(task).condData;
-        
-        if thisTask==1
-            numCond=4;
+        if thisSub==99
+            thisTask=testData(task).thisTask;
+            condData=testData(task).condData;
         else
-            numCond=2;
+            thisTask=allData(task).thisTask;
+            condData=allData(task).condData;
+        end
+        
+        if thisSub==99
+            if thisTask==1
+                numCond=2;
+            else
+                numCond=1;
+            end
+        else
+            if thisTask==1
+                numCond=4;
+            else
+                numCond=2;
+            end
         end
         
         for cond=1:numCond
@@ -43,22 +65,10 @@ for sub=1:size(subjects,2)
                     else
                         accMat(task,cond,trial,thisSub,stim)=NaN;
                     end
-                    
                 end
-                
-%                 task
-%                 cond
-%                 trial
-%                 thisSub
-%                 
-                
-                
             end
-            
         end
-        
     end
-    
 end
 
 save('allRTMat.mat','rtMat')

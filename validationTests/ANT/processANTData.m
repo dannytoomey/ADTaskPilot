@@ -1,5 +1,5 @@
 
-function [rtData accData] = processANTData(dataFile)
+function [rtData, accData] = processANTData(dataFile)
 
 % sjProcess=99;%input('input sj data file for processing ');
 % 
@@ -29,26 +29,19 @@ while moreData==1&&trialNum<(maxTrials+1)
     
     if read(2)==0&&length(thisTrial)>10
         
-        thisBlock=str2double(thisTrial(1));
-        trial=str2double(thisTrial(3));
-        thisSoa=str2double(thisTrial(5));
-        thisCue=thisTrial(7);
-        thisCon=str2double(thisTrial(9));
-        arrowDir=thisTrial(11);
-        resp=thisTrial(13);
-        acc=str2double(thisTrial(15));
-        rt=str2double(thisTrial(18:23));
-        fixation=str2double(thisTrial(25:26));
-        if size(thisTrial,2)==29
-            nFrames=str2double(thisTrial(28:29));
-        else
-            nFrames=str2double(thisTrial(28));
-        end
-        
-%         [thisBlock,trial,thisSoa,thisCue,...
-%             thisCon,arrowDir,resp,acc,rt,fixation,nFrames]=...
-%             textscan(thisTrial,'%d\t%d\t%d\t%c\t%d\t%c\t%c\t%d\t%7.2f\t%d\t%d');
-
+        text=textscan(thisTrial,'%d\t%d\t%d\t%c\t%d\t%c\t%c\t%d\t%7.2f\t%d\t%d');
+            
+        thisBlock=cell2mat(text(1));
+        trial=cell2mat(text(2));
+        thisSoa=cell2mat(text(3));
+        thisCue=cell2mat(text(4));
+        thisCon=cell2mat(text(5));
+        arrowDir=cell2mat(text(6));
+        resp=cell2mat(text(7));
+        acc=cell2mat(text(8));
+        rt=cell2mat(text(9));
+        fixation=cell2mat(text(10));
+        nFrames=cell2mat(text(11));
         
         if thisCue == 'V'
             cueIdx = 1;

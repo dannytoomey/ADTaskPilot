@@ -19,7 +19,7 @@ function analyzeANT(subjects,fileIdentifier)
 % author:  Barry
 %=========================================================
 
-%use [4,6,9,11,13,15:22,24:28,31,32]
+%use [11,13,15:22,24:28,31,32,35,37,38,40:44,46,47,50:63,65:72,74:80]
 
 nCueCon = 4;
 cueCon = ['val';'ivl';'ctr';'non'];
@@ -36,7 +36,7 @@ for i = 1:size(subjects,2)
     
     dataFile = sprintf('s%02d_allANTData.txt',subjects(i));
 
-    [rtData accData] = processANTData(dataFile);
+    [rtData, accData] = processANTData(dataFile);
     if i == 1
         for x=1:nCueCon
             for y=1:nDifCon

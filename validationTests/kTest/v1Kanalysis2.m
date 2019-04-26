@@ -2,7 +2,7 @@
 %what does this do???? maybe write something that shows accuracy and rt
 %with different set sizes? can be used to calculate one measure of wm?
 
-subList = [11,13,15:22,24:28,31,32];
+subList = [11,13,15:22,24:28,31,32,35,37,38,40:44,46,47,50:63,65:72,74:80];
 numBlocks = 1:5;
 for sub = 1:length(subList)
     for block = 1:length(numBlocks)
@@ -53,5 +53,8 @@ for sub = 1:length(subList)
         allK4 = zeros(length(subList), 1);
     end
     allK4(sub,1) = k4;
+    
+    fname=['kDataSj' sprintf('%02d',min(subList)) '-Sj' sprintf('%02d',max(subList)) '.mat'];
+    save(fname,'allK','allK4')
     
 end

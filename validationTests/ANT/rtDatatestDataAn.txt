@@ -1,0 +1,2 @@
+val_inc_L1	val_inc_L2	val_inc_L3	val_con_L1	val_con_L2	val_con_L3	ivl_inc_L1	ivl_inc_L2	ivl_inc_L3	ivl_con_L1	ivl_con_L2	ivl_con_L3	ctr_inc_L1	ctr_inc_L2	ctr_inc_L3	ctr_con_L1	ctr_con_L2	ctr_con_L3	non_inc_L1	non_inc_L2	non_inc_L3	non_con_L1	non_con_L2	non_con_L3	
+ 629.71	 632.99	 594.82	 508.22	 519.14	 532.09	 612.39	 632.90	 721.42	 554.24	 514.46	 524.34	 688.06	 642.65	 629.86	 477.74	 524.60	 490.81	 604.49	 617.85	 699.94	 582.91	 520.92	 520.74	

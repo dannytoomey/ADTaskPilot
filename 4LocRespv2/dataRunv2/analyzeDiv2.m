@@ -1,16 +1,16 @@
 
-function analyzeDiv
+function analyzeDiv2(sjRange)
 
-load('allAccMat.mat')
-load('allRTMat.mat')
+load('/Users/dannytoomey/Documents/Research/ADTask/Experiments/ADTaskPilot/validationTests/dividedTest/allAccMat.mat')
+load('/Users/dannytoomey/Documents/Research/ADTask/Experiments/ADTaskPilot/validationTests/dividedTest/allRTMat.mat')
 
-subjects=[11,13,15:22,24:28,31,32,35,37,38,40:44,46,47,50:63,65:72,74:80];
 numTrials=18;
 
-for sub=1:size(subjects,2)
+for sub=1:size(sjRange,2)
     
-    thisSub=subjects(1,sub);
-    load(['sj' sprintf('%02d',thisSub) '_allDivData.mat'])
+    thisSub=sjRange(1,sub);
+    load(['/Users/dannytoomey/Documents/Research/ADTask/Experiments/ADTaskPilot/validationTests/dividedTest/'...
+        'sj' sprintf('%02d',thisSub) '_allDivData.mat'])
     
     if thisSub==99
         tasks=size(testData,2);
@@ -89,6 +89,37 @@ for sub=1:size(subjects,2)
         end
     end
 end
+% for sub=1:size(sjRange,2)    
+%     thisSub=sjRange(1,sub);
+%     for task=1:2
+%         if task==1
+%             numCond=4;
+%         elseif task==2
+%             numCond=2;
+%         end
+%         for cond=1:numCond
+%             for trial=1:numTrials
+%                 for stim=1:4
+%                     if task==1
+%                         if 0<singRTMat(cond,trial,thisSub,stim)
+%                             if 4*nanstd(nanstd(nanstd(singRTMat(:,:,thisSub,:))))<=...
+%                                     abs(singRTMat(cond,trial,thisSub,stim)-nanmean(nanmean(nanmean(singRTMat(:,:,thisSub,:)))))
+%                                 singRTMat(cond,trial,thisSub,stim)=NaN;
+%                             end
+%                         end                        
+%                     elseif task==2
+%                         if 0<dualRTMat(cond,trial,thisSub,stim)
+%                             if 4*nanstd(nanstd(nanstd(dualRTMat(:,:,thisSub,:))))<=...
+%                                     abs(dualRTMat(cond,trial,thisSub,stim)-nanmean(nanmean(nanmean(dualRTMat(:,:,thisSub,:)))))
+%                                 dualRTMat(cond,trial,thisSub,stim)=NaN;
+%                             end
+%                         end
+%                     end
+%                 end
+%             end
+%         end
+%     end        
+% end
 
 save('singRTMat.mat','singRTMat')
 save('singAccMat.mat','singAccMat')

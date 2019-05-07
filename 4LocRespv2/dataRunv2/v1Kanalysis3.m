@@ -2,12 +2,14 @@
 %what does this do???? maybe write something that shows accuracy and rt
 %with different set sizes? can be used to calculate one measure of wm?
 
-subList = [11,13,15:22,24:28,31,32,35,37,38,40:44,46,47,50:63,65:72,74:80];
+function v1Kanalysis3(sjRange)
+
 numBlocks = 1:5;
-for sub = 1:length(subList)
+for sub = 1:length(sjRange)
     for block = 1:length(numBlocks)
-    subid = subList(:,sub);
-    load(['sj' sprintf('%d_AllKTaskData.mat',subid)]);
+    subid = sjRange(:,sub);
+    load(['/Users/dannytoomey/Documents/Research/ADTask/Experiments/ADTaskPilot/validationTests/kTest/'...
+        'sj' sprintf('%d_AllKTaskData.mat',subid)]);
     data = [allData(block).stim.setSize;allData(block).stim.change;allData(block).stim.accuracy];
         if block ==1
             alldata = data;
@@ -19,9 +21,9 @@ for sub = 1:length(subList)
     setsize8present = [];
     setsize8absent = [];
     for i = 1:length(alldata)
-        if alldata(1, i) == 2||3 && alldata(2, i) == 1
+        if alldata(1, i) == 3 && alldata(2, i) == 1
             setsize8present = [setsize8present;alldata(3, i)];
-        elseif alldata(1, i) == 2||3 && alldata(2, i) == 2
+        elseif alldata(1, i) == 3 && alldata(2, i) == 2
             setsize8absent = [setsize8absent;alldata(3, i)];
         end
     end
@@ -29,12 +31,22 @@ for sub = 1:length(subList)
     hits = mean(setsize8present);
     FA = 1 - mean(setsize8absent);
     %single probe, so use k = N(h-f), where N is set size, h is hit rate, and f is false alarms
-    k = 8*(hits-FA); 
+    k8 = 8*(hits-FA); 
     
-    if sub == 1
-        allK = zeros(length(subList), 1);
+    setsize6present = [];
+    setsize6absent = [];
+    for i = 1:length(alldata)
+        if alldata(1, i) == 2 && alldata(2, i) == 1
+            setsize6present = [setsize6present;alldata(3, i)];
+        elseif alldata(1, i) == 2 && alldata(2, i) == 2
+            setsize6absent = [setsize6absent;alldata(3, i)];
+        end
     end
-    allK(sub,1) = k;
+
+    hits = mean(setsize6present);
+    FA = 1 - mean(setsize6absent);
+    %single probe, so use k = N(h-f), where N is set size, h is hit rate, and f is false alarms
+    k6 = 6*(hits-FA); 
     
     setsize4present = [];
     setsize4absent = [];
@@ -50,12 +62,13 @@ for sub = 1:length(subList)
     FA = 1 - mean(setsize4absent);
     k4 = 4*(hits-FA);
 
-    if sub == 1
-        allK4 = zeros(length(subList), 1);
-    end
-    allK4(sub,1) = k4;
+    avgK=mean([k4/4,k6/6,k8/8])*100;
     
-    fname=['kDataSj' sprintf('%02d',min(subList)) '-Sj' sprintf('%02d',max(subList)) '.mat'];
-    save(fname,'allK','allK4')
+    allK(1,sub)=avgK;
+    
+    fname=['kDataSj' sprintf('%02d',min(sjRange)) '-Sj' sprintf('%02d',max(sjRange)) '.mat'];
+    save(fname,'allK')
     
 end
+
+return

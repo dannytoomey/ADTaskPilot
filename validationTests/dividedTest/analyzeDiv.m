@@ -62,7 +62,11 @@ for sub=1:size(subjects,2)
                         end
                         %rtMat(task,cond,trial,thisSub,stim)=respDataMat(task,cond,trial,thisSub,stim);
                     else
-                        rtMat(task,cond,trial,thisSub,stim)=NaN;
+                        if thisTask==1
+                            singRTMat(cond,trial,thisSub,stim)=NaN;
+                        elseif thisTask==2
+                            dualRTMat(cond,trial,thisSub,stim)=NaN;
+                        end
                     end
                     if respDataMat(task,cond,trial,thisSub,stim)~=0&&tarDataMat(task,cond,trial,thisSub,stim)==1||...
                          respDataMat(task,cond,trial,thisSub,stim)==0&&tarDataMat(task,cond,trial,thisSub,stim)==0

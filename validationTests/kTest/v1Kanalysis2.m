@@ -28,8 +28,9 @@ for sub = 1:length(subList)
 
     hits = mean(setsize8present);
     FA = 1 - mean(setsize8absent);
-    k = 6*(hits-FA)/1-FA;
-
+    %single probe, so use k = N(h-f), where N is set size, h is hit rate, and f is false alarms
+    k = 8*(hits-FA); 
+    
     if sub == 1
         allK = zeros(length(subList), 1);
     end
@@ -47,7 +48,7 @@ for sub = 1:length(subList)
 
     hits = mean(setsize4present);
     FA = 1 - mean(setsize4absent);
-    k4 = 4*(hits-FA)/1-FA;
+    k4 = 4*(hits-FA);
 
     if sub == 1
         allK4 = zeros(length(subList), 1);

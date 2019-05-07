@@ -4,10 +4,8 @@
 function v2dataAnRun4Loc
 
 %skip sj 1, 2, 3, 5, 8
-%[4,6,9:26,28:34]
 
-%sjRange=input('Input Subjects ');
-sjRange=[6,9:11,13,15:22,24:28,31,32,35,37:44,46,47,50,51,53:63,65:70];
+sjRange=[9,11,13,15:22,24:28,31,32,35,37:44,46,47,49,51:63,65:72,74:81,83,84];
 
 for sj=1:size(sjRange,2)
     
@@ -42,6 +40,10 @@ for sj=1:size(sjRange,2)
     
 end
 
-v2dataGraph4Loc(sjRange);
+%v2dataGraph4Loc(sjRange);
+%v1Kanalysis3(sjRange)
+analyzeDiv2(sjRange)
+%analyzeANT2(sjRange,['sj' sprintf('%d',min(sjRange)) '-sj' sprintf('%d',max(sjRange))])
+correlate4loc(sjRange);
 
 return

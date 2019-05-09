@@ -1,9 +1,6 @@
 
 function analyzeDiv2(sjRange)
 
-load('/Users/dannytoomey/Documents/Research/ADTask/Experiments/ADTaskPilot/validationTests/dividedTest/allAccMat.mat')
-load('/Users/dannytoomey/Documents/Research/ADTask/Experiments/ADTaskPilot/validationTests/dividedTest/allRTMat.mat')
-
 numTrials=18;
 
 for sub=1:size(sjRange,2)
@@ -89,42 +86,31 @@ for sub=1:size(sjRange,2)
         end
     end
 end
-% for sub=1:size(sjRange,2)    
-%     thisSub=sjRange(1,sub);
-%     for task=1:2
-%         if task==1
-%             numCond=4;
-%         elseif task==2
-%             numCond=2;
-%         end
-%         for cond=1:numCond
-%             for trial=1:numTrials
-%                 for stim=1:4
-%                     if task==1
-%                         if 0<singRTMat(cond,trial,thisSub,stim)
-%                             if 4*nanstd(nanstd(nanstd(singRTMat(:,:,thisSub,:))))<=...
-%                                     abs(singRTMat(cond,trial,thisSub,stim)-nanmean(nanmean(nanmean(singRTMat(:,:,thisSub,:)))))
-%                                 singRTMat(cond,trial,thisSub,stim)=NaN;
-%                             end
-%                         end                        
-%                     elseif task==2
-%                         if 0<dualRTMat(cond,trial,thisSub,stim)
-%                             if 4*nanstd(nanstd(nanstd(dualRTMat(:,:,thisSub,:))))<=...
-%                                     abs(dualRTMat(cond,trial,thisSub,stim)-nanmean(nanmean(nanmean(dualRTMat(:,:,thisSub,:)))))
-%                                 dualRTMat(cond,trial,thisSub,stim)=NaN;
-%                             end
-%                         end
-%                     end
-%                 end
-%             end
-%         end
-%     end        
-% end
 
 save('singRTMat.mat','singRTMat')
 save('singAccMat.mat','singAccMat')
 save('dualRTMat.mat','dualRTMat')
 save('dualAccMat.mat','dualAccMat')
+
+for sub=1:size(sjRange,2)
+    thisSub=sjRange(sub);
+    for task=1:2
+        if task==1
+            subData=singRTMat(:,:,thisSub,:);
+            subData=subData(~isnan(subData));
+            normData=subData(abs(subData(:)-mean(subData))<=(2*std(subData)));
+            singNorm(sub)=mean(normData);
+        elseif task==2
+            subData=dualRTMat(:,:,thisSub,:);
+            subData=subData(~isnan(subData));
+            normData=subData(abs(subData(:)-mean(subData))<=(2*std(subData)));
+            dualNorm(sub)=mean(normData);
+        end
+    end
+end
+
+save('singNorm.mat','singNorm')
+save('dualNorm.mat','dualNorm')
 
 end
 

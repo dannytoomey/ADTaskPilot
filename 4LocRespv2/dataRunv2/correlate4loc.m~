@@ -18,7 +18,7 @@
 %       working memory  |   k task              |   avg correct x set size
 %
 %%
-function correlate4loc(sjRange,dump)
+function correlate4loc(sjRange)
 
 numCond=3;
 numTask=2;
@@ -120,25 +120,13 @@ end
 
 save('badSubs.mat','badSubSt')
 
-if dump==0
-    dumpSub=[];
-    count=1;
-    for col=1:size(corMat,2)
-        for sub=1:size(badSubSt(col).badSub,2)
-            b=0;
-            for a=1:size(corMat,2)
-                if 1<=find(badSubSt(col).badSub(sub)==badSubSt(a).badSub)
-                b=b+1;
-                end
-            end
-            if b>1&&count==1||b>1&&count>1&&size(find(dumpSub==badSubSt(col).badSub(sub)),2)==0
-                dumpSub(count)=badSubSt(col).badSub(sub);
-                count=count+1;
-            end
-        end
+for col=1:size(corMat,2)
+    for sub=1:size(badSubSt(col).badSub,2)
+        cols=1:size(corMat,2);
+        thisCol=
+        otherCols
+        temp(sub)=find((badSubSt(col).badSub(sub)==badSubSt(3).badSub));
     end
-    dumpSub=sort(dumpSub);
-    save('dumpSub.mat','dumpSub')
 end
 
 end

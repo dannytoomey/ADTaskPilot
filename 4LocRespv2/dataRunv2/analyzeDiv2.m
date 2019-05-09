@@ -9,7 +9,7 @@ for sub=1:size(sjRange,2)
     load(['/Users/dannytoomey/Documents/Research/ADTask/Experiments/ADTaskPilot/validationTests/dividedTest/'...
         'sj' sprintf('%02d',thisSub) '_allDivData.mat'])
     
-    if thisSub==99
+    if thisSub==199
         tasks=size(testData,2);
     else
         tasks=size(allData,2);
@@ -17,7 +17,7 @@ for sub=1:size(sjRange,2)
     
     for task=1:tasks
         
-        if thisSub==99
+        if thisSub==199
             thisTask=testData(task).thisTask;
             condData=testData(task).condData;
         else
@@ -25,7 +25,7 @@ for sub=1:size(sjRange,2)
             condData=allData(task).condData;
         end
         
-        if thisSub==99
+        if thisSub==199
             if thisTask==1
                 numCond=2;
             else

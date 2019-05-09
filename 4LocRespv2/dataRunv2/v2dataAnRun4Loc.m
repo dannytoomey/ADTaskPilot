@@ -7,6 +7,16 @@ function v2dataAnRun4Loc
 
 sjRange=[9,11,13,15:22,24:28,31,32,35,37:44,46,47,49,51:63,65:72,74:81,83,84];
 
+dumpSub=0;
+
+if dumpSub==1
+    load('dumpSub.mat')
+    for a=1:size(dumpSub,2)
+    sjRange=sjRange(sjRange~=dumpSub(a));
+    sjRange=sjRange;
+    end
+end
+
 for sj=1:size(sjRange,2)
     
     sjNum=sjRange(1,sj);
@@ -40,10 +50,10 @@ for sj=1:size(sjRange,2)
     
 end
 
-%v2dataGraph4Loc(sjRange);
-%v1Kanalysis3(sjRange)
+v2dataGraph4Loc(sjRange);
+v1Kanalysis3(sjRange)
 analyzeDiv2(sjRange)
-%analyzeANT2(sjRange,['sj' sprintf('%d',min(sjRange)) '-sj' sprintf('%d',max(sjRange))])
-correlate4loc(sjRange);
+analyzeANT2(sjRange,['sj' sprintf('%d',min(sjRange)) '-sj' sprintf('%d',max(sjRange))])
+correlate4loc(sjRange,dumpSub);
 
 return

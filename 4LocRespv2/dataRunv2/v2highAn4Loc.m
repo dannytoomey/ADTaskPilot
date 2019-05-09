@@ -83,8 +83,10 @@ for task=1:numTask
         useTrials=zeros(1,size(correctTrials,2));
         for trial=1:size(useTrials,2)
             useTrials(1,trial)=data(rtRow,correctTrials(1,trial));
-        end    
-
+        end
+        
+        correctTrials=correctTrials(abs(useTrials(:)-mean(useTrials))<=(2*std(useTrials)));
+        useTrials=useTrials(abs(useTrials(:)-mean(useTrials))<=(2*std(useTrials)));
         visMeanRT=(mean(useTrials))*1000;
         visAccuracy=(size(useTrials,2)/numTrials)*100;
 
@@ -134,6 +136,8 @@ for task=1:numTask
             invalTrialTimes(1,trial)=invalTrials(1,useInvalTrials(1,trial));
         end
 
+        invalTrialTimes=invalTrialTimes(abs(invalTrialTimes(:)-mean(invalTrialTimes))<=(2*std(invalTrialTimes)));
+        valTrialTimes=valTrialTimes(abs(valTrialTimes(:)-mean(valTrialTimes))<=(2*std(valTrialTimes)));
         oriEf=(mean(invalTrialTimes)-mean(valTrialTimes))*1000;
         
         adjColRT=NaN;

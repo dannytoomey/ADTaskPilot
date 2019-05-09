@@ -5,9 +5,9 @@ function v2dataAnRun4Loc
 
 %skip sj 1, 2, 3, 5, 8
 
-sjRange=[9,11,13,15:22,24:28,31,32,35,37:44,46,47,49,51:63,65:72,74:81,83,84];
+sjRange=[9,11,13,15:22,24:28,31,32,35,37:44,46,47,49,51:63,65:72,74:81,83,84,87,91,93:96,98,99];
 
-dumpSub=0;
+dumpSub=1;
 
 if dumpSub==1
     load('dumpSub.mat')
@@ -50,7 +50,7 @@ for sj=1:size(sjRange,2)
     
 end
 
-v2dataGraph4Loc(sjRange);
+%v2dataGraph4Loc(sjRange);
 v1Kanalysis3(sjRange)
 analyzeDiv2(sjRange)
 analyzeANT2(sjRange,['sj' sprintf('%d',min(sjRange)) '-sj' sprintf('%d',max(sjRange))])

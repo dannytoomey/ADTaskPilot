@@ -73,6 +73,9 @@ for sub=1:size(sjRange,2)
     data=cell2mat(textscan(thisSj,'%7.2f'));
     corMat(sub,4)=mean(data([1:3,7:9,13:15,19:21]))-mean(data([4:6,10:12,16:18,22:24]));     %column 4 = val hard-easy
     
+    %correlating (hard - easy) for each measure doesn't make sense, they
+    %measure different effects (flanker vs pop out/conjunction)
+    
     count=1;
     for cue=1:numCue
         sjBasert(1,count)=allDataStruct(1).task(1).cue(cue).visMeanRT(sj);
@@ -116,8 +119,9 @@ for sub=1:size(sjRange,2)
     end
     corMat(sub,15)=mean(sjOri);                        %column 15 = novel orienting effect
     corMat(sub,16)=mean(data(7:12))-mean(data(1:6));   %column 16 = val orienting effect
-
+    
 save('corMat.mat','corMat')
+
 end
 
 for col=1:size(corMat,2)

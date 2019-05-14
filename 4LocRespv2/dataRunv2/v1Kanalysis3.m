@@ -46,6 +46,7 @@ for sub = 1:length(sjRange)
     hits = mean(setsize6present);
     FA = 1 - mean(setsize6absent);
     %single probe, so use k = N(h-f), where N is set size, h is hit rate, and f is false alarms
+    
     k6 = 6*(hits-FA); 
     
     setsize4present = [];
@@ -63,6 +64,11 @@ for sub = 1:length(sjRange)
     k4 = 4*(hits-FA);
 
     avgK=mean([k4/4,k6/6,k8/8])*100;
+    
+    if subid==101
+        avgK=mean([k4/4,k8/8])*100;     %sj 101 had no absent SS 6 for some reason
+    
+    end
     
     allK(1,sub)=avgK;
     

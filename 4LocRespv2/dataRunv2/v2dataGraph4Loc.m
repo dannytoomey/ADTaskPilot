@@ -33,9 +33,8 @@ for var=1:numVar
         end
     end   
 
-    numBins=numCond*numTask*numCue;
-    varBins=zeros(1,numBins);
-    varSEM=zeros(1,numBins);
+    varBins=[];
+    varSEM=[];
     count=1;
     
     for cond=1:numCond
@@ -47,18 +46,7 @@ for var=1:numVar
                 for score=1:size(thisScores,1)
                     graphScores(1,score)=dataMat(var,cond,task,cue,thisScores(score,1));
                 end
-                meanVar=mean(graphScores);
-                sqDev=(graphScores-meanVar).^2;
-                SS=sum(sqDev);
-                numScores=size(graphScores,2);
-                standDev=sqrt(SS/(numScores-1));
-                normScores=nan(1,numScores);
-                for x=1:numScores
-                    if abs(graphScores(1,x)-meanVar)<=(2*standDev)
-                        normScores(1,x)=graphScores(1,x);
-                    end
-                end
-                normGraph=normScores(~isnan(normScores));
+                normGraph=graphScores(abs(graphScores(:)-mean(graphScores))<=(2*std(graphScores)));
                 varBins(1,count)=mean(normGraph);
                 varSEM(1,count)=std(normGraph)/sqrt(size(sjRange,2));
                 count=count+1;
@@ -120,32 +108,19 @@ for var=1:numVar
     end
 end
 
-varBins=zeros(1,numVar);
-varSEM=zeros(1,numVar);    
+varBins=[];
+varSEM=[];
 
 for var=1:numVar
-   
     useScores=(~isnan(uniDist(var,:)));
     thisScores=find(useScores~=0);
     graphScores=zeros(1,size(thisScores,2));
     for score=1:size(thisScores,2)
         graphScores(1,score)=uniDist(var,thisScores(1,score));
-    end
-    meanVar=mean(graphScores);
-    sqDev=(graphScores-meanVar).^2;
-    SS=sum(sqDev);
-    numScores=size(graphScores,2);
-    standDev=sqrt(SS/(numScores-1));
-    normScores=nan(1,numScores);
-    for x=1:numScores
-        if abs(graphScores(1,x)-meanVar)<=(2*standDev)
-            normScores(1,x)=graphScores(1,x);
-        end
-    end
-    normGraph=normScores(~isnan(normScores));
+    end    
+    normGraph=graphScores(abs(graphScores(:)-mean(graphScores))<=(2*std(graphScores)));
     varBins(1,var)=mean(normGraph);
     varSEM(1,var)=std(normGraph)/sqrt(size(sjRange,2));
-    
 end
 
 thisVar='All Data Unique Distractor RT (ms)';
@@ -160,4 +135,3 @@ saveas(gcf,file,'png');
 hold off
 
 return
-

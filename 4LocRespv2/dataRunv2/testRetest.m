@@ -33,10 +33,11 @@ for sub=1:size(sjRange,2)
     end
 end
 
-            
-            
-
-
-            
+save('aCor.mat','aCor')
+save('bCor.mat','bCor')
+aDual=aCor(:,4);
+aDual=aDual(aDual~=0);
+bDual=bCor(:,4);
+bDual=bDual(bDual~=0);
 
 return

@@ -3,11 +3,16 @@
 
 function v2dataAnRun4Loc
 
-%skip sj 1, 2, 3, 5, 8
+sjRange=[11,13,15:22,24:28,31,32,35,37:44,46,47,49,51:63,65:72,74:81,83:87,89,91:102];
+%the full range of useable subjects
 
-sjRange=[9,11,13,15:22,24:28,31,32,35,37:44,46,47,49,51:63,65:72,74:81,83:87,89,91:102];
+dumpSub=0;
+%set to 0 to find subs whose overall performance was greater than two
+%standard deviations away on more than a given % of all experiment variables.
+%set to 1 to exclude these subs from data analysis. note - this exclues 
+%ALL their data from analysis, not just the variables they're bad on.
 
-dumpSub=1;
+%this isn't very helpful, leave on 0 for cleaner data
 
 if dumpSub==1
     load('dumpSub.mat')

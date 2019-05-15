@@ -57,8 +57,7 @@ for run=1:3
             rtRow=11;
 
             numTrials=size(data,2);
-            numBlocks=6;
-
+            
             visErrorOm=0;
             audErrorOm=0;
             audAccuracy=0;
@@ -67,18 +66,39 @@ for run=1:3
             wmProbe=wmData(6:10,:);
             numLetter=5;
             correctWM=0;
-
+            numBlocks=6;
+            useBlocks=0;
             for block=1:numBlocks
-                for letter=1:numLetter
-                    if wmLoad(letter,block)==wmProbe(letter,block)
-                        correctWM=correctWM+1;
+                if run==1           %include all blocks
+                    for letter=1:numLetter
+                        if wmLoad(letter,block)==wmProbe(letter,block)
+                            correctWM=correctWM+1;
+                        end
+                    end
+                    useBlocks=useBlocks+1;
+                elseif run==2
+                    if floor(block/2)==block/2      %use even blocks for aData
+                        for letter=1:numLetter
+                            if wmLoad(letter,block)==wmProbe(letter,block)
+                                correctWM=correctWM+1;
+                            end
+                        end
+                        useBlocks=useBlocks+1;
+                    end
+                elseif run==3
+                    if floor(block/2)~=block/2      %use odd blocks for bData
+                        for letter=1:numLetter
+                            if wmLoad(letter,block)==wmProbe(letter,block)
+                                correctWM=correctWM+1;
+                            end
+                        end
+                        useBlocks=useBlocks+1;
                     end
                 end
             end
+            
+            accuracyWM=(correctWM/(useBlocks*numLetter))*100;
 
-            accuracyWM=(correctWM/(numBlocks*numLetter))*100;
-
-%             visCorrect=zeros(1,numTrials);
             visCorrect=[];
             for trial=1:numTrials
                 if data(targetRow,trial)==data(visRespRow,trial)
@@ -90,41 +110,31 @@ for run=1:3
 
             correctTrials=find(visCorrect~=0);
             useTrials=visCorrect(visCorrect~=0);
-%             useTrials=zeros(1,size(correctTrials,2));
-%             for trial=1:size(useTrials,2)
-%                 useTrials(1,trial)=data(rtRow,correctTrials(1,trial));
-%             end    
-
+    
+            %exclude scores <= 2 standard deviations away
             correctTrials=correctTrials(abs(useTrials(:)-mean(useTrials))<=(2*std(useTrials)));
             useTrials=useTrials(abs(useTrials(:)-mean(useTrials))<=(2*std(useTrials)));
             visMeanRT=(mean(useTrials))*1000;
             visAccuracy=(size(useTrials,2)/numTrials)*100;
 
             if taskCond==2
-
                 audCorrect=zeros(1,numTrials);
-
                 for trial=1:numTrials
-                    if data(toneRow,trial)==300&&data(audRespRow,trial)==1||data(toneRow,trial)==600&&data(audRespRow,trial)==2
+                    if data(toneRow,trial)==300&&data(audRespRow,trial)==1||...
+                            data(toneRow,trial)==600&&data(audRespRow,trial)==2
                         audCorrect(1,trial)=1;
                     elseif data(audRespRow,trial)==0
                         audErrorOm=audErrorOm+1;
                     end
                 end
-
                 useAud=find(audCorrect~=0);
                 audAccuracy=((size(useAud,2))/numTrials)*100;
-
             end
 
             if cueCond==1
                 thres=blockTrials*(2/3);
-%                 valTrials=zeros(1,numTrials*(2/3));
-%                 invalTrials=zeros(1,numTrials*(1/3));
             elseif cueCond==2
                 thres=blockTrials*(1/3);
-%                 valTrials=zeros(1,numTrials*(1/3));
-%                 invalTrials=zeros(1,numTrials*(2/3));
             end
             
             valTrials=[];
@@ -137,17 +147,6 @@ for run=1:3
                 end
             end
 
-%             useValTrials=find(valTrials~=0);
-%             valTrialTimes=zeros(1,size(useValTrials,2));
-%             for trial=1:size(useValTrials,2)
-%                 valTrialTimes(1,trial)=valTrials(1,useValTrials(1,trial));
-%             end
-%             useInvalTrials=find(invalTrials~=0);
-%             invalTrialTimes=zeros(1,size(useInvalTrials,2));
-%             for trial=1:size(useInvalTrials,2)
-%                 invalTrialTimes(1,trial)=invalTrials(1,useInvalTrials(1,trial));
-%             end
-% 
             valTrialTimes=valTrials(valTrials~=0);
             invalTrialTimes=invalTrials(invalTrials~=0);
 

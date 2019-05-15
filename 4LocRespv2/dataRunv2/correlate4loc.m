@@ -36,6 +36,8 @@ for ln=1:skipLines
     temp = fgetl(fid);
 end
 
+corMat=[];
+
 for sub=1:size(sjRange,2)
     
     sj=sjRange(1,sub);
@@ -67,12 +69,11 @@ for sub=1:size(sjRange,2)
         sjHDrt(1,count)=allDataStruct(3).task(1).cue(cue).visMeanRT(sj);
         count=count+1;
     end
-    corMat(sub,3)=mean(sjHDrt-sjEZrt);     %column 3 = novel hard-easy
     
     thisSj=fgetl(fid);
     data=cell2mat(textscan(thisSj,'%7.2f'));
-    corMat(sub,4)=mean(data([1:3,7:9,13:15,19:21]))-mean(data([4:6,10:12,16:18,22:24]));     %column 4 = val hard-easy
     
+    %note - don't correlate hard-easy for novel and val
     %correlating (hard - easy) for each measure doesn't make sense, they
     %measure different effects (flanker vs pop out/conjunction)
     
@@ -81,11 +82,11 @@ for sub=1:size(sjRange,2)
         sjBasert(1,count)=allDataStruct(1).task(1).cue(cue).visMeanRT(sj);
         count=count+1;
     end
-    corMat(sub,5)=mean(sjEZrt);                         %column 5 = novel EZ rt
-    corMat(sub,6)=mean(data([4:6,10:12,16:18,22:24]));  %column 6 = val EZ rt
+    corMat(sub,3)=mean(sjEZrt);                         %column 3 = novel EZ rt
+    corMat(sub,4)=mean(data([4:6,10:12,16:18,22:24]));  %column 4 = val EZ rt
     
-    corMat(sub,7)=mean(sjHDrt);                         %column 7 = novel Hard rt
-    corMat(sub,8)=mean(data([1:3,7:9,13:15,19:21]));    %column 8 = val Hard rt
+    corMat(sub,5)=mean(sjHDrt);                         %column 5 = novel Hard rt
+    corMat(sub,6)=mean(data([1:3,7:9,13:15,19:21]));    %column 6 = val Hard rt
     
     %divided attention
     
@@ -97,14 +98,14 @@ for sub=1:size(sjRange,2)
             count=count+1;
         end
     end
-    corMat(sub,9)=mean(sjDual)-mean(sjSingle);        %column 9 = novel dual cost
-    corMat(sub,10)=dualNorm(sub)-singNorm(sub);       %column 10 = val dual cost
+    corMat(sub,7)=mean(sjDual)-mean(sjSingle);        %column 7 = novel dual cost
+    corMat(sub,8)=dualNorm(sub)-singNorm(sub);        %column 8 = val dual cost
     
-    corMat(sub,11)=mean(sjSingle);                    %column 11 = novel single
-    corMat(sub,12)=singNorm(sub);                     %column 12 = val single
+    corMat(sub,9)=mean(sjSingle);                     %column 9 = novel single
+    corMat(sub,10)=singNorm(sub);                     %column 10 = val single
     
-    corMat(sub,13)=mean(sjDual);                      %column 13 = novel dual
-    corMat(sub,14)=dualNorm(sub);                     %column 14 = val dual
+    corMat(sub,11)=mean(sjDual);                      %column 11 = novel dual
+    corMat(sub,12)=dualNorm(sub);                     %column 12 = val dual
                                                      
     %orienting effect
     
@@ -117,8 +118,8 @@ for sub=1:size(sjRange,2)
             end
         end
     end
-    corMat(sub,15)=mean(sjOri);                        %column 15 = novel orienting effect
-    corMat(sub,16)=mean(data(7:12))-mean(data(1:6));   %column 16 = val orienting effect
+    corMat(sub,13)=mean(sjOri);                        %column 13 = novel orienting effect
+    corMat(sub,14)=mean(data(7:12))-mean(data(1:6));   %column 14 = val orienting effect
     
 save('corMat.mat','corMat')
 
@@ -143,7 +144,7 @@ if dump==0
                 b=b+1;
                 end
             end
-            if b>=floor(size(corMat,2)/4)&&count==1||b>=floor(size(corMat,2)/4)&&count>1&&size(find(dumpSub==badSubSt(col).badSub(sub)),2)==0
+            if b>=floor(size(corMat,2)/2.5)&&count==1||b>=floor(size(corMat,2)/4)&&count>1&&size(find(dumpSub==badSubSt(col).badSub(sub)),2)==0
                 dumpSub(count)=badSubSt(col).badSub(sub);
                 count=count+1;
             end
@@ -153,5 +154,4 @@ if dump==0
     save('dumpSub.mat','dumpSub')
 end
 
-end
-
+return

@@ -10,21 +10,22 @@ load('bDataStruct.mat')
 
 for run=1:3
     for task=1:numTask
-        for cue=1:numCue
-            if medTaskOrder==1
-                if task==1
-                    taskCond=1;
-                elseif task==2
-                    taskCond=2;
-                end
-            elseif medTaskOrder==2
-                if task==1
-                    taskCond=2;
-                elseif task==2
-                    taskCond=1;
-                end
+        %account for counterbalancing
+        if medTaskOrder==1
+            if task==1
+                taskCond=1;
+            elseif task==2
+                taskCond=2;
             end
-
+        elseif medTaskOrder==2
+            if task==1
+                taskCond=2;
+            elseif task==2
+                taskCond=1;
+            end
+        end
+        for cue=1:numCue
+            
             block1=allMedTask(task).thisTaskData(cue).thisCueCondData(1).thisBlockTrials(blockTrials).thisTrialData;
             block2=allMedTask(task).thisTaskData(cue).thisCueCondData(2).thisBlockTrials(blockTrials).thisTrialData;
             block3=allMedTask(task).thisTaskData(cue).thisCueCondData(3).thisBlockTrials(blockTrials).thisTrialData;
@@ -32,9 +33,9 @@ for run=1:3
             block5=allMedTask(task).thisTaskData(cue).thisCueCondData(5).thisBlockTrials(blockTrials).thisTrialData;
             block6=allMedTask(task).thisTaskData(cue).thisCueCondData(6).thisBlockTrials(blockTrials).thisTrialData;
 
-            data=[block1,block2,block3,block4,block5,block6];
-            aData=data(:,[1,3,5,7,9,11,13,15,17,19,21,23,25,27,29,31,35]);
-            bData=data(:,[2,4,6,8,10,12,14,16,18,20,22,24,26,28,30,32,34]);
+            data=[block1,block2,block3,block4,block5,block6];               %all data for allDataStruct
+            aData=data(:,[1,3,5,7,9,11,13,15,17,19,21,23,25,27,29,31,35]);  %even trials for aData and...
+            bData=data(:,[2,4,6,8,10,12,14,16,18,20,22,24,26,28,30,32,34]); %odd trials for bData. this will be used for test-retest later on
             
             if run==2
                 data=aData;
@@ -57,8 +58,7 @@ for run=1:3
             rtRow=11;
 
             numTrials=size(data,2);
-            numBlocks=6;
-
+            
             visErrorOm=0;
             audErrorOm=0;
             audAccuracy=0;
@@ -67,17 +67,39 @@ for run=1:3
             wmProbe=wmData(6:10,:);
             numLetter=5;
             correctWM=0;
-
+            numBlocks=6;
+            useBlocks=0;
             for block=1:numBlocks
-                for letter=1:numLetter
-                    if wmLoad(letter,block)==wmProbe(letter,block)
-                        correctWM=correctWM+1;
+                if run==1           %include all blocks
+                    for letter=1:numLetter
+                        if wmLoad(letter,block)==wmProbe(letter,block)
+                            correctWM=correctWM+1;
+                        end
+                    end
+                    useBlocks=useBlocks+1;
+                elseif run==2
+                    if floor(block/2)==block/2      %use even blocks for aData
+                        for letter=1:numLetter
+                            if wmLoad(letter,block)==wmProbe(letter,block)
+                                correctWM=correctWM+1;
+                            end
+                        end
+                        useBlocks=useBlocks+1;
+                    end
+                elseif run==3
+                    if floor(block/2)~=block/2      %use odd blocks for bData
+                        for letter=1:numLetter
+                            if wmLoad(letter,block)==wmProbe(letter,block)
+                                correctWM=correctWM+1;
+                            end
+                        end
+                        useBlocks=useBlocks+1;
                     end
                 end
             end
-
-            accuracyWM=(correctWM/(numBlocks*numLetter))*100;
-
+            
+            accuracyWM=(correctWM/(useBlocks*numLetter))*100;
+            
             visCorrect=[];
             for trial=1:numTrials
                 if data(targetRow,trial)==data(visRespRow,trial)
@@ -90,6 +112,7 @@ for run=1:3
             correctTrials=find(visCorrect~=0);
             useTrials=visCorrect(visCorrect~=0);
             
+            %exclude values <= 2 standard deviations away
             correctTrials=correctTrials(abs(useTrials(:)-mean(useTrials))<=(2*std(useTrials)));
             useTrials=useTrials(abs(useTrials(:)-mean(useTrials))<=(2*std(useTrials)));
             visMeanRT=(mean(useTrials))*1000;
@@ -98,7 +121,8 @@ for run=1:3
             if taskCond==2
                 audCorrect=zeros(1,numTrials);
                 for trial=1:numTrials
-                    if data(toneRow,trial)==300&&data(audRespRow,trial)==1||data(toneRow,trial)==600&&data(audRespRow,trial)==2
+                    if data(toneRow,trial)==300&&data(audRespRow,trial)==1||...
+                            data(toneRow,trial)==600&&data(audRespRow,trial)==2
                         audCorrect(1,trial)=1;
                     elseif data(audRespRow,trial)==0
                         audErrorOm=audErrorOm+1;

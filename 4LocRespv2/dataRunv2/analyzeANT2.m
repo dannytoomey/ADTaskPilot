@@ -73,4 +73,3 @@ end
 
 fclose(accFid);
 fclose(rtFid);
-

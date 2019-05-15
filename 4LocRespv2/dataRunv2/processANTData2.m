@@ -67,8 +67,6 @@ while moreData==1&&trialNum<(maxTrials+1)
         moreData = 0;
     end
 
-
-
 end
 
 rtData = rtData./accData;
@@ -76,5 +74,3 @@ accData = accData./trialCtr;
 fclose(fid);
 
 return;
-
-
